@@ -1,4 +1,4 @@
-- Fix workshop edit route
+- Fix workshop edit route.  
 - Hash password in the create user ANd in the Edit
 - Fix reservation index size
 - Fix Dashboard landing page
