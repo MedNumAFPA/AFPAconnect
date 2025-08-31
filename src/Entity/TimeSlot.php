@@ -116,4 +116,22 @@ class TimeSlot
         }
         return $this;
     }
+
+    public function getChoiceLabel(): string
+    {
+        // On récupère le nom de l'atelier et on formate la date et l'heure
+        $workshopName = $this->getWorkshop()->getName();
+        $date = $this->getDate()->format('d/m/Y');
+        $fromTime = $this->getFromTime()->format('H:i');
+        $toTime = $this->getToTime()->format('H:i');
+
+        // On retourne une chaîne de caractères complète et claire
+        return sprintf(
+            '%s - %s (%s - %s)',
+            $workshopName,
+            $date,
+            $fromTime,
+            $toTime
+        );
+    }
 }
