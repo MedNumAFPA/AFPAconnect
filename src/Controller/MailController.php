@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ReservationsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -11,25 +12,39 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MailController extends AbstractController
 {
-    /**
-     * @throws TransportExceptionInterface
-     */
+//    /**
+//     * @throws TransportExceptionInterface
+//     */
     #[Route('/mailtest', name: 'app_mail')]
-    public function index(MailerInterface $mailer): Response
+    public function index(MailerInterface $mailer, ReservationsRepository $reservationsRepository): Response
     {
 
-        $email = (new Email())
-            ->from('me@arnaudrabel.com')
+
+
+
+        // Define the time window, exactly like the console command will.
+        // This finds workshops scheduled between 24 and 25 hours from now.
+        $startTime = new \DateTimeImmutable('+24 hours');
+        $endTime = new \DateTimeImmutable('+25 hours');
+
+        $reservations = $reservationsRepository->findRemindersDueToSend($startTime, $endTime);
+
+        dd($reservations);
+
+
+
+//        $email = (new Email())
+//            ->from('me@arnaudrabel.com')
 //            ->to('arnaud.rabel@gmail.com')
-//            ->to('amine.elkhal@icloud.com')
-//            ->to('shamashan@gmail.com')
-            ->to('mounir.sebti33@gmail.com')
-            ->subject('Test Email from Symfony!')
-            ->text('This is the plain text version of the email.')
-            ->html('<p>This is the <strong>HTML</strong> version of the email. If you see this, it worked!</p>');
-
-        $mailer->send($email);
-
-        return new Response('Test email has been sent! Check your inbox.');
+////            ->to('amine.elkhal@icloud.com')
+////            ->to('shamashan@gmail.com')
+////            ->to('mounir.sebti33@gmail.com')
+//            ->subject('Test Email from Symfony!')
+//            ->text('This is the plain text version of the email.')
+//            ->html('<p>This is the <strong>HTML</strong> version of the email. If you see this, it worked!</p>');
+//
+//        $mailer->send($email);
+//
+//        return new Response('Test email has been sent! Check your inbox.');
     }
 }

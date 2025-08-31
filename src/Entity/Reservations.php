@@ -31,6 +31,9 @@ class Reservations
     #[ORM\Column]
     private ?bool $isReminderActive = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $reminderSentAt = null;
+
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TimeSlots $timeslot = null;
@@ -112,6 +115,18 @@ class Reservations
         return $this;
     }
 
+    public function getReminderSentAt(): ?\DateTimeImmutable
+    {
+        return $this->reminderSentAt;
+    }
+
+    public function setReminderSentAt(?\DateTimeImmutable $reminderSentAt): static
+    {
+        $this->reminderSentAt = $reminderSentAt;
+
+        return $this;
+    }
+
     public function getTimeslot(): ?TimeSlots
     {
         return $this->timeslot;
@@ -123,4 +138,5 @@ class Reservations
 
         return $this;
     }
+
 }
