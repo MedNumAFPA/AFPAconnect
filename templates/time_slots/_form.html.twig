@@ -28,10 +28,8 @@
 	{{ form_widget(form.workshop, {"attr": {"class": "form-control form-combo"}})  }}
 </div> #}
 
-<twig:Button
-	color="primary">
-	{#	<button>Save</button>#}
-	Sauvegarder
+<twig:Button color="primary">
+    {{ button_label|default('Ajouter') }}
 </twig:Button>
 
 {{ form_end(form) }}
