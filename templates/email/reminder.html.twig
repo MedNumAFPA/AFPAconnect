@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <style>
@@ -48,11 +48,9 @@
 <body>
 <div class="container">
     <div class="header">
-{#        'cid:logo' uses the logo variables we set in the emailHandler and cid is to use for email images
-It basically upload the image as attachement and then embed it in the mail  #}
         <img src="{{ 'cid:logo-txt' }}" alt="Afpa Connect Logo" width="200">
     </div>
-    <div class="content">
+    <div class="content" style="color: #333333;">
         <h3>Bonjour {{ reservation.firstname }},</h3>
 
         <p>
@@ -73,10 +71,6 @@ It basically upload the image as attachement and then embed it in the mail  #}
         <br>
         <p style="text-align:center;">
             <a href="https://devafpaconnect.arnaudrabel.com/" class="button" style="color: #ffffff; text-decoration: none;">Visiter notre site</a>
-{#           CHANGE THIS URL IN PROD
-Might need to use {{ url('app_homepage') }} for dynamic url generation
-    or hardcode it to https://devafpaconnect.arnaudrabel.com/ in prod
-#}
         </p>
     </div>
     <div class="footer">
