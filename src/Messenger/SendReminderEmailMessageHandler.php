@@ -9,6 +9,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * This is the service that handles sending the reminder email.
@@ -20,7 +21,8 @@ final class SendReminderEmailMessageHandler
         private readonly MailerInterface        $mailer,
         private readonly ReservationsRepository $reservationsRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly Environment            $twig
+        private readonly Environment            $twig,
+        private readonly KernelInterface        $kernel,
     )
     {
 
@@ -48,7 +50,9 @@ final class SendReminderEmailMessageHandler
             ->to($reservation->getEmail())
             ->subject('Rappel: Vous avez un atelier bientôt!')
 //            ->embedFromPath('public/images/logo.png', 'logo')
-            ->embedFromPath('public/images/logo-txt.png', 'logo-txt')
+            ->embedFromPath(
+                $this->kernel->getProjectDir() .
+                '/public/images/logo-txt.png', 'logo-txt')
             ->text('This is the plain text version of the email.') // Fallback plain text
             // Set the HTML body of the email
             ->html($htmlContent);

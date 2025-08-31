@@ -9,6 +9,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class MailController extends AbstractController
 {
@@ -16,7 +17,7 @@ class MailController extends AbstractController
 //     * @throws TransportExceptionInterface
 //     */
     #[Route('/mailtest', name: 'app_mail')]
-    public function index(MailerInterface $mailer, ReservationsRepository $reservationsRepository): Response
+    public function index(MailerInterface $mailer, ReservationsRepository $reservationsRepository, KernelInterface $kernel): Response
     {
 
 
@@ -29,7 +30,7 @@ class MailController extends AbstractController
 
         $reservations = $reservationsRepository->findRemindersDueToSend($startTime, $endTime);
 
-        dd($startTime, $endTime, $reservations);
+        dd($startTime, $endTime, $reservations, $kernel->getProjectDir());
 
 
 
