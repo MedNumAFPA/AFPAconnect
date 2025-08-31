@@ -28,10 +28,10 @@ class ReservationsRepository extends ServiceEntityRepository
     public function findRemindersDueToSend(\DateTimeImmutable $startTime, \DateTimeImmutable $endTime): array
     {
         return $this->createQueryBuilder('r')
-            ->innerJoin('r.timeslot', 't') // 'r.timeslot' must match the property name in your Reservations entity
+            ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
             ->andWhere('r.reminderSentAt IS NULL')
-            // This is the CRITICAL change. We combine the date and time columns in the database.
+            // This is CRITICAL. We combine the date and time columns in the database.
             // NOTE: The CONCAT function is for MySQL/MariaDB. For PostgreSQL, you would use `(t.date || ' ' || t.fromTime)::timestamp`
             ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :startTime AND :endTime')
             ->setParameter('isActive', true)

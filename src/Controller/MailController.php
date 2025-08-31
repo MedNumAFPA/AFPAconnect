@@ -22,23 +22,14 @@ class MailController extends AbstractController
 
 
 
-        // 1. Define the time window, exactly like the console command will.
+        // Define the time window, exactly like the console command will.
         // This finds workshops scheduled between 24 and 25 hours from now.
         $startTime = new \DateTimeImmutable('+24 hours');
         $endTime = new \DateTimeImmutable('+25 hours');
 
-        // 2. Call the repository method with the calculated time window.
         $reservations = $reservationsRepository->findRemindersDueToSend($startTime, $endTime);
 
-        // 3. Dump the results and stop execution.
-        // This is a powerful debugging tool.
         dd($reservations);
-
-        // The code will stop at dd(), so this part will not be reached.
-        // This is perfect for testing.
-        return $this->render('...');
-
-
 
 
 
