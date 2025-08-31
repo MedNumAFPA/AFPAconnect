@@ -96,8 +96,8 @@ To get a local copy up and running, follow these steps.
     symfony console tailwind:build --watch
     ```
 
-7.  **Configuring the Mailer:**
-    To enable the application to send emails for confirmations or reminders, follow these steps.
+7.  **Automated Email Configuration (Mailer & Reminders):**
+    The application sends emails for confirmations and scheduled reminders. This requires configuring your mail server and running background processes.
 
     **a. Set Your Mailer DSN:**
     After cloning the project, open your `.env.local` file and update the `MAILER_DSN` variable with your SMTP provider's credentials.
@@ -105,13 +105,26 @@ To get a local copy up and running, follow these steps.
     MAILER_DSN="smtp://username:password@ssl0.ovh.net:465"
     ```
 
-    **b. Run the Messenger Worker:**
-    This application sends emails asynchronously. You must run a worker in a separate terminal to process the queue and send the emails.
+    **b. Run the Messenger Worker (for all emails):**
+    This application sends all emails asynchronously. You must run a worker in a separate terminal to process the queue and send the emails. This is required for both immediate confirmations and scheduled reminders.
     ```sh
     symfony console messenger:consume async -vv
     ```
+    *This command runs continuously. Keep this terminal open during development when testing any email functionality.*
 
-    This command runs continuously in the background. For convenience during development, you should keep this terminal open while testing email functionality.
+    **c. Set Up the Reminder Scheduler (Cron Job):**
+    To automatically send reminder emails 24 hours before a workshop, a command must be run on a schedule. This is handled by a cron job.
+
+    To test this feature manually, first ensure the messenger worker (step b) is running, then execute:
+    ```sh
+    symfony console app:send-reminders
+    ```
+
+    For production, you must add this command to your server's crontab. Edit the crontab with `crontab -e` and add the following line:
+    ```crontab
+    * * * * * cd /path/to/your/project && symfony console app:send-reminders >> /dev/null 2>&1
+    ```
+    *Remember to replace `/path/to/your/project` with the absolute path to the application's root directory.*
 
 8.  **Run the application:**
     You can use the built-in Symfony web server to run the project locally.
