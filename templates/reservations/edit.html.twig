@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Éditer la réservation
+{% block title %}Modifier la réservation
 {% endblock %}
 
 {% block body %}
 	<twig:Container>
 		<twig:Card>
 
-			<twig:PageTitle>Éditer la réservation</twig:PageTitle>
+			<twig:PageTitle>Modifier la réservation</twig:PageTitle>
 
-			{{ include('reservations/_form.html.twig', {'button_label': 'Mettre a jour'}) }}
+			{{ include('reservations/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-			<a href="{{ path('app_reservations_index') }}">Revenir a la liste</a>
+			<a href="{{ path('app_reservations_index') }}">Retour</a>
 
-			{{ include('reservations/_delete_form.html.twig') }}
+{#			{{ include('reservations/_delete_form.html.twig') }}#}
 		</twig:Card>
 	</twig:Container>
 

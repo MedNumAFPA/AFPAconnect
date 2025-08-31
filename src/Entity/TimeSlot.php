@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\TimeSlotsRepository;
+use App\Repository\TimeSlotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TimeSlotsRepository::class)]
-class TimeSlots
+#[ORM\Entity(repositoryClass: TimeSlotRepository::class)]
+class TimeSlot
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,12 +27,12 @@ class TimeSlots
 
     #[ORM\ManyToOne(inversedBy: 'timeSlots')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Workshops $workshop = null;
+    private ?Workshop $workshop = null;
 
     /**
-     * @var Collection<int, Reservations>
+     * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'timeslot', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'timeslot', orphanRemoval: true)]
     private Collection $reservations;
 
     public function __construct()
@@ -79,26 +79,26 @@ class TimeSlots
         return $this;
     }
 
-    public function getWorkshop(): ?Workshops
+    public function getWorkshop(): ?Workshop
     {
         return $this->workshop;
     }
 
-    public function setWorkshop(?Workshops $workshop): static
+    public function setWorkshop(?Workshop $workshop): static
     {
         $this->workshop = $workshop;
         return $this;
     }
 
     /**
-     * @return Collection<int, Reservations>
+     * @return Collection<int, Reservation>
      */
     public function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function addReservation(Reservations $reservation): static
+    public function addReservation(Reservation $reservation): static
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
@@ -107,7 +107,7 @@ class TimeSlots
         return $this;
     }
 
-    public function removeReservation(Reservations $reservation): static
+    public function removeReservation(Reservation $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
             if ($reservation->getTimeslot() === $this) {
@@ -115,5 +115,23 @@ class TimeSlots
             }
         }
         return $this;
+    }
+
+    public function getChoiceLabel(): string
+    {
+        // On récupère le nom de l'atelier et on formate la date et l'heure
+        $workshopName = $this->getWorkshop()->getName();
+        $date = $this->getDate()->format('d/m/Y');
+        $fromTime = $this->getFromTime()->format('H:i');
+        $toTime = $this->getToTime()->format('H:i');
+
+        // On retourne une chaîne de caractères complète et claire
+        return sprintf(
+            '%s - %s (%s - %s)',
+            $workshopName,
+            $date,
+            $fromTime,
+            $toTime
+        );
     }
 }

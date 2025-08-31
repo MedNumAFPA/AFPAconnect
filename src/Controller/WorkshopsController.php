@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Workshops;
-use App\Form\WorkshopsType;
-use App\Repository\WorkshopsRepository;
+use App\Entity\Workshop;
+use App\Form\WorkshopType;
+use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class WorkshopsController extends AbstractController
 {
     #[Route(name: 'app_workshops_index', methods: ['GET'])]
-    public function index(WorkshopsRepository $workshopsRepository): Response
+    public function index(WorkshopRepository $workshopsRepository): Response
     {
         return $this->render('workshops/index.html.twig', [
             'workshops' => $workshopsRepository->findAll(),
@@ -25,8 +25,8 @@ final class WorkshopsController extends AbstractController
     #[Route('/new', name: 'app_workshops_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $workshop = new Workshops();
-        $form = $this->createForm(WorkshopsType::class, $workshop);
+        $workshop = new Workshop();
+        $form = $this->createForm(WorkshopType::class, $workshop);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -43,7 +43,7 @@ final class WorkshopsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_workshops_show', methods: ['GET'])]
-    public function show(Workshops $workshop): Response
+    public function show(Workshop $workshop): Response
     {
         return $this->render('workshops/show.html.twig', [
             'workshop' => $workshop,
@@ -51,9 +51,9 @@ final class WorkshopsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_workshops_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Workshops $workshop, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Workshop $workshop, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(WorkshopsType::class, $workshop);
+        $form = $this->createForm(WorkshopType::class, $workshop);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,7 +69,7 @@ final class WorkshopsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_workshops_delete')]
-    public function delete(Request $request, Workshops $workshop, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Workshop $workshop, EntityManagerInterface $entityManager): Response
     {
           if ($this->isCsrfTokenValid('delete' . $workshop->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($workshop);

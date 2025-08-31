@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Reservations;
-use App\Form\ReservationsType;
-use App\Repository\ReservationsRepository;
+use App\Entity\Reservation;
+use App\Form\ReservationType;
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ReservationsController extends AbstractController
 {
     #[Route(name: 'app_reservations_index', methods: ['GET'])]
-    public function index(ReservationsRepository $reservationsRepository): Response
+    public function index(ReservationRepository $reservationsRepository): Response
     {
         return $this->render('reservations/index.html.twig', [
             'reservations' => $reservationsRepository->findAll(),
@@ -25,8 +25,8 @@ final class ReservationsController extends AbstractController
     #[Route('/new', name: 'app_reservations_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $reservation = new Reservations();
-        $form = $this->createForm(ReservationsType::class, $reservation);
+        $reservation = new Reservation();
+        $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -43,7 +43,7 @@ final class ReservationsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_reservations_show', methods: ['GET'])]
-    public function show(Reservations $reservation): Response
+    public function show(Reservation $reservation): Response
     {
         return $this->render('reservations/show.html.twig', [
             'reservation' => $reservation,
@@ -51,9 +51,9 @@ final class ReservationsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_reservations_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Reservations $reservation, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ReservationsType::class, $reservation);
+        $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,7 +69,7 @@ final class ReservationsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_reservations_delete', methods: ['POST'])]
-    public function delete(Request $request, Reservations $reservation, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($reservation);

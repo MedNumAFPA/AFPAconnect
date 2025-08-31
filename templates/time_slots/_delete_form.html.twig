@@ -1,4 +1,4 @@
-<form class="" method="post" action="{{ path('app_time_slots_delete', {'id': time_slot.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce créneau?');">
+<form class="" method="post" action="{{ path('app_time_slots_delete', {'id': time_slot.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce créneau ?');">
 
 	<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ time_slot.id) }}">
 	<twig:Button color="danger">Supprimer</twig:Button>

@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationsRepository;
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReservationsRepository::class)]
-class Reservations
+#[ORM\Entity(repositoryClass: ReservationRepository::class)]
+class Reservation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,7 +36,7 @@ class Reservations
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?TimeSlots $timeslot = null;
+    private ?TimeSlot $timeslot = null;
 
     public function getId(): ?int
     {
@@ -127,12 +127,12 @@ class Reservations
         return $this;
     }
 
-    public function getTimeslot(): ?TimeSlots
+    public function getTimeslot(): ?TimeSlot
     {
         return $this->timeslot;
     }
 
-    public function setTimeslot(?TimeSlots $timeslot): static
+    public function setTimeslot(?TimeSlot $timeslot): static
     {
         $this->timeslot = $timeslot;
 

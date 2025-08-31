@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\TimeSlots;
-use App\Form\TimeSlotsType;
-use App\Repository\TimeSlotsRepository;
+use App\Entity\TimeSlot;
+use App\Form\TimeSlotType;
+use App\Repository\TimeSlotRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class TimeSlotsController extends AbstractController
 {
     #[Route(name: 'app_time_slots_index', methods: ['GET'])]
-    public function index(TimeSlotsRepository $timeSlotsRepository): Response
+    public function index(TimeSlotRepository $timeSlotsRepository): Response
     {
         return $this->render('time_slots/index.html.twig', [
             'time_slots' => $timeSlotsRepository->findAll(),
@@ -23,10 +23,10 @@ final class TimeSlotsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_time_slots_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TimeSlotsRepository $timeSlotsRepo): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TimeSlotRepository $timeSlotsRepo): Response
     {
-        $timeSlot = new TimeSlots();
-        $form = $this->createForm(TimeSlotsType::class, $timeSlot);
+        $timeSlot = new TimeSlot();
+        $form = $this->createForm(TimeSlotType::class, $timeSlot);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,7 +56,7 @@ final class TimeSlotsController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_time_slots_show', methods: ['GET'])]
-    public function show(TimeSlots $timeSlot): Response
+    public function show(TimeSlot $timeSlot): Response
     {
         return $this->render('time_slots/show.html.twig', [
             'time_slot' => $timeSlot,
@@ -64,9 +64,9 @@ final class TimeSlotsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_time_slots_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, TimeSlots $timeSlot, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, TimeSlot $timeSlot, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(TimeSlotsType::class, $timeSlot);
+        $form = $this->createForm(TimeSlotType::class, $timeSlot);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,7 +83,7 @@ final class TimeSlotsController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_time_slots_delete')]
-    public function delete(TimeSlots $timeSlot, EntityManagerInterface $entityManager): Response
+    public function delete(TimeSlot $timeSlot, EntityManagerInterface $entityManager): Response
     {
         // dd("test");
         $entityManager->remove($timeSlot);
