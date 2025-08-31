@@ -38,9 +38,9 @@ class ReservationType extends AbstractType
             ])
             ->add('timeslot', EntityType::class, [
                 'class' => TimeSlot::class,
-                'choice_label' => 'id',
+                'choice_label' => 'choiceLabel',
                 'attr' => ['class' => 'form-combo'],
-                'label' => 'Créneau'
+                'label' => 'Atelier et créneaux'
             ])
         ;
     }
