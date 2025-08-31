@@ -28,8 +28,8 @@ class SendRemindersCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // Define the time window (e.g., between 24 and 25 hours from now)
-        $checkStartTime = new \DateTimeImmutable('+24 hours');
+        // Define the time window (in this case, between 23 and 25 hours from now)
+        $checkStartTime = new \DateTimeImmutable('+23 hours');
         $checkEndTime = new \DateTimeImmutable('+25 hours');
 
         $reservationsToSend = $this->reservationRepository->findRemindersDueToSend($checkStartTime, $checkEndTime);

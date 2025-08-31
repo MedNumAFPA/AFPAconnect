@@ -8,6 +8,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Email;
+use Twig\Environment;
 
 /**
  * This is the service that handles sending the reminder email.
@@ -16,15 +17,17 @@ use Symfony\Component\Mime\Email;
 final class SendReminderEmailMessageHandler
 {
     public function __construct(
-        private readonly MailerInterface $mailer,
+        private readonly MailerInterface        $mailer,
         private readonly ReservationsRepository $reservationsRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly Environment            $twig
     )
     {
 
     }
 
     // The __invoke method receives the message from the SAME namespace.
+
     /**
      * @throws TransportExceptionInterface
      */
@@ -32,28 +35,26 @@ final class SendReminderEmailMessageHandler
     {
         $reservation = $this->reservationsRepository->find($message->getReservationId());
 
-        // Safety checks: do nothing if reservation is gone or reminder was already sent.
         if (!$reservation || $reservation->getReminderSentAt() !== null) {
             return;
         }
 
-        $workshopDate = $reservation->getTimeslot()->getDate()->format('F j, Y');
-        $workshopTime = $reservation->getTimeslot()->getFromTime()->format('g:i A');
+        $htmlContent = $this->twig->render('email/reminder.html.twig', [
+            'reservation' => $reservation,
+        ]);
 
         $email = (new Email())
-            ->from('me@arnaudrabel.com')
+            ->from('me@arnaudrabel.com') // Change this later
             ->to($reservation->getEmail())
             ->subject('Rappel: Vous avez un atelier bientôt!')
-            ->text(sprintf(
-                "Bonjour %s,\n\nCeci est un rappel que vous avez un atelier prévu le %s à %s.\n\nÀ bientôt!",
-                $reservation->getFirstname(),
-                $workshopDate,
-                $workshopTime
-            ));
+//            ->embedFromPath('public/images/logo.png', 'logo')
+            ->embedFromPath('public/images/logo-txt.png', 'logo-txt')
+            ->text('This is the plain text version of the email.') // Fallback plain text
+            // Set the HTML body of the email
+            ->html($htmlContent);
 
         $this->mailer->send($email);
 
-        // Mark the reminder as sent to prevent duplicates.
         $reservation->setReminderSentAt(new \DateTimeImmutable());
         $this->entityManager->flush();
     }
