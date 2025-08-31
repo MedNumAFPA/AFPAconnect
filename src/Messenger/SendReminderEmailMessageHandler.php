@@ -2,7 +2,7 @@
 
 namespace App\Messenger;
 
-use App\Repository\ReservationsRepository;
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,7 +19,7 @@ final class SendReminderEmailMessageHandler
 {
     public function __construct(
         private readonly MailerInterface        $mailer,
-        private readonly ReservationsRepository $reservationsRepository,
+        private readonly ReservationRepository  $reservationsRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly Environment            $twig,
         private readonly KernelInterface        $kernel,

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\ReservationsRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -17,7 +17,7 @@ class MailController extends AbstractController
 //     * @throws TransportExceptionInterface
 //     */
     #[Route('/mailtest', name: 'app_mail')]
-    public function index(MailerInterface $mailer, ReservationsRepository $reservationsRepository, KernelInterface $kernel): Response
+    public function index(MailerInterface $mailer, ReservationRepository $reservationsRepository, KernelInterface $kernel): Response
     {
 
 
