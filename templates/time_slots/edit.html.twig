@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Éditer créneau
+{% block title %}Modifier créneau
 {% endblock %}
 
 {% block body %}
 	<twig:Container>
 		<twig:Card>
 
-			<twig:PageTitle>Éditer créneau</twig:PageTitle>
-			{{ include('time_slots/_form.html.twig', {'button_label': 'Mettre a jour'}) }}
-			<a href="{{ path('app_time_slots_index') }}" class="mt-5">Revenir a la liste</a>
+			<twig:PageTitle>Modifier créneau</twig:PageTitle>
+			{{ include('time_slots/_form.html.twig', {'button_label': 'Modifier'}) }}
+			<a href="{{ path('app_time_slots_index') }}" class="mt-5">Retour</a>
 		</twig:Card>
 	</twig:Container>
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reservations{% endblock %}
+{% block title %}Reservation : {{ reservation.id }}{% endblock %}
 
 {% block body %}
-    <h1>Reservations</h1>
+    <h1>Reservation : {{ reservation.id }}</h1>
 
     <table class="table">
         <tbody>
@@ -32,13 +32,13 @@
                 <td>{{ reservation.formationName }}</td>
             </tr>
             <tr>
-                <th>Veux être rappelé de l'atelier</th>
+                <th>Rappel activé ?</th>
                 <td>{{ reservation.isReminderActive ? 'Oui' : 'Non' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_reservations_index') }}">Revenir a la liste</a>
+    <a href="{{ path('app_reservations_index') }}">Retour</a>
 
     <a href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">Éditer</a>
 
