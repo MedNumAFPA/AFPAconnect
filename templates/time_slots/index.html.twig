@@ -32,9 +32,9 @@
 						<tr class="border-b dark:border-neutral-600">
 							<td class="px-2  py-4">{{ time_slot.id }}</td>
 
-							<td class="px-2 py-4">{{ time_slot.fromTime ? time_slot.fromTime|date('H:i:s') : '' }}</td>
+							<td class="px-2 py-4">{{ time_slot.fromTime ? time_slot.fromTime|date('H:i') : '' }}</td>
 
-							<td class="px-2  py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i:s') : '' }}</td>
+							<td class="px-2  py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
 
 							<td class="px-2  py-4">{{ time_slot.date ? time_slot.date|date('Y-m-d') : '' }}</td>
 
