@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\Reservations;
-use App\Entity\TimeSlots;
+use App\Entity\Reservation;
+use App\Entity\TimeSlot;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReservationsType extends AbstractType
+class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -37,7 +37,7 @@ class ReservationsType extends AbstractType
                 'required' => false,
             ])
             ->add('timeslot', EntityType::class, [
-                'class' => TimeSlots::class,
+                'class' => TimeSlot::class,
                 'choice_label' => 'id',
                 'attr' => ['class' => 'form-combo'],
                 'label' => 'Créneau'
@@ -48,7 +48,7 @@ class ReservationsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Reservations::class,
+            'data_class' => Reservation::class,
         ]);
     }
 }

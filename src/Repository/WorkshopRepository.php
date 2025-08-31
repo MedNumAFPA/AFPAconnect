@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Workshops;
+use App\Entity\Workshop;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Workshops>
+ * @extends ServiceEntityRepository<Workshop>
  */
-class WorkshopsRepository extends ServiceEntityRepository
+class WorkshopRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Workshops::class);
+        parent::__construct($registry, Workshop::class);
     }
 
     //    /**
-    //     * @return Workshops[] Returns an array of Workshops objects
+    //     * @return Workshop[] Returns an array of Workshop objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class WorkshopsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Workshops
+    //    public function findOneBySomeField($value): ?Workshop
     //    {
     //        return $this->createQueryBuilder('w')
     //            ->andWhere('w.exampleField = :val')

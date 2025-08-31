@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Messenger\SendReminderEmailMessage;
-use App\Repository\ReservationsRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,8 +18,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class SendRemindersCommand extends Command
 {
     public function __construct(
-        private readonly ReservationsRepository $reservationRepository,
-        private readonly MessageBusInterface $bus
+        private readonly ReservationRepository $reservationRepository,
+        private readonly MessageBusInterface   $bus
     ) {
         parent::__construct();
     }

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Workshops;
+use App\Entity\Workshop;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -19,7 +19,7 @@ final class WorkshopsControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-        $this->workshopRepository = $this->manager->getRepository(Workshops::class);
+        $this->workshopRepository = $this->manager->getRepository(Workshop::class);
 
         foreach ($this->workshopRepository->findAll() as $object) {
             $this->manager->remove($object);
@@ -63,7 +63,7 @@ final class WorkshopsControllerTest extends WebTestCase
     public function testShow(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Workshops();
+        $fixture = new Workshop();
         $fixture->setName('My Title');
         $fixture->setDescription('My Title');
         $fixture->setMaxSlots('My Title');
@@ -84,7 +84,7 @@ final class WorkshopsControllerTest extends WebTestCase
     public function testEdit(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Workshops();
+        $fixture = new Workshop();
         $fixture->setName('Value');
         $fixture->setDescription('Value');
         $fixture->setMaxSlots('Value');
@@ -118,7 +118,7 @@ final class WorkshopsControllerTest extends WebTestCase
     public function testRemove(): void
     {
         $this->markTestIncomplete();
-        $fixture = new Workshops();
+        $fixture = new Workshop();
         $fixture->setName('Value');
         $fixture->setDescription('Value');
         $fixture->setMaxSlots('Value');

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\WorkshopsRepository;
+use App\Repository\WorkshopRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: WorkshopsRepository::class)]
-class Workshops
+#[ORM\Entity(repositoryClass: WorkshopRepository::class)]
+class Workshop
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,10 +28,10 @@ class Workshops
     private ?int $roomNumber = null;
 
     /**
-     * @var Collection<int, TimeSlots>
+     * @var Collection<int, TimeSlot>
      */
-    // #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlots::class, cascade: ['persist', 'remove'])]
-    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlots::class, cascade: ['persist'])]
+    // #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlot::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlot::class, cascade: ['persist'])]
     private Collection $timeSlots;
 
     public function __construct()
@@ -89,14 +89,14 @@ class Workshops
     }
 
     /**
-     * @return Collection<int, TimeSlots>
+     * @return Collection<int, TimeSlot>
      */
     public function getTimeSlots(): Collection
     {
         return $this->timeSlots;
     }
 
-    public function addTimeSlot(TimeSlots $timeSlot): static
+    public function addTimeSlot(TimeSlot $timeSlot): static
     {
         if (!$this->timeSlots->contains($timeSlot)) {
             $this->timeSlots->add($timeSlot);
@@ -105,7 +105,7 @@ class Workshops
         return $this;
     }
 
-    public function removeTimeSlot(TimeSlots $timeSlot): static
+    public function removeTimeSlot(TimeSlot $timeSlot): static
     {
         if ($this->timeSlots->removeElement($timeSlot)) {
             if ($timeSlot->getWorkshop() === $this) {
