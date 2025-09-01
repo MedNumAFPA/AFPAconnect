@@ -7,7 +7,6 @@
         <twig:Card>
             <twig:PageTitle>Créer des créneaux pour un atelier</twig:PageTitle>
 
-
             <p class="text-sm text-gray-500 mb-4">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
@@ -17,7 +16,6 @@
 
             <h3 class="text-lg font-semibold mt-6 mb-2">Jours</h3>
 
-            {# On définit une variable Twig qui contiendra le HTML de notre prototype personnalisé #}
             {% set prototype %}
                 {{ form_row(form.dailySlots.vars.prototype.date) }}
                 {{ form_row(form.dailySlots.vars.prototype.morningSlot) }}
@@ -35,7 +33,6 @@
                         {{ form_row(dayForm.date) }}
                         {{ form_row(dayForm.morningSlot) }}
                         {{ form_row(dayForm.hasAfternoonSlot) }}
-
                         <div class="afternoon-slot-wrapper">
                             {{ form_row(dayForm.afternoonSlot) }}
                         </div>
@@ -44,22 +41,21 @@
                 {% endfor %}
             </ul>
 
-            <div class="flex items-center space-x-4 mt-4">
+            <div class="flex justify-center items-center space-x-4 mt-4">
                 <button type="button" id="add-day-button"
-                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                        class="bg-green-800 text-white p-4 rounded-md shadow-md hover:shadow-sm">
                     Ajouter une autre journée
                 </button>
-
                 <button type="button" id="remove-day-button"
-                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 hidden">
+                        class="bg-red-600 text-white p-4 rounded-md shadow-md hover:shadow-sm hidden">
                     Supprimer le dernier jour
                 </button>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-6 flex justify-center">
                 <button type="submit"
-                        class="px-6 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700">Sauvegarder
-                    tous les créneaux
+                        class="bg-primary text-white p-4 rounded-md shadow-md hover:shadow-sm">
+                    Sauvegarder tous les créneaux
                 </button>
             </div>
 

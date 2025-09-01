@@ -4,26 +4,27 @@
 {% endblock %}
 
 {% block body %}
-	<twig:Container>
-		<twig:Card>
-			<twig:PageTitle class="text-2xl font-bold mb-6">Inscription</twig:PageTitle>
+    <twig:Container>
+        <twig:Card>
+            <twig:PageTitle class="text-2xl font-bold mb-6">Inscription</twig:PageTitle>
             <p class="text-sm text-gray-500 mb-4">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
-			{{ form_errors(registrationForm) }}
+            {{ form_errors(registrationForm) }}
 
-			{{ form_start(registrationForm) }}
-			{{ form_row(registrationForm.email) }}
-			{{ form_row(registrationForm.plainPassword) }}
-			{{ form_row(registrationForm.agreeTerms) }}
+            {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+            <div class="flex items-center space-x-4 ml-3 mt-3">
+                <twig:Button color="primary" type="submit">S'inscrire</twig:Button>
+            </div>
+            {{ form_end(registrationForm) }}
 
-			<twig:Button color="primary" type="submit">S'inscrire</twig:Button>
-			{{ form_end(registrationForm) }}
+        </twig:Card>
+    </twig:Container>
 
-		</twig:Card>
-	</twig:Container>
-
-	<h1></h1>
+    <h1></h1>
 
 
 {% endblock %}
