@@ -57,7 +57,7 @@
                     <strong>{{ timeslot.workshop.name }}</strong><br>
                     {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}<br>
                     Salle : {{ timeslot.workshop.roomNumber }}<br>
-                    g
+                    Places max : {{ timeslot.workshop.maxSlots }}<br><hr>
                   </div>
                 {% endfor %}
               {% else %}
