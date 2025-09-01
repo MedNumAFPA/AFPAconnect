@@ -40,4 +40,15 @@ class TimeSlotRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findSlotsByDate(\DateTime $date): array
+        {
+            return $this->createQueryBuilder('t')
+                ->leftJoin('t.workshop', 'w')
+                ->addSelect('w')
+                ->where('t.date = :date')
+                ->setParameter('date', $date->format('Y-m-d'))
+                ->orderBy('t.fromTime', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
 }

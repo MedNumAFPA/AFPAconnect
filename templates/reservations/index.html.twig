@@ -19,6 +19,7 @@
                     <th scope="col" class="px-2 py-4">Numéro téléphone</th>
                     <th scope="col" class="px-2 py-4">Nom de la formation</th>
                     <th scope="col" class="px-2 py-4">Rappel activé ?</th>
+                    <th>Rappel envoyé a :</th>
                     <th scope="col" class="px-2 py-4">Créneau</th>
                     <th scope="col" class="px-2 py-4 text-center">Actions</th>
                 </tr>
@@ -32,9 +33,8 @@
                         <td class="px-2 py-4">{{ reservation.email }}</td>
                         <td class="px-2 py-4">{{ reservation.phoneNumber }}</td>
                         <td class="px-2 py-4">{{ reservation.formationName }}</td>
-
-                        {# Correction de l'ordre des colonnes #}
                         <td class="px-2 py-4">{{ reservation.isReminderActive ? 'Oui' : 'Non' }}</td>
+                        <td>{{ reservation.reminderSentAt ? reservation.reminderSentAt|date('d/m/Y à H:i') : 'Non envoyé' }}</td>
                         <td class="px-2 py-4">
                             {{ reservation.timeslot.fromTime|format_time(locale='fr', pattern='HH:mm') }}
                             -

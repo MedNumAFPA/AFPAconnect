@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer des créneaux pour un atelier{% endblock %}
+
+{% block body %}
+    <twig:Container>
+        <twig:Card>
+            <twig:PageTitle>Créer des créneaux pour un atelier</twig:PageTitle>
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.workshop) }}
+
+            <h3 class="text-lg font-semibold mt-6 mb-2">Jours</h3>
+
+            {# On définit une variable Twig qui contiendra le HTML de notre prototype personnalisé #}
+            {% set prototype %}
+                {{ form_row(form.dailySlots.vars.prototype.date) }}
+                {{ form_row(form.dailySlots.vars.prototype.morningSlot) }}
+                {{ form_row(form.dailySlots.vars.prototype.hasAfternoonSlot) }}
+                <div class="afternoon-slot-wrapper">
+                    {{ form_row(form.dailySlots.vars.prototype.afternoonSlot) }}
+                </div>
+                <hr class="my-4">
+            {% endset %}
+
+            <ul id="daily-slots-list" class="space-y-4" data-prototype="{{ prototype|e('html_attr') }}"
+                data-widget-tags="{{ '<li></li>'|e('html_attr') }}" data-index="{{ form.dailySlots|length }}">
+                {% for dayForm in form.dailySlots %}
+                    <li>
+                        {{ form_row(dayForm.date) }}
+                        {{ form_row(dayForm.morningSlot) }}
+                        {{ form_row(dayForm.hasAfternoonSlot) }}
+
+                        <div class="afternoon-slot-wrapper">
+                            {{ form_row(dayForm.afternoonSlot) }}
+                        </div>
+                        <hr class="my-4">
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <button type="button" id="add-day-button"
+                    class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                Ajouter une autre journée
+            </button>
+
+            <div class="mt-6">
+                <button type="submit"
+                        class="px-6 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700">Sauvegarder
+                    tous les créneaux
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </twig:Card>
+    </twig:Container>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // On met toute notre logique dans une fonction qu'on peut appeler quand on veut.
+        function initializeFormLogic() {
+            const list = document.getElementById('daily-slots-list');
+            const addDayButton = document.getElementById('add-day-button');
+
+            // Si les éléments n'existent pas sur la page, on ne fait rien.
+            if (!list || !addDayButton) {
+                return;
+            }
+
+            // La fonction pour la case à cocher
+            const initializeDayFormLogic = (dayFormElement) => {
+                const checkbox = dayFormElement.querySelector('input[type="checkbox"][id$="_hasAfternoonSlot"]');
+                const afternoonWrapper = dayFormElement.querySelector('.afternoon-slot-wrapper');
+                if (!checkbox || !afternoonWrapper) return;
+                const updateVisibility = () => {
+                    afternoonWrapper.style.display = checkbox.checked ? 'block' : 'none';
+                };
+                checkbox.addEventListener('change', updateVisibility);
+                updateVisibility();
+            };
+
+            // On applique aux formulaires existants
+            list.querySelectorAll('li').forEach(initializeDayFormLogic);
+
+            // On configure le bouton "Ajouter"
+            addDayButton.addEventListener('click', function () {
+                // ... votre logique pour ajouter une nouvelle journée ...
+                const lastDateInput = list.querySelector('li:last-child input[type="date"]');
+                let nextDate = new Date();
+                if (lastDateInput && lastDateInput.value) {
+                    const lastDate = new Date(lastDateInput.value);
+                    nextDate.setTime(lastDate.getTime() + (24 * 60 * 60 * 1000));
+                }
+                const year = nextDate.getFullYear();
+                const month = String(nextDate.getMonth() + 1).padStart(2, '0');
+                const day = String(nextDate.getDate()).padStart(2, '0');
+                const nextDayString = `${year}-${month}-${day}`;
+
+                let index = parseInt(list.dataset.index);
+                let prototype = list.dataset.prototype;
+                let newFormHtml = prototype.replace(/__name__/g, index);
+
+                const newLi = document.createElement('li');
+                newLi.innerHTML = newFormHtml;
+                list.appendChild(newLi);
+
+                const newDateInput = newLi.querySelector('input[type="date"]');
+                if (newDateInput) {
+                    newDateInput.value = nextDayString;
+                }
+
+                list.dataset.index = index + 1;
+
+                initializeDayFormLogic(newLi);
+            });
+        }
+
+        // document.addEventListener('DOMContentLoaded', initializeFormLogic);
+        document.addEventListener('turbo:load', initializeFormLogic);
+    </script>
+{% endblock %}
+
+{#
+// Version JS sans functions
+
+            document.addEventListener('turbo:load', function () {
+            const list = document.getElementById('daily-slots-list');
+            const addDayButton = document.getElementById('add-day-button');
+
+            if (!list || !addDayButton) {
+                return;
+            }
+
+            const initializeDayFormLogic = (dayFormElement) => {
+                const checkbox = dayFormElement.querySelector('input[type="checkbox"][id$="_hasAfternoonSlot"]');
+                const wrapper = dayFormElement.querySelector('.afternoon-slot-wrapper');
+
+                if (!checkbox || !wrapper) return;
+
+                const toggleVisibility = function () {
+                    wrapper.style.display = checkbox.checked ? 'block' : 'none';
+                };
+
+                checkbox.addEventListener('change', toggleVisibility);
+                toggleVisibility();
+            };
+
+            list.querySelectorAll('li').forEach(initializeDayFormLogic);
+
+            addDayButton.addEventListener('click', function () {
+                const lastDateInput = list.querySelector('li:last-child input[type="date"]');
+                let nextDate = new Date();
+                if (lastDateInput && lastDateInput.value) {
+                    const lastDate = new Date(lastDateInput.value);
+                    nextDate.setTime(lastDate.getTime() + (24 * 60 * 60 * 1000));
+                }
+                const year = nextDate.getFullYear();
+                const month = String(nextDate.getMonth() + 1).padStart(2, '0');
+                const day = String(nextDate.getDate()).padStart(2, '0');
+                const nextDayString = `${year}-${month}-${day}`;
+
+                let index = parseInt(list.dataset.index);
+                let prototype = list.dataset.prototype;
+                let newFormHtml = prototype.replace(/__name__/g, index);
+
+                const newLi = document.createElement('li');
+                newLi.innerHTML = newFormHtml;
+                list.appendChild(newLi);
+
+                const newDateInput = newLi.querySelector('input[type="date"]');
+                if (newDateInput) {
+                    newDateInput.value = nextDayString;
+                }
+
+                list.dataset.index = index + 1;
+
+                initializeDayFormLogic(newLi);
+            });
+        });
+#}

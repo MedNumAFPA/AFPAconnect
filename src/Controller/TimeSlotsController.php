@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Form\WorkshopTimeSlotType;
 
 #[Route('/timeslots')]
 final class TimeSlotsController extends AbstractController
@@ -91,4 +92,58 @@ final class TimeSlotsController extends AbstractController
         $this->addFlash('danger', 'The time slot was deleted!');
         return $this->redirectToRoute('app_time_slots_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/new/batch', name: 'app_time_slots_new_batch')] // Nouvelle route
+    public function newBatch(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Structure de données initiale
+        $initialData = [
+            'dailySlots' => [
+                [
+                    'date' => new \DateTime(),
+                ]
+            ]
+        ];
+
+        $form = $this->createForm(WorkshopTimeSlotType::class, $initialData);
+        $form->handleRequest($request);
+
+        // Dans la méthode newBatch de votre contrôleur
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $workshop = $data['workshop'];
+
+            foreach ($data['dailySlots'] as $dailySlotData) {
+                $date = $dailySlotData['date'];
+
+                // La case à cocher n'est pas dans les données, mais on peut vérifier si le créneau existe
+                $morning = $dailySlotData['morningSlot'];
+                $afternoon = $dailySlotData['afternoonSlot'];
+
+                // Persister le créneau du matin (on suppose qu'il y en a toujours un)
+                if ($morning && $morning->getFromTime() && $morning->getToTime()) {
+                    $morning->setDate($date);
+                    $morning->setWorkshop($workshop);
+                    $entityManager->persist($morning);
+                }
+
+                // NE PERSISTER LE CRÉNEAU DE L'APRÈS-MIDI QUE S'IL EST REMPLI
+                if ($afternoon && $afternoon->getFromTime() && $afternoon->getToTime()) {
+                    $afternoon->setDate($date);
+                    $afternoon->setWorkshop($workshop);
+                    $entityManager->persist($afternoon);
+                }
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Les créneaux ont été ajoutés avec succès !');
+            return $this->redirectToRoute('app_time_slots_index');
+        }
+
+        return $this->render('time_slots/new_batch.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }
