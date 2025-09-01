@@ -1,17 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Inscription
+{% endblock %}
 
 {% block body %}
-    <h1>Inscription</h1>
+	<twig:Container>
+		<twig:Card>
+			<twig:PageTitle class="text-2xl font-bold mb-6">Inscription</twig:PageTitle>
+			{{ form_errors(registrationForm) }}
 
-    {{ form_errors(registrationForm) }}
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.plainPassword) }}
+			{{ form_row(registrationForm.agreeTerms) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+			<twig:Button color="primary" type="submit">S'inscrire</twig:Button>
+			{{ form_end(registrationForm) }}
 
-        <button type="submit" class="btn">S'inscrire</button>
-    {{ form_end(registrationForm) }}
+		</twig:Card>
+	</twig:Container>
+
+	<h1></h1>
+
+
 {% endblock %}
