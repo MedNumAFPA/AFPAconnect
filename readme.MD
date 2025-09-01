@@ -131,3 +131,33 @@ To get a local copy up and running, follow these steps.
     ```sh
     symfony serve
     ```
+
+## 🚀 Deployment
+
+When you deploy updated code to your production server, it is crucial to follow a series of steps to ensure the new changes are applied correctly and the application cache is up to date.
+
+Here is the checklist to follow after sending your code to the server (e.g., after a `git pull`):
+
+1.  **Update PHP Dependencies:**
+    This command installs any new dependencies and optimizes the class autoloader for production.
+    ```sh
+    composer install --no-dev --optimize-autoloader
+    ```
+
+2.  **Update the Database (if necessary):**
+    If you have made any changes to your Doctrine entities, this command will apply the corresponding migrations.
+    ```sh
+    symfony console doctrine:migrations:migrate --env=prod
+    ```
+
+3.  **Build Frontend Assets (CSS & JS):**
+    This command rebuilds your Tailwind CSS and JavaScript files for production.
+    ```sh
+    symfony console tailwind:build
+    ```
+
+4.  **Clear the Application Cache (Crucial Step):**
+    This is the most important step. It forces Symfony to recompile your Twig templates and configuration. This is what solves issues with pages not showing the latest changes.
+    ```sh
+    symfony console cache:clear --env=prod
+    ```
