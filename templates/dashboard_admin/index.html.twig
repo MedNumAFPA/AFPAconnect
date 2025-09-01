@@ -32,19 +32,18 @@
 {% for i in 1..4 %}
   <div id="tab{{ i }}" class="mt-4 {% if i != 1 %}hidden{% endif %}">
     <table class="min-w-full text-sm">
-
       <thead>
         <tr class="bg-gray-200 font-bold">
-        {% set semaineKey = 'semaine' ~ i %}
+          {% set semaineKey = 'semaine' ~ i %}
           {% for day in days %}
-          <td class="p-2">
-            {{ day|capitalize }}<br>
-            {{ weekDates[semaineKey][day]|date('d/m/Y') }}
-          </td>
+            <td class="p-2">
+              {{ day|capitalize }}<br>
+              {{ weekDates[semaineKey][day]|date('d/m/Y') }}
+            </td>
           {% endfor %}
         </tr>
       </thead>
-      
+
       <tbody>
         <tr>
           {% set semaineKey = 'semaine' ~ i %}
@@ -53,11 +52,11 @@
               {% set timeslotday = week[semaineKey][day] ?? [] %}
               {% if timeslotday is not empty %}
                 {% for timeslot in timeslotday %}
-                  <div>
+                  <div class="mb-2 p-2 border rounded bg-gray-50">
                     <strong>{{ timeslot.workshop.name }}</strong><br>
-                    {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}<br>
                     Salle : {{ timeslot.workshop.roomNumber }}<br>
-                    Places max : {{ timeslot.workshop.maxSlots }}<br><hr>
+                    Places max : {{ timeslot.reservations|length }} / {{ timeslot.workshop.maxSlots }}<br>
+                    Horaire : {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}
                   </div>
                 {% endfor %}
               {% else %}
@@ -67,7 +66,6 @@
           {% endfor %}
         </tr>
       </tbody>
-
     </table>
   </div>
 {% endfor %}
