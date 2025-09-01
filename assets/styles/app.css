@@ -39,3 +39,34 @@ label {
     margin: 10px;
     width: 25%;
 }
+
+label.required::after {
+    content: " *";
+    color: red;
+    margin-left: 2px;
+}
+
+/* form {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 20px;
+}
+.form-control {
+    width: 100%;
+} */
+
+/*
+
+td,
+th {
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px;
+    padding: 5px;
+}
+
+thead {
+    background-color: var(--foreground);
+    color: #fff;
+} */

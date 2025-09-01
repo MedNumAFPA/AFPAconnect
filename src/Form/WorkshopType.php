@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Workshop;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,16 +15,32 @@ class WorkshopType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom de l\'atelier'
+                'label' => 'Nom',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez le nom de l\'atelier...'
+                ]
             ])
             ->add('description', TextType::class, [
-                'label' => 'Description'
+                'label' => 'Description',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Décrivez brièvement le contenu de l\'atelier...'
+                ]
             ])
             ->add('maxSlots', IntegerType::class, [
-                'label' => 'Places maximum'
+                'label' => 'Places maximum',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez le nombre de places disponibles maximum...'
+                ]
             ])
             ->add('roomNumber', TextType::class, [
-                'label' => 'N° de salle'
+                'label' => 'N° de salle',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Entrez le n° de salle... (Optionnel, laissez vide pour entretien distanciel)'
+                ]
             ]);
     }
 

@@ -44,7 +44,7 @@
           {% endfor %}
         </tr>
       </thead>
-      
+
       <tbody>
         <tr>
           {% set semaineKey = 'semaine' ~ i %}
@@ -57,7 +57,7 @@
                     <strong>{{ timeslot.workshop.name }}</strong><br>
                     {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}<br>
                     Salle : {{ timeslot.workshop.roomNumber }}<br>
-                    Places max : {{ timeslot.workshop.maxSlots }}<br><hr>
+                    g
                   </div>
                 {% endfor %}
               {% else %}
