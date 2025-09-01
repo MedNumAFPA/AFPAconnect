@@ -8,7 +8,6 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 class Link
 {
-
-    public string $color = '';
-    public string $href = '';
+    public string $color = 'primary';
+    public string $href = '""';
 }
