@@ -19,10 +19,8 @@ final class TimeSlotController extends AbstractController
     #[Route(name: 'app_time_slots_index', methods: ['GET'])]
     public function index(WorkshopRepository $workshopRepository): Response
     {
-
-
         return $this->render('time_slots/index.html.twig', [
-            'time_slots' => $workshopRepository->findAll(),
+            'workshops' => $workshopRepository->findAll(),
         ]);
     }
 
