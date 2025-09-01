@@ -18,31 +18,60 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'label' => 'Prénom' // <-- Traduction
+                'label' => 'Prénom',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez votre prénom...'
+                ]
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Nom de famille' // <-- Traduction
+                'label' => 'Nom de famille',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez votre nom de famille...'
+                ]
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email' // <-- Traduction
+                'label' => 'Adresse email',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez une adresse email valide...'
+                ]
             ])
             ->add('phoneNumber', TextType::class, [
-                'label' => 'Numéro de téléphone' // <-- Traduction
+                'label' => 'Numéro de téléphone',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez votre numéro de téléphone...'
+                ]
             ])
             ->add('formationName', TextType::class, [
-                'label' => 'Nom de la formation' // <-- Traduction
+                'label' => 'Nom de la formation',
+                'required' => false,
+//                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez votre nom de formation... (Optionnel, laissez vide si non applicable)'
+                ]
             ])
             ->add('isReminderActive', CheckboxType::class, [
-                'label' => 'Activer le rappel par email? (Vous recevrez un email 24h avant un atelier.)', // <-- Traduction
+                'label' => 'Activer le rappel par email? (Vous recevrez un email 24h avant un atelier.)',
                 'required' => false,
             ])
             ->add('timeslot', EntityType::class, [
                 'class' => TimeSlot::class,
                 'choice_label' => 'choiceLabel',
-                'attr' => ['class' => 'form-combo'],
-                'label' => 'Atelier et créneaux'
-            ])
-        ;
+                'label' => 'Atelier et créneaux',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'class' => 'form-combo'
+                ],
+                'placeholder' => 'Sélectionnez un créneau',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

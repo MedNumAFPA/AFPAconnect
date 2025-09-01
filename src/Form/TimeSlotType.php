@@ -30,14 +30,22 @@ class TimeSlotType extends AbstractType
                 'label' => 'Heure de début',
                 'widget' => 'single_text',
                 'html5' => true,
-                'data' => $options['default_from_time'],
             ])
             ->add('toTime', TimeType::class, [
                 'label' => 'Heure de fin',
                 'widget' => 'single_text',
                 'html5' => true,
-                'data' => $options['default_to_time'],
             ]);
+
+        if (isset($options['default_from_time'])) {
+            $fromTimeOptions['data'] = $options['default_from_time'];
+            $builder->add('fromTime', TimeType::class, $fromTimeOptions);
+        }
+        if (isset($options['default_to_time'])) {
+            $toTimeOptions['data'] = $options['default_to_time'];
+            $builder->add('toTime', TimeType::class, $toTimeOptions);
+        }
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
