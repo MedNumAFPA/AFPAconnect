@@ -21,10 +21,13 @@
 
 	</head>
 	<body>
-    {% include "layouts/navbar.html.twig" %}
+    	{% include "layouts/navbar.html.twig" %}
 		{% block body %}
 
         {% endblock %}
-	{% include "layouts/footer.html.twig" %}
+
+	    {% block footer %}
+        	{% include "layouts/footer.html.twig" %}
+    	{% endblock %}
 	</body>
 </html>
