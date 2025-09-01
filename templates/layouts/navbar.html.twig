@@ -1,66 +1,78 @@
-<nav class=" flex-row p-4 justify-between items-center md:flex lg:flex hidden shadow-md">
-	<div class="flex space-x-2 flex-1 items-center">
-		<img class=" max-w-[75px]" src="{{ asset('images/logo.svg') }}" alt="">
-		<img class=" max-w-[75px]" src="{{ asset('images/logo-txt.svg') }}" alt="">
-	</div>
-	<div class="flex flex-6 justify-between">
-		<div class="flex space-x-4 items-center">
-			<li class="list-none">
-				<a href="{{ path('app_homepage') }}" class="">
-					Accueil
-				</a>
-			</li>
-			<li class="list-none">
-				<a href="{{ path('app_qr_code') }}" class=" ">
-					Qr-code
-				</a>
-			</li>
-			<li class="list-none">
-				<a href="{{ path('app_reservations_index') }}" class=" ">
-					Réservations
-				</a>
-			</li>
-			<li class="list-none">
-				<a href="{{ path('app_time_slots_index') }}" class=" ">
-					Créneaux
-				</a>
-			</li>
-            <li class="list-none">
-                <a href="{{ path('app_workshops_index') }}" class=" ">
-                    Ateliers
-                </a>
-            </li>
-			<li class="list-none">
-				<a href="{{ path('app_user_index') }}" class=" ">
-					Utilisateurs
-				</a>
-			</li>
-			<li class="list-none">
-				<a href="{{ path('app_dashboard_admin') }}" class=" ">
-					Admin Dashboard
-				</a>
-			</li>
+<nav class="bg-white shadow-md p-4">
+	<div class="max-w-screen-xl flex items-center justify-between mx-auto">
+		<div class="flex space-x-2 items-center">
+			<a href="{{ path('app_homepage') }}">
+
+				<img href="{{ path('app_homepage') }}" class="max-w-[75px]" src="{{ asset('images/logo.svg') }}" alt="">
+			</a>
+			<a href="{{ path('app_homepage') }}">
+				<img class="max-w-[75px]" src="{{ asset('images/logo-txt.svg') }}" alt="">
+			</a>
 		</div>
-		<div class="flex space-x-3">
+		<ul class="hidden md:flex space-x-4 font-medium">
+			<li>
+				<a href="{{ path('app_homepage') }}" class="hover:text-blue-600">Accueil</a>
+			</li>
+			<li>
+				<a href="{{ path('app_qr_code') }}" class="hover:text-blue-600">Qr-code</a>
+			</li>
+			<li>
+				<a href="{{ path('app_reservations_index') }}" class="hover:text-blue-600">Réservations</a>
+			</li>
+			<li>
+				<a href="{{ path('app_time_slots_index') }}" class="hover:text-blue-600">Créneaux</a>
+			</li>
+			<li>
+				<a href="{{ path('app_workshops_index') }}" class="hover:text-blue-600">Ateliers</a>
+			</li>
+			<li>
+				<a href="{{ path('app_user_index') }}" class="hover:text-blue-600">Utilisateurs</a>
+			</li>
+			<li>
+				<a href="{{ path('app_dashboard_admin') }}" class="hover:text-blue-600">Admin Dashboard</a>
+			</li>
+		</ul>
+		<div class="hidden md:flex space-x-2">
 			{% if app.user %}
-				<li class="list-none">
-					<twig:Link href="{{ path('app_logout') }}" color="danger" onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">
-						Déconnexion
-					</twig:Link>
-				</li>
+				<a href="{{ path('app_logout') }}" class="text-red-600" onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">Déconnexion</a>
 			{% else %}
-				<li class="list-none">
-					<twig:Link href="{{ path('app_register') }}" color="primary">
-						Inscription
-					</twig:Link>
-				</li>
-				<li class="list-none">
-					<twig:Link href="{{ path('app_login') }}" color="info">
-						Connexion
-					</twig:Link>
-				</li>
+				<twig:Link href="{{ path('app_register') }}" color="primary">Inscription</twig:Link>
+				<twig:Link href="{{ path('app_login') }}" color="info">Connexion</twig:Link>
 			{% endif %}
 		</div>
+		<button id="burgerBtn" class="flex md:hidden text-xl">
+			<i class="fa fa-bars fa-lg"></i>
+		</button>
 	</div>
+	<div id="mobileMenu" class="hidden flex-col mt-4 md:hidden space-y-2">
+		<a href="{{ path('app_homepage') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Accueil</a>
+		<a href="{{ path('app_qr_code') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Qr-code</a>
+		<a href="{{ path('app_reservations_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Réservations</a>
+		<a href="{{ path('app_time_slots_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Créneaux</a>
+		<a href="{{ path('app_workshops_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Ateliers</a>
+		<a href="{{ path('app_user_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Utilisateurs</a>
+		<a href="{{ path('app_dashboard_admin') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Admin Dashboard</a>
 
+		{% if app.user %}
+			<a href="{{ path('app_logout') }}" class="px-4 py-2 text-red-600 hover:bg-red-500 hover:text-white" onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">Déconnexion</a>
+		{% else %}
+			<a href="{{ path('app_register') }}" class="px-4 py-2 text-blue-600 hover:bg-blue-500 hover:text-white">Inscription</a>
+			<a href="{{ path('app_login') }}" class="px-4 py-2 text-green-600 hover:bg-green-500 hover:text-white">Connexion</a>
+		{% endif %}
+	</div>
 </nav>
+
+ <script>
+const burgerBtn = document.getElementById("burgerBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+
+burgerBtn.addEventListener("click", () => {
+    if (mobileMenu.classList.contains("hidden")) {
+        mobileMenu.classList.remove("hidden");
+        mobileMenu.classList.add("flex");
+    } else {
+        mobileMenu.classList.remove("flex");
+        mobileMenu.classList.add("hidden");
+    }
+});
+  </script>

@@ -36,9 +36,9 @@ final class TimeSlotsController extends AbstractController
                 return $this->redirectToRoute('app_time_slots_index', [], Response::HTTP_SEE_OTHER);
             }
 
-//            dd($form);
+            // dd($form);
 
-            $slot = $timeSlotsRepo->findBy(['fromTime' => $timeSlot->getFromTime(), 'toTime' => $timeSlot->getToTime(), 'date' => $timeSlot->getDate()]);
+            $slot = $timeSlotsRepo->findBy(['fromTime' => $timeSlot->getFromTime(), 'toTime' => $timeSlot->getToTime(), 'date' => $timeSlot->getDate(), 'workshop' => $timeSlot->getWorkshop()]);
             if ($slot) {
                 $this->addFlash('danger', 'The time slot already exists!');
                 return $this->redirectToRoute('app_time_slots_index', [], Response::HTTP_SEE_OTHER);
@@ -93,10 +93,6 @@ final class TimeSlotsController extends AbstractController
         return $this->redirectToRoute('app_time_slots_index', [], Response::HTTP_SEE_OTHER);
     }
 
-
-
-
-
     #[Route('/new/batch', name: 'app_time_slots_new_batch')] // Nouvelle route
     public function newBatch(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -112,7 +108,7 @@ final class TimeSlotsController extends AbstractController
         $form = $this->createForm(WorkshopTimeSlotType::class, $initialData);
         $form->handleRequest($request);
 
-// Dans la méthode newBatch de votre contrôleur
+        // Dans la méthode newBatch de votre contrôleur
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -149,9 +145,5 @@ final class TimeSlotsController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-
-
-
 
 }
