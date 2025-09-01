@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\TimeSlot;
 use App\Form\TimeSlotType;
 use App\Repository\TimeSlotRepository;
+use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,13 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Form\WorkshopTimeSlotType;
 
 #[Route('/timeslots')]
-final class TimeSlotsController extends AbstractController
+final class TimeSlotController extends AbstractController
 {
     #[Route(name: 'app_time_slots_index', methods: ['GET'])]
-    public function index(TimeSlotRepository $timeSlotsRepository): Response
+    public function index(WorkshopRepository $workshopRepository): Response
     {
         return $this->render('time_slots/index.html.twig', [
-            'time_slots' => $timeSlotsRepository->findAll(),
+            'workshops' => $workshopRepository->findAll(),
         ]);
     }
 
@@ -93,7 +94,7 @@ final class TimeSlotsController extends AbstractController
         return $this->redirectToRoute('app_time_slots_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/new/batch', name: 'app_time_slots_new_batch')] // Nouvelle route
+    #[Route('/new/batch', name: 'app_time_slots_new_batch')]
     public function newBatch(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Structure de données initiale
@@ -107,8 +108,6 @@ final class TimeSlotsController extends AbstractController
 
         $form = $this->createForm(WorkshopTimeSlotType::class, $initialData);
         $form->handleRequest($request);
-
-        // Dans la méthode newBatch de votre contrôleur
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();

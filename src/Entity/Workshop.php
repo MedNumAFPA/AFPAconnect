@@ -24,14 +24,13 @@ class Workshop
     #[ORM\Column]
     private ?int $maxSlots = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $roomNumber = null;
 
     /**
      * @var Collection<int, TimeSlot>
      */
-    // #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlot::class, cascade: ['persist', 'remove'])]
-    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: TimeSlot::class, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: TimeSlot::class, mappedBy: 'workshop', cascade: ['persist'])]
     private Collection $timeSlots;
 
     public function __construct()

@@ -20,7 +20,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email'
+                'label' => 'Adresse email',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez une adresse email valide...'
+                ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'J\'accepte les conditions d\'utilisation',
@@ -37,8 +41,21 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'], // dit au navigateur qu’il s’agit d’un nouveau mot de passe (meilleure gestion de la sécurité).
                 'required' => true,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmez le mot de passe'],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'label_attr' => ['class' => 'required'],
+                    'attr' => [
+                        'placeholder' => 'Entrez un mot de passe de 6 caractères minimum...'
+                    ],
+                ],
+
+                'second_options' => [
+                    'label' => 'Confirmez le mot de passe',
+                    'label_attr' => ['class' => 'required'],
+                    'attr' => [
+                        'placeholder' => 'Retapez le mot de passe...'
+                    ],
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer un mot de passe.', // le mot de passe est obligatoire.

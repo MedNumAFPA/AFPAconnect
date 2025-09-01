@@ -7,6 +7,9 @@
 	<twig:Container>
 		<twig:Card>
 			<twig:PageTitle>Modifier créneau</twig:PageTitle>
+            <p class="text-sm text-gray-500 mb-4">
+                Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
+            </p>
 			{{ include('time_slots/_form.html.twig', {'button_label': 'Modifier'}) }}
 			<a href="{{ path('app_time_slots_index') }}" class="mt-5">Retour</a>
 		</twig:Card>

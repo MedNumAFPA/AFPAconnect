@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<twig:Container>
 		<twig:Card>
 			<twig:PageTitle>Index des ateliers</twig:PageTitle>
@@ -48,14 +49,16 @@
 						</tr>
 					{% endfor %}
 
-				</tbody>
-			</twig:Table>
+                </tbody>
+            </twig:Table>
 
-			<twig:Link color="primary" href="{{ path('app_workshops_new') }}" class="px-2 py-1 bg-blue-500 text-white  hover:bg-blue-300">
-				Ajouter
-			</twig:Link>
-			<a href="{{ path('app_dashboard_admin') }}" class="m-5">
-				Retour</a>
-		</twig:Card>
-	</twig:Container>
+            <twig:Link color="primary" href="{{ path('app_workshops_new') }}"
+                       class="px-2 py-1 bg-blue-500 text-white  hover:bg-blue-300">
+                Ajouter
+            </twig:Link>
+
+            <a href="{{ path('app_dashboard_admin') }}" class="m-5">
+                Retour</a>
+        </twig:Card>
+    </twig:Container>
 {% endblock %}
