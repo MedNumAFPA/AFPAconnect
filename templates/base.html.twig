@@ -18,10 +18,12 @@
 		{% endblock %}
 
 	</head>
-	<body class="relative">
+	<body class="relative flex flex-col min-h-screen">
 		{% include "layouts/navbar.html.twig" %}
 		{% include "layouts/flash_message.html.twig" %}
+        <main class="flex-grow">
 		{% block body %}{% endblock %}
+        </main>
 		{% block footer %}
     		{% include "layouts/footer.html.twig" %}
 		{% endblock %}

@@ -25,11 +25,11 @@ class Reservation
     #[ORM\Column(length: 255)]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $formationName = null;
 
     #[ORM\Column]
-    private ?bool $isReminderActive = null;
+    private ?bool $isReminderActive = false;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $reminderSentAt = null;
