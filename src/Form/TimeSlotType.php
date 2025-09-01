@@ -16,23 +16,27 @@ class TimeSlotType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date', DateType::class, [
-                'label' => 'Date',
-                'widget' => 'single_text', // Pour un meilleur affichage
-            ])
+//            ->add('date', DateType::class, [
+//                'label' => 'Date',
+//                'widget' => 'single_text', // Pour un meilleur affichage
+//            ])
+//            ->add('workshop', EntityType::class, [
+//                'class' => Workshop::class,
+//                'choice_label' => 'name',
+//                'label' => 'Atelier',
+//                'attr' => ['class' => 'form-combo']
+//            ])
             ->add('fromTime', TimeType::class, [
                 'label' => 'Heure de début',
                 'widget' => 'single_text',
+                'html5' => true,
+                'data' => $options['default_from_time'],
             ])
             ->add('toTime', TimeType::class, [
                 'label' => 'Heure de fin',
                 'widget' => 'single_text',
-            ])
-            ->add('workshop', EntityType::class, [
-                'class' => Workshop::class,
-                'choice_label' => 'name',
-                'label' => 'Atelier',
-                'attr' => ['class' => 'form-combo']
+                'html5' => true,
+                'data' => $options['default_to_time'],
             ]);
     }
 
@@ -40,6 +44,8 @@ class TimeSlotType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TimeSlot::class,
+            'default_from_time' => null,
+            'default_to_time' => null,
         ]);
     }
 }

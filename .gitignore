@@ -20,6 +20,7 @@
 ###< symfony/asset-mapper ###
 
 .DS_Store
+.fuse_hidden*
 .idea
 .vscode
 node_modules
