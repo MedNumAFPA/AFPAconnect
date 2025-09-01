@@ -1,10 +1,12 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
 
 {% block title %}Dashboard Admin{% endblock %}
 
 {% block body %}
 
 <h2 class="text-center">Dashboard Admin</h2>
+
+
 
 <div class="flex flex-row gap-4 justify-center items-center">
     <a href="{{ path('app_user_index') }}" class="w-[300px] h-[100px] bg-blue-500 text-white flex items-center justify-center text-center hover:bg-blue-700 transition">Gérer les utilisateurs</a>
@@ -26,96 +28,41 @@
   </li>
 </ul>
 
-<div id="tab1" class="mt-4">
-  <table class="min-w-full text-sm">
-    <tr class="bg-gray-200 font-bold">
-      <td class="p-2">Lundi</td>
-      <td class="p-2">Mardi</td>
-      <td class="p-2">Mercredi</td>
-      <td class="p-2">Jeudi</td>
-      <td class="p-2">Vendredi</td>
-    </tr>
-    <tr>
-      <td class="p-2">Atelier 1</td>
-      <td class="p-2">Atelier 2</td>
-      <td class="p-2">Atelier 3</td>
-      <td class="p-2">Atelier 4</td>
-      <td class="p-2">Atelier 5</td>
-    </tr>
-  </table>
-</div>
-<div id="tab2" class="mt-4 hidden">
-  <table class="min-w-full text-sm">
-    <tr class="bg-gray-200 font-bold">
-      <td class="p-2">Lundi</td>
-      <td class="p-2">Mardi</td>
-      <td class="p-2">Mercredi</td>
-      <td class="p-2">Jeudi</td>
-      <td class="p-2">Vendredi</td>
-    </tr>
-    <tr>
-      <td class="p-2">Atelier 11</td>
-      <td class="p-2">Atelier 22</td>
-      <td class="p-2">Atelier 33</td>
-      <td class="p-2">Atelier 44</td>
-      <td class="p-2">Atelier 55</td>
-    </tr>
-  </table>
-</div>
-<div id="tab3" class="mt-4 hidden">
-  <table class="min-w-full text-sm">
-    <tr class="bg-gray-200 font-bold">
-      <td class="p-2">Lundi</td>
-      <td class="p-2">Mardi</td>
-      <td class="p-2">Mercredi</td>
-      <td class="p-2">Jeudi</td>
-      <td class="p-2">Vendredi</td>
-    </tr>
-    <tr>
-      <td class="p-2">Atelier 111</td>
-      <td class="p-2">Atelier 222</td>
-      <td class="p-2">Atelier 333</td>
-      <td class="p-2">Atelier 444</td>
-      <td class="p-2">Atelier 555</td>
-    </tr>
-  </table>
-</div>
-<div id="tab4" class="mt-4 hidden">
-  <table class="min-w-full text-sm">
-    <tr class="bg-gray-200 font-bold">
-      <td class="p-2">Lundi</td>
-      <td class="p-2">Mardi</td>
-      <td class="p-2">Mercredi</td>
-      <td class="p-2">Jeudi</td>
-      <td class="p-2">Vendredi</td>
-    </tr>
-    <tr>
-      <td class="p-2">Atelier 1111</td>
-      <td class="p-2">Atelier 2222</td>
-      <td class="p-2">Atelier 3333</td>
-      <td class="p-2">Atelier 4444</td>
-      <td class="p-2">Atelier 5555</td>
-    </tr>
-  </table>
-</div>
+{# Boucle sur les 4 semaines dynamiquement #}
+{% for i in 1..4 %}
+  <div id="tab{{ i }}" class="mt-4 {% if i != 1 %}hidden{% endif %}">
+    <table class="min-w-full text-sm">
 
- <script>
-
-    // function showTab(tabId) {
-    //     document.getElementById('tab1').classList.add('hidden');
-    //     document.getElementById('tab2').classList.add('hidden');
-    //     document.getElementById('tab3').classList.add('hidden');
-    //     document.getElementById('tab4').classList.add('hidden');
-    //     document.getElementById(tabId).classList.remove('hidden');
-    //     document.getElementById('btn1').classList.remove('bg-gray-100', 'text-blue-400');
-    //     document.getElementById('btn2').classList.remove('bg-gray-100', 'text-blue-400');
-    //     document.getElementById('btn3').classList.remove('bg-gray-100', 'text-blue-400');
-    //     document.getElementById('btn4').classList.remove('bg-gray-100', 'text-blue-400');
-    //     document.getElementById('btn1').classList.add(tabId === 'tab1' ? 'bg-gray-100' : 'bg-gray-50');
-    //     document.getElementById('btn2').classList.add(tabId === 'tab2' ? 'bg-gray-100' : 'bg-gray-50');
-    //     document.getElementById('btn3').classList.add(tabId === 'tab3' ? 'bg-gray-100' : 'bg-gray-50');
-    //     document.getElementById('btn4').classList.add(tabId === 'tab4' ? 'bg-gray-100' : 'bg-gray-50');
-    // }
-</script>
- {# {{ encore_entry_script_tags('app') }} #}
+      <thead>
+        <tr class="bg-gray-200 font-bold">
+          {% for day in days %}
+          <td class="p-2">{{ day|capitalize }}</td>
+          {% endfor %}
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr>
+          {% set semaineKey = 'semaine' ~ i %}
+          {% for day in days %}
+            <td class="p-2 align-top">
+              {% set timeslotday = week[semaineKey][day] ?? [] %}
+              {% if timeslotday is not empty %}
+                {% for timeslot in timeslotday %}
+                  <div>
+                    <strong>{{ timeslot.workshop.name }}</strong><br>
+                    {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}
+                  </div>
+                {% endfor %}
+              {% else %}
+                <div>Aucun atelier</div>
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endfor %}
+ {{ encore_entry_script_tags('app') }}
 {% endblock %}

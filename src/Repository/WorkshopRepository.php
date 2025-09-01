@@ -40,4 +40,14 @@ class WorkshopRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    // public function findWorkshopsWithTimeSlotsByDate(\DateTime $date): array
+    // {
+    //     return $this->createQueryBuilder('ts')
+    //         ->join('ts.workshop', 'w')
+    //         ->addSelect('w')
+    //         ->where('ts.date = :date')
+    //         ->setParameter('date', $date->format('Y-m-d'))
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 }
