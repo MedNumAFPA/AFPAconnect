@@ -13,6 +13,7 @@ final class DashBoardAdminController extends AbstractController
     public function dashboard(TimeSlotRepository $timeSlotRepository): Response
     {
         $week = [];
+        $weekDates = [];
         $weeks = ['semaine1', 'semaine2', 'semaine3', 'semaine4']; // 4 semaines
 
         // Exemple : récupérer les dates des jours de la semaine à afficher
@@ -25,6 +26,7 @@ final class DashBoardAdminController extends AbstractController
         ];
         foreach ($weeks as $idx => $weekName) {
             $week[$weekName] = [];
+            $weekDates[$weekName] = [];
     
             foreach ($days as $dayName => $date) {
                 // Décaler la date selon la semaine
@@ -34,6 +36,7 @@ final class DashBoardAdminController extends AbstractController
                 $timeSlots = $timeSlotRepository->findSlotsByDate($targetDate);
     
                 $week[$weekName][$dayName] = $timeSlots;
+                $weekDates[$weekName][$dayName] = $targetDate;
             }
         }
     
@@ -42,6 +45,7 @@ final class DashBoardAdminController extends AbstractController
 
         return $this->render('dashboard_admin/index.html.twig', [
             'week' => $week,
+            'weekDates' => $weekDates,
             'days' => $daysname,
         ]);
     }
