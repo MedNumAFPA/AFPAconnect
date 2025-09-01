@@ -25,7 +25,7 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 // Code pour gérer les onglets dans la page dashboardadmin.html.twig
 
-document.addEventListener('DOMContentLoaded', () => {
+function initializeTabs() {
     const tabs = ['tab1', 'tab2', 'tab3', 'tab4'];
     const buttons = ['btn1', 'btn2', 'btn3', 'btn4'];
   
@@ -57,5 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.add('bg-gray-100', 'text-blue-400');
       });
     });
-  });
+  };
+  if (window.Turbo) {
+    document.addEventListener('turbo:load', initializeTabs);
+  } else {
+    document.addEventListener('DOMContentLoaded', initializeTabs);
+  }
 // --------------------------------------------------------------//
