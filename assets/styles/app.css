@@ -9,6 +9,7 @@
     --color-danger: #dd191c;
     --color-success: #22bb33;
     --color-info: #ffd900;
+    /* --color-info: #bf1960; */
 }
 
 @source inline("bg-primary");

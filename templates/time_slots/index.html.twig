@@ -3,6 +3,7 @@
 {% block title %}Gestion des Créneaux par Atelier{% endblock %}
 
 {% block body %}
+
     <twig:Container>
         {% include "layouts/flash_message.html.twig" %}
 
@@ -44,10 +45,9 @@
                                                 <td class="px-2 py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
                                                 <td class="px-6 py-4">
                                                     <div class="flex flex-row justify-center space-x-3">
-                                                        <twig:Link
-                                                            href="{{ path('app_time_slots_edit', {'id': time_slot.id}) }}"
-                                                            color="info">Modifier
-                                                        </twig:Link>
+									                                    <twig:Link href="{{ path('app_time_slots_edit', {'id': time_slot.id}) }}" color="info">
+										                                    <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+									                                    </twig:Link>
                                                         {{ include('time_slots/_delete_form.html.twig', { 'time_slot': time_slot }) }}
                                                     </div>
                                                 </td>
@@ -80,6 +80,7 @@
             </div>
         </twig:Card>
     </twig:Container>
+    
 {% endblock %}
 
 {% block javascripts %}

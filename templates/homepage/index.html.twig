@@ -3,23 +3,23 @@
 {% block title %}AFPA Connect{% endblock %}
 
 {% block body %}
-    <div class="main-container bg-white">
 
-        <div class="min-h-[80vh] bg-gradient-to-tr from-[#b0b1b3] via-[#22c55e] to-[#4ade80] flex items-center justify-center">
-            <twig:Container>
-                <twig:Card>
-                    <div class="flex flex-col items-center justify-center">
-                        <h1 class="font-extrabold text-center lg:text-6xl">Bienvenue sur
-                        </h1>
-                        <img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="Logo Afpa Connect">
-                        <img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="Icone Afpa Connect">
-                        <p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre rendez-vous avec nos experts !</p>
-                        <twig:Link href="{{ path('app_reservations_new') }}" color="primary">Prendre Rendez-vous</twig:Link>
+	<div class="min-h-[100vh] ">
+		<div class="max-h-[50vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
 
-                    </div>
-                </twig:Card>
-            </twig:Container>
-        </div>
+			<twig:Container>
+				<twig:Card>
+					<div class="flex flex-col items-center justify-center">
+						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue sur
+						</h1>
+						<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
+						<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
+						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre rendez-vous avec nos experts !</p>
+						<twig:Link href="{{ path('app_reservations_new') }}" color="primary">Prendre Rendez-vous</twig:Link>
+					</div>
+				</twig:Card>
+			</div>
 
-    </div>
-{% endblock %}
+		</twig:Container>
+    
+	{% endblock %}
