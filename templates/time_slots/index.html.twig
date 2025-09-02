@@ -73,11 +73,9 @@
 				</twig:Link>
 			</div>
 
-			<div class="mt-4">
-				<a href="{{ path('app_dashboard_admin') }}">
-					Retour
-				</a>
-			</div>
+			<a href="{{ path('app_dashboard_admin') }}" class="m-5">
+				Retour
+			</a>
 		</twig:Card>
 	</twig:Container>
 
@@ -86,32 +84,32 @@
 {% block javascripts %}
 	{{ parent() }}
 	 <script>
-							document.addEventListener("turbo:load", function () {
-  const accordionHeaders = document.querySelectorAll(".accordion-header");
-
-  accordionHeaders.forEach((header) => {
-    header.addEventListener("click", () => {
-      const accordionContent = header.nextElementSibling;
-      const accordionArrow = header.querySelector(".accordion-arrow");
-      const isOpen = !accordionContent.classList.contains("hidden");
-
-      document.querySelectorAll(".accordion-content").forEach((content) => {
-        content.classList.add("hidden");
-      });
-      document.querySelectorAll(".accordion-arrow").forEach((arrow) => {
-        arrow.classList.remove("rotate-180");
-      });
-
-      if (!isOpen) {
-        accordionContent.classList.remove("hidden");
-        accordionArrow.classList.add("rotate-180");
-      }
-    });
-  });
-});
-
-				
-																			
-								</script>
+																	document.addEventListener("turbo:load", function () {
+										  const accordionHeaders = document.querySelectorAll(".accordion-header");
+										
+										  accordionHeaders.forEach((header) => {
+										    header.addEventListener("click", () => {
+										      const accordionContent = header.nextElementSibling;
+										      const accordionArrow = header.querySelector(".accordion-arrow");
+										      const isOpen = !accordionContent.classList.contains("hidden");
+										
+										      document.querySelectorAll(".accordion-content").forEach((content) => {
+										        content.classList.add("hidden");
+										      });
+										      document.querySelectorAll(".accordion-arrow").forEach((arrow) => {
+										        arrow.classList.remove("rotate-180");
+										      });
+										
+										      if (!isOpen) {
+										        accordionContent.classList.remove("hidden");
+										        accordionArrow.classList.add("rotate-180");
+										      }
+										    });
+										  });
+										});
+										
+														
+																													
+																		</script>
 
 {% endblock %}
