@@ -10,6 +10,9 @@
     {{ form_label(form.email, 'Email', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
     {{ form_widget(form.email, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
 
+    {{ form_label(form.nickname, 'Pseudo', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+    {{ form_widget(form.nickname, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+
     {% if form.oldPassword is defined %}
         {{ form_label(form.oldPassword, 'Ancien mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}
         {{ form_widget(form.oldPassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
