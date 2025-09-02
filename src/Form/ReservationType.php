@@ -52,7 +52,7 @@ class ReservationType extends AbstractType
             ->add('formationName', TextType::class, [
                 'label' => 'Nom de la formation',
                 'required' => false,
-//                'label_attr' => ['class' => 'required'],
+                //                'label_attr' => ['class' => 'required'],
                 'attr' => [
                     'placeholder' => 'Entrez votre nom de formation... (Optionnel, laissez vide si non applicable)'
                 ]

@@ -1,7 +1,6 @@
-<div class="flex flex-col mx-6 shadow-[2px_7px_13px_0px_rgba(0,0,0,0.2)] overflow-hidden md:w-[70%] h-[50%px]
-{#max-h-[85%]
-Commented because it breaks multiple forms on desktop, probably even more on mobile
-#}
- border-t-primary border-t-7 m-2.5 p-10 rounded-2xl border-solid bg-white max-w-[90%]">
+<div class="flex flex-col mx-6 shadow-[2px_7px_13px_0px_rgba(0,0,0,0.2)] md:max-w-[70%] h-[50%px]
+																								max-h-[85%] max-w-[90%]
+																								min-w-[90%] md:min-w-[60%]
+																								 border-t-primary border-t-7 m-2.5 p-2 md:p-10 rounded-2xl border-solid bg-white overflow-y-scroll">
 	{{ block('content') }}
 </div>
