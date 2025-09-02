@@ -91,9 +91,9 @@ To get a local copy up and running, follow these steps.
     symfony console tailwind:build
     ```
 
-    For convenience during development, you can use the `--watch` flag to automatically re-compile your CSS every time you save a file:
+    For convenience during development, you can use the `-w` flag to automatically re-compile your CSS every time you save a file:
     ```sh
-    symfony console tailwind:build --watch
+    symfony console tailwind:build -w
     ```
 
 7.  **Automated Email Configuration (Mailer & Reminders):**
@@ -125,6 +125,38 @@ To get a local copy up and running, follow these steps.
     * * * * * cd /path/to/your/project && symfony console app:send-reminders >> /dev/null 2>&1
     ```
     *Remember to replace `/path/to/your/project` with the absolute path to the application's root directory.*
+
+    **d. Configure the Default URI for Emails:**
+    For links in emails sent from a background worker (like password resets) to point to the correct domain instead of `localhost`, you must configure the router to use an environment variable. This is the best practice as it avoids hardcoding URLs in your configuration.
+
+    **i. Update the Routing Configuration:**
+    Modify the file `config/packages/routing.yaml` to tell the router to read the domain from the `APP_URL` environment variable.
+
+    ```yaml
+    # config/packages/routing.yaml
+    framework:
+        router:
+            # This makes the default URI dynamic and environment-aware.
+            default_uri: '%env(APP_URL)%'
+    ```
+
+    **ii. Set Your Environment URLs:**
+    Now, you can define the `APP_URL` for each environment.
+
+    *   **For local development, in your `.env` file:**
+        (This file is committed to Git and provides a default for all developers).
+        ```env
+        # .env
+        APP_URL=http://127.0.0.1:8000
+        ```
+
+    *   **For the production server, in your `.env.local` file:**
+        (This file is NOT committed to Git and overrides the default settings).
+        ```env
+        # .env.local on the server
+        APP_URL=https://your-production-domain.com
+        ```
+    *Remember to replace `https://your-production-domain.com` with your actual domain name.*
 
 8.  **Run the application:**
     You can use the built-in Symfony web server to run the project locally.
