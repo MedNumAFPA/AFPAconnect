@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-
 	<twig:Container>
 		<twig:Card>
 			<twig:PageTitle>Index des ateliers</twig:PageTitle>
@@ -49,16 +48,49 @@
 						</tr>
 					{% endfor %}
 
-                </tbody>
-            </twig:Table>
+				</tbody>
+			</twig:Table>
+			<div class="md:hidden">
+				{% for workshop in workshops %}
+					<twig:RecordCard title="{{workshop.name}}">
+						<table
+							class="text-left my-5">
+							{# <tr class="m-3">
+																																																																							<th scope="row" class="w-[50%]">Id :</th>
+																																																																							<td class="">{{ workshop.id }}</td>
+																																																																						</tr> #}
+							<tr>
+								<th scope="row" class="">Nom :</th>
+								<td class="">{{ workshop.name }}</td>
+							</tr>
+							<tr>
+								<th scope="row" class="">Description :</th>
+								<td class="">{{ workshop.description |length > 12 ? workshop.description | slice(0, 12) ~ ' ...' : workshop.description }}</td>
+							</tr>
+							<tr></tr>
+							<th scope="row" class="">Plc maximum :</th>
+							<td class="">{{ workshop.maxSlots }}</td>
+						</tr>
+						<tr>
+							<th scope="row" class="">N° de salle :</th>
+							<td class="">{{ workshop.roomNumber }}</td>
+						</tr>
+					</table>
+					<div class="flex flex-row justify-center space-x-3">
+						<twig:Link color="info" href="{{ path('app_workshops_edit', {'id': workshop.id}) }}">
+							<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+						</twig:Link>
+						{{ include('workshops/_delete_form.html.twig') }}
+					</div>
+				</twig:RecordCard>
+			{% endfor %}
+		</div>
 
-            <twig:Link color="primary" href="{{ path('app_workshops_new') }}"
-                       class="px-2 py-1 bg-blue-500 text-white  hover:bg-blue-300">
-                Ajouter
-            </twig:Link>
+		<twig:Link color="primary" href="{{ path('app_workshops_new') }}" class="px-2 py-1 bg-blue-500 text-white  hover:bg-blue-300">
+			Ajouter
+		</twig:Link>
 
-            <a href="{{ path('app_dashboard_admin') }}" class="m-5">
-                Retour</a>
-        </twig:Card>
-    </twig:Container>
-{% endblock %}
+		<a href="{{ path('app_dashboard_admin') }}" class="m-5">
+			Retour</a>
+	</twig:Card>
+</twig:Container>{% endblock %}
