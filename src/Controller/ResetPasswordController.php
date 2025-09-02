@@ -135,8 +135,11 @@ class ResetPasswordController extends AbstractController
             'email' => $emailFormData,
         ]);
 
+//        dd($user);
+
         // Do not reveal whether a user account was found or not.
         if (!$user) {
+            dd("no user");
             return $this->redirectToRoute('app_check_email');
         }
 
@@ -147,17 +150,19 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     '%s - %s',
-            //     $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
-            //     $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
-            // ));
+//            dd($e->getMessage());
+
+             $this->addFlash('reset_password_error', sprintf(
+                 '%s - %s',
+                 $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
+                 $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
+             ));
 
             return $this->redirectToRoute('app_check_email');
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('password-reset@afpaconnect.com', 'Password Reset Mailer'))
+            ->from(new Address('me@arnaudrabel.com', 'Password Reset Mailer'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('reset_password/email.html.twig')
