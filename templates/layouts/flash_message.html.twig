@@ -9,20 +9,19 @@
             </div>
         </div>
 
-        <script>
-            const toasts = document.getElementsByClassName("toast");
-            Array.from(toasts).forEach((toast) => {
-                setTimeout(() => {
-                    toast.classList.remove("flex");
-                    toast.classList.add("hidden");
-                }, 3000);
-                const closeBtn = document.getElementById("closeToast");
-                closeBtn.addEventListener("click", () => {
-                    toast.classList.remove("flex");
-                    toast.classList.add("hidden");
-                });
-            });
-
-        </script>
-    {% endfor %}
+		 <script>
+						const toasts = document.getElementsByClassName("toast");
+						Array.from(toasts).forEach((toast) => {
+						    setTimeout(() => {
+						        toast.classList.remove("flex");
+						        toast.classList.add("hidden");
+						    }, 3000);
+						    const closeBtn = document.getElementById("closeToast");
+						    closeBtn.addEventListener("click", () => {
+						        toast.classList.remove("flex");
+						        toast.classList.add("hidden");
+						    });
+						});											
+			</script>
+	{% endfor %}
 {% endfor %}
