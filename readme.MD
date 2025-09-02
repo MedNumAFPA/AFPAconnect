@@ -91,9 +91,9 @@ To get a local copy up and running, follow these steps.
     symfony console tailwind:build
     ```
 
-    For convenience during development, you can use the `--watch` flag to automatically re-compile your CSS every time you save a file:
+    For convenience during development, you can use the `-w` flag to automatically re-compile your CSS every time you save a file:
     ```sh
-    symfony console tailwind:build --watch
+    symfony console tailwind:build -w
     ```
 
 7.  **Automated Email Configuration (Mailer & Reminders):**
