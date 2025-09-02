@@ -12,6 +12,7 @@
 					<tr>
 						<th scope="col" class="px-2 py-4">Id</th>
 						<th scope="col" class="px-2 py-4">Email</th>
+						<th scope="col" class="px-2 py-4">Pseudo</th>
 						<th scope="col" class="px-2 py-4">Roles</th>
 						<th scope="col" class="px-2 py-4">Actions</th>
 					</tr>
@@ -21,6 +22,7 @@
 						<tr class="border-b dark:border-neutral-600">
 							<td class="px-2 py-4">{{ user.id }}</td>
 							<td class="px-2 py-4">{{ user.email }}</td>
+							<td class="px-2 py-4">{{ user.nickname }}</td>
 							<td class="px-2 py-4">
 								{% for role in user.roles %}
 									{% if role == 'ROLE_ADMIN' %}

@@ -13,12 +13,13 @@
             {{ form_errors(registrationForm) }}
 
             {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.plainPassword) }}
-            {{ form_row(registrationForm.agreeTerms) }}
-            <div class="flex items-center space-x-4 ml-3 mt-3">
-                <twig:Button color="primary" type="submit">S'inscrire</twig:Button>
-            </div>
+                {{ form_row(registrationForm.email) }}
+                {{ form_row(registrationForm.nickname) }}
+                {{ form_row(registrationForm.plainPassword) }}
+                {{ form_row(registrationForm.agreeTerms) }}
+                <div class="flex items-center space-x-4 ml-3 mt-3">
+                    <twig:Button color="primary" type="submit">S'inscrire</twig:Button>
+                </div>
             {{ form_end(registrationForm) }}
 
         </twig:Card>
