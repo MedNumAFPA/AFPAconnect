@@ -53,8 +53,53 @@
 					{% endfor %}
 				</tbody>
 			</twig:Table>
-			<twig:Link color="primary" href="{{ path('app_user_new') }}" class=" px-2 py-1 bg-blue-500 text-white hover:bg-blue-300">Ajouter</twig:Link>
-			<a class="mt-5" href="{{ path('app_dashboard_admin') }}">Retour</a>
-		</twig:Card>
-	</twig:Container>
-{% endblock %}
+			<div class="md:hidden text-sm">
+				{% for user in users %}
+					<twig:RecordCard title="{{user.email}}">
+						<table class="text-left my-5"></tr>
+						<tr>
+							<th scope="row" class="p-1">Id :</th>
+							<td class="p-1">{{ user.id }}</td>
+
+						</tr>
+						<tr>
+							<th scope="row" class="p-1">email :</th>
+
+							<td class="p-1">{{ user.email}}</td>
+
+						</tr>
+						<tr class="">
+							<th scope="row " class="p-1">Role :</th>
+							<td class="">
+								{% for role in user.roles %}
+									{% if role == 'ROLE_ADMIN' %}
+										<span class="px-1 pt-2 bg-red-600 text-white text-s" disabled>Admin</span>
+									{% elseif role == 'ROLE_USER' %}
+										<span class="mx-1 p-2 bg-green-800 rounded-full text-white text-xs" disabled>Utilisateur</span>
+									{% elseif role == 'ROLE_EDITOR' %}
+										<span class="px-1 pt-1 bg-yellow-600 text-white text-s" disabled>Éditeur</span>
+									{% else %}
+										{{ role|capitalize }}
+									{% endif %}
+								{% endfor %}
+
+							</td>
+						</tr>
+
+					</table>
+					<div class="flex flex-row justify-center space-x-3">
+						<twig:Link color="info" href="{{ path('app_user_edit', {'id': user.id}) }}">
+							<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+
+						</twig:Link>
+						{{ include('user/_delete_form.html.twig') }}
+
+					</div>
+				</twig:RecordCard>
+			{% endfor %}
+		</div>
+
+		<twig:Link color="primary" href="{{ path('app_user_new') }}">Ajouter</twig:Link>
+		<a class="m-5" href="{{ path('app_dashboard_admin') }}">Retour</a>
+	</twig:Card>
+</twig:Container>{% endblock %}
