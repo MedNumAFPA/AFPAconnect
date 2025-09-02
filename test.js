@@ -1,17 +1,12 @@
-document.addEventListener("turbo:load", function () {
-    const accordionHeaders = document.querySelectorAll(".accordion-header");
-
-    accordionHeaders.forEach((header) => {
-        header.addEventListener("click", () => {
-            const contents = document.querySelectorAll(".accordion-content");
-            contents.forEach((content) => {
-                content.classList.add("hidden");
-            });
-
-            const accordionContent = header.nextElementSibling;
-            const accordionArrow = header.querySelector(".accordion-arrow");
-            accordionContent.classList.toggle("hidden");
-            accordionArrow.classList.toggle("rotate-180");
-        });
+const toast = document.getElementsByClassName("toast");
+forEach(toast, (toast) => {
+    setTimeout(() => {
+        toast.classList.remove("flex");
+        toast.classList.add("hidden");
+    }, 3000);
+    const closeBtn = document.getElementById("closeToast");
+    closeBtn.addEventListener("click", () => {
+        toast.classList.remove("flex");
+        toast.classList.add("hidden");
     });
 });
