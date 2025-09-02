@@ -4,79 +4,89 @@
 {% endblock %}
 
 {% block body %}
-	<div class="flex flex-col p-5 w-full">
+<div class="flex flex-col p-5 w-full bg-secondary mt-5">
 
-		<twig:PageTitle class="text-center">Dashboard Admin</twig:PageTitle>
+	<twig:PageTitle class="text-center">Dashboard Admin</twig:PageTitle>
 
-		<div class="flex flex-row gap-4 justify-center items-center">
-			<a href="{{ path('app_user_index') }}" class="w-[300px] h-[100px] bg-blue-500 text-white flex items-center justify-center text-center hover:bg-blue-700 transition">Gérer les utilisateurs</a>
-			<a href="{{ path('app_reservations_index') }}" class="w-[300px] h-[100px] bg-blue-500 text-white flex items-center justify-center text-center hover:bg-blue-700 transition">Gérer les Crenaux</a>
-			<a href="{{ path('app_workshops_index') }}" class="w-[300px] h-[100px] bg-blue-500 text-white flex items-center justify-center  text-center hover:bg-blue-700 transition">Gérer les Atelier</a>
-		</div>
-		<ul class="mt-4 flex space-x-2 border-b">
-			<li>
-				<button onclick="showTab('tab1')" class="px-2 py-1 bg-gray-100 hover:text-blue-400 rounded-t-lg font-medium" id="btn1">Semaine 38</button>
-			</li>
-			<li>
-				<button onclick="showTab('tab2')" class="px-2 py-1 bg-gray-50 hover:text-blue-400 rounded-t-lg font-medium" id="btn2">Semaine 39</button>
-			</li>
-			<li>
-				<button onclick="showTab('tab3')" class="px-2 py-1 bg-gray-50 hover:text-blue-400 rounded-t-lg font-medium" id="btn3">Semaine 40</button>
-			</li>
-			<li>
-				<button onclick="showTab('tab4')" class="px-2 py-1 bg-gray-50 hover:text-blue-400 rounded-t-lg font-medium" id="btn4">Semaine 41</button>
-			</li>
-		</ul>
+	<div class="flex flex-row gap-4 justify-center items-center space-x-5 mb-5">
+		<a href="{{ path('app_user_index') }}" class="w-[20%] h-[150px] bg-primary text-white flex items-center justify-center text-center shadow-[0px_4px_6px_0px_#b5b5b5]
+																																		hover:shadow-sm border-1 border-muted transition rounded-2xl">Gérer les utilisateurs</a>
 
-		{# Boucle sur les 4 semaines dynamiquement #}
-		{% for i in 1..4 %}
-			<div id="tab{{ i }}" class="mt-4 {% if i != 1 %}hidden{% endif %}">
-				<table class="min-w-full text-sm">
-					<thead>
-						<tr class="bg-gray-200 font-bold">
-							{% set semaineKey = 'semaine' ~ i %}
-							{% for day in days %}
-								<td class="p-2">
-									{{ day|capitalize }}<br>
-									{{ weekDates[semaineKey][day]|date('d/m/Y') }}
-								</td>
-							{% endfor %}
-						</tr>
-					</thead>
-          
-					<tbody>
-						<tr>
-							{% set semaineKey = 'semaine' ~ i %}
-							{% for day in days %}
-								<td class="p-2 align-top">
-									{% set timeslotday = week[semaineKey][day] ?? [] %}
-									{% if timeslotday is not empty %}
-										{% for timeslot in timeslotday %}
-											<div class="mb-2 p-2 border rounded bg-gray-50">
-												<strong>{{ timeslot.workshop.name }}</strong><br>
-												Salle :
-												{{ timeslot.workshop.roomNumber }}<br>
-												Places max :
-												{{ timeslot.reservations|length }}
-												/
-												{{ timeslot.workshop.maxSlots }}<br>
-												Horaire :
-												{{ timeslot.fromTime|date('H:i') }}
-												-
-												{{ timeslot.toTime|date('H:i') }}
-											</div>
-										{% endfor %}
-									{% else %}
-										<div>Aucun atelier</div>
-									{% endif %}
-								</td>
-							{% endfor %}
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		{% endfor %}
-		{{ encore_entry_script_tags('app') }}
+		<a href="{{ path('app_reservations_index') }}" class="w-[20%] h-[150px] bg-primary text-white flex items-center justify-center text-center shadow-[0px_4px_6px_0px_#b5b5b5]
+																															hover:shadow-sm border-1 border-muted transition rounded-2xl">Gérer les Crenaux</a>
+
+		<a href="{{ path('app_workshops_index') }}" class="w-[20%] h-[150px] bg-primary text-white flex items-center justify-center  text-center shadow-[0px_4px_6px_0px_#b5b5b5]
+																															hover:shadow-sm border-1 border-muted transition rounded-2xl">Gérer les Atelier</a>
+
 	</div>
-  
-{% endblock %}
+	<ul class="mt-4 flex space-x-2 border-b">
+		<li>
+			<button onclick="showTab('tab1')" class="px-2 py-1 bg-primary hover:text-blue-400 rounded-t-md font-medium text-white" id="btn1">Semaine 38</button>
+
+		</li>
+		<li>
+			<button onclick="showTab('tab2')" class="px-2 py-1 bg-primary hover:text-blue-400 rounded-t-md font-medium text-white" id="btn2">Semaine 39</button>
+
+		</li>
+		<li>
+			<button onclick="showTab('tab3')" class="px-2 py-1 bg-primary hover:text-blue-400 rounded-t-md font-medium text-white" id="btn3">Semaine 40</button>
+
+
+		</li>
+		<li>
+			<button onclick="showTab('tab4')" class="px-2 py-1 bg-primary0 hover:text-blue-400 rounded-t-md font-medium text-white" id="btn4">Semaine 41</button>
+
+
+		</li>
+	</ul>
+
+	{# Boucle sur les 4 semaines dynamiquement #}
+	{% for i in 1..4 %}
+		<div id="tab{{ i }}" class="mt-4 bg-white border {% if i != 1 %}hidden{% endif %}">
+			<table class="min-w-full text-sm">
+
+				<thead class="border-b-1 border-dashed">
+					<tr class=" font-bold text-center">
+						{% set semaineKey = 'semaine' ~ i %}
+						{% for day in days %}
+							<td class="p-2">
+								{{ day|capitalize }}<br>
+								{{ weekDates[semaineKey][day]|date('d/m/Y') }}
+							</td>
+						{% endfor %}
+					</tr>
+				</thead>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				{% set semaineKey = 'semaine' ~ i %}
+				{% for day in days %}
+					<td class="p-2 align-top">
+						{% set timeslotday = week[semaineKey][day] ?? [] %}
+						{% if timeslotday is not empty %}
+							{% for timeslot in timeslotday %}
+								<div class="mb-2 p-2 border rounded bg-gray-50">
+									<strong>{{ timeslot.workshop.name }}</strong><br>
+									Salle :
+									{{ timeslot.workshop.roomNumber }}<br>
+									Places max :
+									{{ timeslot.reservations|length }}
+									/
+									{{ timeslot.workshop.maxSlots }}<br>
+									Horaire :
+									{{ timeslot.fromTime|date('H:i') }}
+									-
+									{{ timeslot.toTime|date('H:i') }}
+								</div>
+							{% endfor %}
+						{% else %}
+							<div>Aucun atelier</div>
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+</div>{% endfor %}{{ encore_entry_script_tags('app') }}</div>{% endblock %}
