@@ -126,6 +126,18 @@ To get a local copy up and running, follow these steps.
     ```
     *Remember to replace `/path/to/your/project` with the absolute path to the application's root directory.*
 
+    **d. Configure the Default URI for Emails:**
+    For links in emails sent from a background worker (like password resets) to point to the correct domain instead of `localhost`, you must explicitly configure the router.
+
+    Create or edit the file `config/packages/routing.yaml` and add the following:
+    ```yaml
+    # config/packages/routing.yaml
+    framework:
+        router:
+            default_uri: 'https://your-production-domain.com'
+    ```
+    *Remember to replace `https://your-production-domain.com` with your actual domain name. This ensures all generated URLs in commands are correct.*
+
 8.  **Run the application:**
     You can use the built-in Symfony web server to run the project locally.
     ```sh

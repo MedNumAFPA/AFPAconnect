@@ -8,3 +8,5 @@ when@prod:
     framework:
         router:
             strict_requirements: null
+            default_uri: 'https://devafpaconnect.arnaudrabel.com'
+#            default_uri: 'https://localhost:8000'
