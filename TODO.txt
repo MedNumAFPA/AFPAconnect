@@ -1,4 +1,17 @@
- - Fix reservation index size
-- Fix Dashboard landing page
-- fix toast
--
+Saria :
+- Fix/Finish toast
+- Retour button to fix
+- Créneaux/Timeslot to fix
+
+
+
+
+
+Amine :
+- Separate form to change password
+- Fix/finish Dashboard landing page
+
+
+Arnaud :
+- Fix double entry when validating the timeslot form.
+- Fix email to send a customized email
