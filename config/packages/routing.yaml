@@ -3,7 +3,7 @@ framework:
         # Configure how to generate URLs in non-HTTP contexts, such as CLI commands.
         # See https://symfony.com/doc/current/routing.html#generating-urls-in-commands
 #        default_uri: 'https://devafpaconnect.arnaudrabel.com'
-        default_uri: 'https://localhost:8000'
+        default_uri: '%env(APP_URL)%'
 
 when@dev:
     framework:
@@ -11,11 +11,11 @@ when@dev:
             # Configure how to generate URLs in non-HTTP contexts, such as CLI commands.
             # See https://symfony.com/doc/current/routing.html#generating-urls-in-commands
 #            default_uri: 'https://devafpaconnect.arnaudrabel.com'
-            default_uri: 'https://localhost:8000'
+            default_uri: '%env(APP_URL)%'
 
 when@prod:
     framework:
         router:
             strict_requirements: null
 #            default_uri: 'https://devafpaconnect.arnaudrabel.com'
-            default_uri: 'https://localhost:8000'
+            default_uri: '%env(APP_URL)%'

@@ -127,16 +127,36 @@ To get a local copy up and running, follow these steps.
     *Remember to replace `/path/to/your/project` with the absolute path to the application's root directory.*
 
     **d. Configure the Default URI for Emails:**
-    For links in emails sent from a background worker (like password resets) to point to the correct domain instead of `localhost`, you must explicitly configure the router.
+    For links in emails sent from a background worker (like password resets) to point to the correct domain instead of `localhost`, you must configure the router to use an environment variable. This is the best practice as it avoids hardcoding URLs in your configuration.
 
-    Create or edit the file `config/packages/routing.yaml` and add the following:
+    **i. Update the Routing Configuration:**
+    Modify the file `config/packages/routing.yaml` to tell the router to read the domain from the `APP_URL` environment variable.
+
     ```yaml
     # config/packages/routing.yaml
     framework:
         router:
-            default_uri: 'https://your-production-domain.com'
+            # This makes the default URI dynamic and environment-aware.
+            default_uri: '%env(APP_URL)%'
     ```
-    *Remember to replace `https://your-production-domain.com` with your actual domain name. This ensures all generated URLs in commands are correct.*
+
+    **ii. Set Your Environment URLs:**
+    Now, you can define the `APP_URL` for each environment.
+
+    *   **For local development, in your `.env` file:**
+        (This file is committed to Git and provides a default for all developers).
+        ```env
+        # .env
+        APP_URL=http://127.0.0.1:8000
+        ```
+
+    *   **For the production server, in your `.env.local` file:**
+        (This file is NOT committed to Git and overrides the default settings).
+        ```env
+        # .env.local on the server
+        APP_URL=https://your-production-domain.com
+        ```
+    *Remember to replace `https://your-production-domain.com` with your actual domain name.*
 
 8.  **Run the application:**
     You can use the built-in Symfony web server to run the project locally.
