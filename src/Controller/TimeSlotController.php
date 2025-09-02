@@ -97,12 +97,11 @@ final class TimeSlotController extends AbstractController
     #[Route('/new/batch', name: 'app_time_slots_new_batch')]
     public function newBatch(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Structure de données initiale
+        // Cette structure sert pour l'affichage initial du formulaire.
+        // C'est ce qui permet aux valeurs par défaut de TimeSlotType de fonctionner.
         $initialData = [
             'dailySlots' => [
-                [
-                    'date' => new \DateTime(),
-                ]
+                ['date' => new \DateTime(),]
             ]
         ];
 
@@ -113,25 +112,32 @@ final class TimeSlotController extends AbstractController
             $data = $form->getData();
             $workshop = $data['workshop'];
 
-            foreach ($data['dailySlots'] as $dailySlotData) {
+
+            // On récupère les données brutes de la requête pour vérifier les cases à cocher.
+            $requestData = $request->request->all();
+            // Le nom 'workshop_time_slot' est dérivé de WorkshopTimeSlotType
+            $dailySlotsRequestData = $requestData['workshop_time_slot']['dailySlots'] ?? [];
+
+            // On boucle sur les données validées du formulaire, en récupérant l'index.
+            foreach ($data['dailySlots'] as $index => $dailySlotData) {
                 $date = $dailySlotData['date'];
 
-                // La case à cocher n'est pas dans les données, mais on peut vérifier si le créneau existe
                 $morning = $dailySlotData['morningSlot'];
-                $afternoon = $dailySlotData['afternoonSlot'];
-
-                // Persister le créneau du matin (on suppose qu'il y en a toujours un)
                 if ($morning && $morning->getFromTime() && $morning->getToTime()) {
                     $morning->setDate($date);
                     $morning->setWorkshop($workshop);
                     $entityManager->persist($morning);
                 }
 
-                // NE PERSISTER LE CRÉNEAU DE L'APRÈS-MIDI QUE S'IL EST REMPLI
-                if ($afternoon && $afternoon->getFromTime() && $afternoon->getToTime()) {
-                    $afternoon->setDate($date);
-                    $afternoon->setWorkshop($workshop);
-                    $entityManager->persist($afternoon);
+                // On vérifie si la case 'hasAfternoonSlot' a été envoyée pour cet index.
+                // Si la case est décochée, la clé n'existera pas dans les données de la requête.
+                if (isset($dailySlotsRequestData[$index]['hasAfternoonSlot'])) {
+                    $afternoon = $dailySlotData['afternoonSlot'];
+                    if ($afternoon && $afternoon->getFromTime() && $afternoon->getToTime()) {
+                        $afternoon->setDate($date);
+                        $afternoon->setWorkshop($workshop);
+                        $entityManager->persist($afternoon);
+                    }
                 }
             }
 
