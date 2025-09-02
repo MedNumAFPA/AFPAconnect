@@ -7,19 +7,27 @@
 {{ form_start(form) }}
 
 
-{{ form_label(form.email, 'Email', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
-{{ form_widget(form.email, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+    {{ form_label(form.email, 'Email', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+    {{ form_widget(form.email, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
 
-{{ form_label(form.plainpassword, 'Mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}
-{{ form_widget(form.plainpassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+    {{ form_label(form.nickname, 'Pseudo', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
+    {{ form_widget(form.nickname, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
 
-<div class="flex items-center space-x-4 ml-3 mt-3">
-    <twig:Button color="primary">
-        {{ button_label|default('Ajouter') }}
-    </twig:Button>
-</div>
+    {% if form.oldPassword is defined %}
+        {{ form_label(form.oldPassword, 'Ancien mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}
+        {{ form_widget(form.oldPassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+    {% endif %}
 
-<br>
-<a class="mt-5" href="{{ path('app_user_index') }}">Retour</a>
+    {{ form_label(form.plainpassword, 'Nouveau mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}
+    {{ form_widget(form.plainpassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+
+    <div class="flex items-center space-x-4 ml-3 mt-3">
+        <twig:Button color="primary">
+            {{ button_label|default('Ajouter') }}
+        </twig:Button>
+    </div>
+
+    <br>
+    <a class="mt-5" href="{{ path('app_user_index') }}">Retour</a>
 
 {{ form_end(form) }}

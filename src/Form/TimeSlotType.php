@@ -16,16 +16,16 @@ class TimeSlotType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-//            ->add('date', DateType::class, [
-//                'label' => 'Date',
-//                'widget' => 'single_text', // Pour un meilleur affichage
-//            ])
-//            ->add('workshop', EntityType::class, [
-//                'class' => Workshop::class,
-//                'choice_label' => 'name',
-//                'label' => 'Atelier',
-//                'attr' => ['class' => 'form-combo']
-//            ])
+            //            ->add('date', DateType::class, [
+            //                'label' => 'Date',
+            //                'widget' => 'single_text', // Pour un meilleur affichage
+            //            ])
+            //            ->add('workshop', EntityType::class, [
+            //                'class' => Workshop::class,
+            //                'choice_label' => 'name',
+            //                'label' => 'Atelier',
+            //                'attr' => ['class' => 'form-combo']
+            //            ])
             ->add('fromTime', TimeType::class, [
                 'label' => 'Heure de début',
                 'widget' => 'single_text',
@@ -39,13 +39,14 @@ class TimeSlotType extends AbstractType
 
         if (isset($options['default_from_time'])) {
             $fromTimeOptions['data'] = $options['default_from_time'];
-            $builder->add('fromTime', TimeType::class, $fromTimeOptions);
+            $builder->add('fromTime', TimeType::class, $fromTimeOptions
+        
+        );
         }
         if (isset($options['default_to_time'])) {
             $toTimeOptions['data'] = $options['default_to_time'];
             $builder->add('toTime', TimeType::class, $toTimeOptions);
         }
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

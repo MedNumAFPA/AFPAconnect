@@ -6,6 +6,7 @@
     --color-muted: oklch(0.98 0 0);
     --color-muted-foreground: hsl(220, 8%, 46%);
     --color-primary: #60bf19;
+    --color-secondary: #fdfefa;
     --color-danger: #dd191c;
     --color-success: #22bb33;
     --color-info: #ffd900;

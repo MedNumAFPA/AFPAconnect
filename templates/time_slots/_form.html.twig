@@ -1,37 +1,10 @@
-{{ form_start(form) }}
+{{ form_start(form)}}
 {{ form_widget(form) }}
 
-
-{# <div class="flex items-center">
-
-	{{ form_label(form.date) }}
-	{{ form_widget(form.date, {"attr": {"class": "form-control"}}) }}
-</div>
-
-
-<div class="flex items-center">
-
-	{{ form_label(form.fromTime) }}
-	{{ form_widget(form.fromTime, {"attr": {"class": "form-control"}}) }}
-</div>
-
-
-<div class="flex items-center">
-
-	{{ form_label(form.toTime) }}
-	{{ form_widget(form.toTime, {"attr": {"class": "form-control"}}) }}
-</div>
-
-
-<div class="flex items-center mb-3">
-	{{ form_label(form.workshop) }}
-	{{ form_widget(form.workshop, {"attr": {"class": "form-control form-combo"}})  }}
-</div> #}
-
 <div class="flex items-center space-x-4 ml-3 mt-3">
-    <twig:Button color="primary">
-        {{ button_label|default('Ajouter') }}
-    </twig:Button>
+	<twig:Button color="primary">
+		{{ button_label|default('Ajouter') }}
+	</twig:Button>
 </div>
 
 {{ form_end(form) }}

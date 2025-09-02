@@ -27,19 +27,19 @@ final class DashBoardAdminController extends AbstractController
         foreach ($weeks as $idx => $weekName) {
             $week[$weekName] = [];
             $weekDates[$weekName] = [];
-    
+
             foreach ($days as $dayName => $date) {
                 // Décaler la date selon la semaine
                 $targetDate = (clone $date)->modify('+' . $idx . ' weeks');
-    
+
                 // Récupérer les créneaux pour ce jour déplacé
                 $timeSlots = $timeSlotRepository->findSlotsByDate($targetDate);
-    
+
                 $week[$weekName][$dayName] = $timeSlots;
                 $weekDates[$weekName][$dayName] = $targetDate;
             }
         }
-    
+
         // Passez le tableau et seulement les noms des jours pour Twig
         $daysname = array_keys($days);
 
@@ -49,5 +49,4 @@ final class DashBoardAdminController extends AbstractController
             'days' => $daysname,
         ]);
     }
-
 }
