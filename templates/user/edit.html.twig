@@ -12,8 +12,10 @@
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
 			{{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
+			<a href="{{ path('app_password_edit', {'id': user.id}) }}">Changer le mots de passe</a>
 		</twig:Card>
 	</twig:Container>
+
 	{# <a href="{{ path('app_user_index') }}">back to list</a>
 
 			    {{ include('user/_delete_form.html.twig') }} #}
