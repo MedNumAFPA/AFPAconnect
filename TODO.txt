@@ -4,9 +4,6 @@ Saria :
 - Créneaux/Timeslot to fix
 
 
-
-
-
 Amine :
 - Separate form to change password
 - Fix/finish Dashboard landing page
