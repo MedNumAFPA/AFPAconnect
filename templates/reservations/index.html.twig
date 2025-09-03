@@ -10,17 +10,17 @@
 		<twig:Card>
 			<twig:PageTitle>Index des réservations</twig:PageTitle>
 
-			<twig:Table>
+			<twig:Table class="hidden md:flex">
 				<thead class="uppercase border-b-2 border-neutral-600">
 					<tr>
 						<th scope="col" class="px-2 py-4">Id</th>
 						<th scope="col" class="px-2 py-4">Prénom</th>
 						<th scope="col" class="px-2 py-4">Nom</th>
 						<th scope="col" class="px-2 py-4">Email</th>
-						<th scope="col" class="px-2 py-4">Numéro téléphone</th>
-						<th scope="col" class="px-2 py-4">Nom de la formation</th>
-						<th scope="col" class="px-2 py-4">Rappel activé ?</th>
-						<th>Rappel envoyé a :</th>
+						<th scope="col" class="px-2 py-4">N.téléphone</th>
+						<th scope="col" class="px-2 py-4">N.formation</th>
+						<th scope="col" class="px-2 py-4">Rpl activé?</th>
+						<th>Rpl envoyé a :</th>
 						<th scope="col" class="px-2 py-4">Créneau</th>
 						<th scope="col" class="px-2 py-4 text-center">Actions</th>
 					</tr>
@@ -44,13 +44,12 @@
 
 							<td class="px-2 py-4">
 								<div class="flex flex-row justify-center space-x-3">
-									<twig:Link color="info" href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">
+									<twig:TableLink color="info" href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">
 										<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-									</twig:Link>
-									<twig:Link color="danger" href="{{ path('app_reservations_delete', {'id': reservation.id}) }}">
+									</twig:TableLink>
+									<twig:TableLink color="danger" href="{{ path('app_reservations_delete', {'id': reservation.id}) }}">
 										<i class="fa-solid fa-trash fa-lg m-1"></i>
-
-									</twig:Link>
+									</twig:TableLink>
 								</div>
 							</td>
 						</tr>
@@ -62,48 +61,58 @@
 				</tbody>
 			</twig:Table>
 
-			<div class="md:hidden text-sm">
+			<div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
+
 				{% for reservation in reservations %}
 					<twig:RecordCard title="{{reservation.firstname}} {{reservation.lastname}}">
 
 						<table class="text-left my-5">
 							<tr>
-								<th scope="row" class="">Prénom :</th>
-								<td class="">{{ reservation.firstname }}</td>
+								<th scope="row" class="py-1">Prénom :</th>
+								<td class="py-1">{{ reservation.firstname }}</td>
+
 
 							</tr>
 							<tr>
-								<th scope="row" class="">Nom :</th>
+								<th scope="row" class="py-1">Nom :</th>
+
 								<td class="">{{ reservation.lastname }}</td>
 
+
 							</tr>
 							<tr>
-								<th scope="row" class="">Email  :</th>
+<th scope="row" class="py-1">Email  :</th>
+
 								<td class=" text-wrap">{{ reservation.email |length > 12 ? reservation.email | slice(0, 12) ~ '...'  : reservation.email }}</td>
 
 							</tr>
 							<tr>
-								<th scope="row" class="">N.Téléphone  :</th>
+<th scope="row" class="py-1">N.Téléphone  :</th>
+
 								<td class="">{{ reservation.phoneNumber   }}</td>
 
 
 							</tr>
 							<tr>
-								<th scope="row" class="">N.Formation :</th>
+<th scope="row" class="py-1">N.Formation :</th>
+
 								<td class="">{{ reservation.formationName |length > 14 ? reservation.formationName | slice(0, 14) ~ ' ...' : reservation.formationName }}</td>
 							</tr>
 							<tr>
-								<th scope="row" class="">Rpl activé ?:</th>
+<th scope="row" class="py-1">Rpl activé ?:</th>
+
 								<td class="">
 									{{ reservation.isReminderActive ? 'Oui' : 'Non' }}</td>
 							</tr>
 							<tr>
-								<th scope="row" class="">Rpl envoyé a :</th>
+<th scope="row" class="py-1">Rpl envoyé a :</th>
+
 								<td class="">
 									{{ reservation.reminderSentAt ? reservation.reminderSentAt|date('d/m/Y à H:i') : 'Non envoyé' }}</td>
 							</tr>
 							<tr>
-								<th scope="row" class="">Créneau :</th>
+<th scope="row" class="py-1">Créneau :</th>
+
 								<td class="">
 									{{ reservation.timeslot.fromTime|format_time(locale='fr', pattern='HH:mm') }}
 									-
@@ -112,12 +121,12 @@
 							</tr>
 						</table>
 						<div class="flex flex-row justify-center space-x-3">
-							<twig:Link color="info" href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">
+							<twig:TableLink color="info" href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">
 								<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-							</twig:Link>
-							<twig:Link color="danger" href="{{ path('app_reservations_delete', {'id': reservation.id}) }}">
+							</twig:TableLink>
+							<twig:TableLink color="danger" href="{{ path('app_reservations_delete', {'id': reservation.id}) }}">
 								<i class="fa-solid fa-trash fa-lg m-1"></i>
-							</twig:Link>
+							</twig:TableLink>
 						</div>
 					</twig:RecordCard>
 				{% endfor %}
