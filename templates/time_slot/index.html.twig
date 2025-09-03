@@ -17,32 +17,32 @@
             </div>
 
             {% if workshops is not empty %}
-
-                <div class="flex flex-col items-center space-y-4 w-full max-h-[80%] overflow-y-scroll">
+                <div class="space-y-4">
 
                     {% for workshop in workshops %}
-                        <div class="w-full">
+                        <div class="">
+
                             <div
                                 class="accordion-header border rounded-xl w-full p-3 bg-white hover:bg-gray-100 cursor-pointer flex justify-between items-center h-[50-px]">
                                 <h3 class="text-lg font-semibold">{{ workshop.name }}</h3>
                                 <span class="accordion-arrow transform transition-transform duration-300">▼</span>
                             </div>
 
-                            <div class="accordion-content hidden max-h-[400px] overflow-y-scroll">
+                            <div class="accordion-content hidden max-h-[440px] overflow-y-scroll border-x border-b border-gray-300 rounded-b-lg">
 
                                 {% if workshop.timeSlots is not empty %}
-                                    <twig:Table class="flex mt-0">
+
+                                    <twig:Table class="hidden md:block">
                                         <thead class="uppercase border-b-2 text-xs">
                                         <tr>
                                             <th scope="col" class="px-2 py-3">ID</th>
                                             <th scope="col" class="px-2 py-3">Date</th>
                                             <th scope="col" class="px-2 py-3">Début</th>
                                             <th scope="col" class="px-2 py-3">Fin</th>
-                                            <th scope="col" class="px-2 py-3">Actions</th>
+                                            <th scope="col" class="px-2 py-3 text-center">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-
                                         {% for time_slot in workshop.timeSlots %}
                                             <tr class="border-b dark:border-neutral-600">
                                                 <td class="px-2 py-4">{{ time_slot.id }}</td>
@@ -50,7 +50,7 @@
                                                 <td class="px-2 py-4">{{ time_slot.fromTime ? time_slot.fromTime|date('H:i') : '' }}</td>
                                                 <td class="px-2 py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
                                                 <td class="px-6 py-4">
-                                                    <div class="flex flex-row justify-center space-x-3">
+                                                    <div class="flex flex-row justify-center items-center space-x-3 actions">
                                                         <twig:TableLink
                                                             href="{{ path('app_time_slot_edit', {'id': time_slot.id}) }}"
                                                             color="info">
@@ -63,22 +63,49 @@
                                         {% endfor %}
                                         </tbody>
                                     </twig:Table>
+
+                                    <div class="flex flex-col items-center md:hidden text-sm text-center w-full">
+                                        {% for time_slot in workshop.timeSlots %}
+                                            <twig:RecordCard title="{{ time_slot.date|date('d/m/Y') }}"
+                                                             class="w-full mb-4">
+                                                <table class="text-left my-5 mx-auto">
+                                                    <tr>
+                                                        <th scope="row" class="py-1 pr-2">Début :</th>
+                                                        <td>{{ time_slot.fromTime ? time_slot.fromTime|date('H:i') : '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" class="py-1 pr-2">Fin :</th>
+                                                        <td>{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
+                                                    </tr>
+                                                </table>
+                                                <div class="flex flex-row justify-center items-center space-x-3">
+                                                    <twig:TableLink
+                                                        href="{{ path('app_time_slot_edit', {'id': time_slot.id}) }}"
+                                                        color="info">
+                                                        <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+                                                    </twig:TableLink>
+                                                    {{ include('time_slot/_delete_form.html.twig', { 'time_slot': time_slot }) }}
+                                                </div>
+                                            </twig:RecordCard>
+                                        {% endfor %}
+                                    </div>
+
                                 {% else %}
-                                    <p class="text-gray-500 p-3">Aucun créneau n'est défini pour cet atelier.</p>
+                                    <p class="text-gray-500">Aucun créneau n'est défini for cet atelier.</p>
                                 {% endif %}
                             </div>
                         </div>
-
                     {% endfor %}
                 </div>
+
             {% else %}
                 <p class="text-center text-gray-500 py-8 ">Aucun atelier n'a été créé pour le moment.</p>
             {% endif %}
 
         </twig:Card>
     </twig:Container>
-
 {% endblock %}
+
 
 {% block javascripts %}
     {{ parent() }}

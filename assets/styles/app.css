@@ -45,8 +45,8 @@ label {
 form {
     margin-right: 20px;
 }
-
-.mobile-actions form{
+/* fix center actions */
+.actions form{
     margin-right: 0;
 }
 

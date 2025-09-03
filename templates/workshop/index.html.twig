@@ -27,7 +27,7 @@
                     <th scope="col" class="px-2 py-4">Actions</th>
                 </tr>
                 </thead>
-                <tbody name="body">
+                <tbody name="body" class="border-x border-b border-gray-300 rounded-b-lg">
 
                 {% for workshop in workshops %}
                     <tr class="border-b dark:border-neutral-600">
@@ -41,7 +41,7 @@
                         <td class="px-2 py-4">{{ workshop.maxSlots }}</td>
                         <td class="px-2 py-4">{{ workshop.roomNumber }}</td>
                         <td class="px-2 py-4 space-x-2">
-                            <div class="flex flex-row justify-center space-x-3">
+                            <div class="flex flex-row justify-center space-x-3 actions">
                                 <twig:TableLink color="info"
                                                 href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
                                     <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
@@ -90,7 +90,7 @@
                                 <td class="">{{ workshop.roomNumber }}</td>
                             </tr>
                         </table>
-                        <div class="flex flex-row justify-center items-center space-x-3 mobile-actions">
+                        <div class="flex flex-row justify-center items-center space-x-3 actions">
                             <twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
                                 <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
                             </twig:TableLink>
