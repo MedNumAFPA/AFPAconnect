@@ -8,14 +8,17 @@
 		<twig:Card>
 
 			<twig:PageTitle>Modifier la réservation</twig:PageTitle>
-            <p class="text-sm text-gray-500 mb-4">
-                Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
-            </p>
+			<p class="text-sm text-gray-500 mb-4">
+				Les champs marqués d'un
+				<span class="text-red-500">*</span>
+				sont obligatoires.
+			</p>
 			{{ include('reservations/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-			<a href="{{ path('app_reservations_index') }}">Retour</a>
+			<a class="m-5" href="{{ path('app_reservations_index') }}">← Retour</a>
 
-{#			{{ include('reservations/_delete_form.html.twig') }}#}
+
+			{#			{{ include('reservations/_delete_form.html.twig') }}#}
 		</twig:Card>
 	</twig:Container>
 

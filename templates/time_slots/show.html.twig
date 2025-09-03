@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créneau : {{ time_slot.id }}
+{% block title %}Créneau :
+	{{ time_slot.id }}
 {% endblock %}
 
 {% block body %}
-	<h1>Créneau : {{ time_slot.id }}</h1>
+	<h1>Créneau :
+		{{ time_slot.id }}</h1>
 
 	<table class="table">
 		<tbody>
@@ -27,7 +29,8 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_time_slots_index') }}">Retour</a>
+	<a class="m-5" href="{{ path('app_time_slots_index') }}">← Retour</a>
+
 
 	<a href="{{ path('app_time_slots_edit', {'id': time_slot.id}) }}">Modifier</a>
 

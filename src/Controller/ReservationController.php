@@ -32,9 +32,10 @@ final class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reservation);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Your reservation well received!');
             return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
         }
+        $this->addFlash('danger', 'Something went wrong!');
 
         return $this->render('reservations/new.html.twig', [
             'reservation' => $reservation,
@@ -58,10 +59,11 @@ final class ReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('info', 'The reservation updated successfully!');
 
             return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        $this->addFlash('danger', 'Something went wrong!');
         return $this->render('reservations/edit.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
@@ -71,11 +73,11 @@ final class ReservationController extends AbstractController
     #[Route('/{id}', name: 'app_reservations_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($reservation);
             $entityManager->flush();
+            $this->addFlash('danger', 'The reservation deleted successfully!');
         }
-
         return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
     }
 }
