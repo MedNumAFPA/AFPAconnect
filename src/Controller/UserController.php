@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Form\UpdatePasswordFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ final class UserController extends AbstractController
     public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, ['is_add' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,20 +57,16 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, User $user,EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user, ['is_edit' => true]);
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainpassword')->getData();
-
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-            $entityManager->flush();
+            
             $this->addFlash('info', 'User updated successfully!');
-
+            $entityManager->flush();  
+          
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
         $this->addFlash('danger', 'Something went wrong!');
@@ -90,5 +87,31 @@ final class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // Ajouter une route pour modifier le mdp 
+    #[Route('/{id}/editpassword', name: 'app_password_edit', methods: ['GET', 'POST'])]
+    public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher,EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UpdatePasswordFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+             /** @var string $plainPassword */
+             $plainPassword = $form->get('plainpassword')->getData();
+
+             // encode the plain password
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            $entityManager->flush();  
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès !');
+            
+        }else {
+            //  $this->addFlash('danger', 'Le mots de pas saisie est incorrect.');
+        }
+        return $this->render('user/update-password.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 }

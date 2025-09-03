@@ -23,26 +23,16 @@ class UserType extends AbstractType
                 'attr' => [
                 'placeholder' => 'Entrez une adresse email valide...'
                 ]
-            ])
-            // ->add('roles')
-            ->add('plainpassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Ajouter nouveau mot de passe'],
-                'second_options' => ['label' => 'Répétez le nouveau mot de passe'],
-                'invalid_message' => 'Les mots de passe ne correspondent pas.',
-                'mapped' => false,
-                'required' => true,
-            ])
-            
-        ;
-        if ($options['is_edit']) {
-            $builder->add('oldPassword', PasswordType::class, [
-                'label' => 'Ancien mot de passe',
-                'mapped' => false,
-                'constraints' => [
-                    new UserPassword(['message' => 'Ancien mots de passe est incorect.']),
-                ],
-            ]);
+                ]);
+            if ($options['is_add']) {
+                $builder->add('plainpassword', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'first_options' => ['label' => 'Ajouter nouveau mot de passe'],
+                    'second_options' => ['label' => 'Répétez le nouveau mot de passe'],
+                    'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                    'mapped' => false,
+                    'required' => true,
+                ]);
         }
         if ($options['allow_roles_update'] ?? false){
             $builder->add('roles', ChoiceType::class, [
@@ -63,7 +53,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'allow_roles_update' => false, // Par défaut, l'édition des rôles est désactivée
-            'is_edit' => false,  // valeur par défaut
+            'is_add' => false,  // valeur par défaut
         ]);
     }
 }
