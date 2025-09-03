@@ -3,32 +3,50 @@
         <div class="flex items-center  space-x-6">
             <div class="flex space-x-2 items-center">
                 <a href="{{ path('app_homepage') }}">
-                    <img href="{{ path('app_homepage') }}" class="max-w-[75px]" src="{{ asset('images/logo.svg') }}"
-                         alt="">
-                </a>
-                <a href="{{ path('app_homepage') }}">
-                    <img class="max-w-[75px]" src="{{ asset('images/logo-txt.svg') }}" alt="">
+                    <div class="flex">
+                        <img href="{{ path('app_homepage') }}" class="max-w-[75px]" src="{{ asset('images/logo.svg') }}"
+                             alt="">
+                        <img class="max-w-[75px]" src="{{ asset('images/logo-txt.svg') }}" alt="">
+                    </div>
                 </a>
             </div>
-            <ul
-                class="hidden md:flex space-x-4 font-medium">
+            <ul class="hidden md:flex space-x-4 font-medium">
+                {% set current_route = app.request.attributes.get('_route') %}
                 <li>
-                    <a href="{{ path('app_workshops_index') }}" class="hover:text-blue-600">Ateliers</a>
+                    <a href="{{ path('app_workshops_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_workshops_' ? 'text-blue-700 font-bold' : '' }}">
+                        Ateliers
+                    </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_time_slots_index') }}" class="hover:text-blue-600">Créneaux</a>
+                    <a href="{{ path('app_time_slots_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_time_slots_' ? 'text-primary font-bold' : '' }}">
+                        Créneaux
+                    </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_reservations_index') }}" class="hover:text-blue-600">Réservations</a>
+                    <a href="{{ path('app_reservations_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_reservations_' ? 'text-primary font-bold' : '' }}">
+                        Réservations
+                    </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_qr_code') }}" class="hover:text-blue-600">Qr-codes</a>
+                    <a href="{{ path('app_qr_code') }}"
+                       class="hover:text-green-600 {{ current_route == 'app_qr_code' ? 'text-primary font-bold' : '' }}">
+                        Qr-codes
+                    </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_user_index') }}" class="hover:text-blue-600">Utilisateurs</a>
+                    <a href="{{ path('app_user_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_user_' ? 'text-primary font-bold' : '' }}">
+                        Utilisateurs
+                    </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_dashboard_admin') }}" class="hover:text-blue-600">Admin Dashboard</a>
+                    <a href="{{ path('app_dashboard_admin') }}"
+                       class="hover:text-green-600 {{ current_route == 'app_dashboard_admin' ? 'text-primary font-bold' : '' }}">
+                        Admin Dashboard
+                    </a>
                 </li>
             </ul>
         </div>
