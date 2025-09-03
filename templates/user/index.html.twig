@@ -34,7 +34,7 @@
                 <th scope="col" class="px-2 py-4">Actions</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="border-x border-b border-gray-300 rounded-lg">
             {% for user in users %}
                 <tr class="border-b dark:border-neutral-600">
                     <td class="px-2 py-4">{{ user.id }}</td>
@@ -54,7 +54,7 @@
                         {% endfor %}
                     </td>
                     <td class="px-2 py-4">
-                        <div class="flex flex-row justify-center space-x-3">
+                        <div class="flex flex-row justify-center space-x-3 actions">
                             <twig:TableLink color="info" href="{{ path('app_user_edit', {'id': user.id}) }}">
                                 <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
 
@@ -107,7 +107,7 @@
                         </tr>
 
                     </table>
-                    <div class="flex flex-row justify-center space-x-3 mobile-actions">
+                    <div class="flex flex-row justify-center space-x-3 actions">
                         <twig:TableLink color="info" href="{{ path('app_user_edit', {'id': user.id}) }}">
                             <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
 
