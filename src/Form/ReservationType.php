@@ -57,10 +57,6 @@ class ReservationType extends AbstractType
                     'placeholder' => 'Entrez votre nom de formation... (Optionnel, laissez vide si non applicable)'
                 ]
             ])
-            ->add('isReminderActive', CheckboxType::class, [
-                'label' => 'Activer le rappel par email? (Vous recevrez un email 24h avant un atelier.)',
-                'required' => false,
-            ])
             ->add('timeslot', EntityType::class, [
                 'class' => TimeSlot::class,
                 'choice_label' => 'choiceLabel',
@@ -71,6 +67,10 @@ class ReservationType extends AbstractType
                     'class' => 'form-combo'
                 ],
                 'placeholder' => 'Sélectionnez un créneau',
+            ])
+            ->add('isReminderActive', CheckboxType::class, [
+                'label' => 'Activer le rappel par email?',
+                'required' => false,
             ]);
     }
 

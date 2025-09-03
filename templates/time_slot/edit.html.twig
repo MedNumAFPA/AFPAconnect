@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier créneau
-{% endblock %}
+{% block title %}Modifier créneau{% endblock %}
 
 {% block body %}
 	<twig:Container>
@@ -12,8 +11,8 @@
 				<span class="text-red-500">*</span>
 				sont obligatoires.
 			</p>
-			{{ include('time_slots/_form.html.twig', {'button_label': 'Modifier'}) }}
-			<a href="{{ path('app_time_slots_index') }}" class="mt-5">← Retour</a>
+			{{ include('time_slot/_form.html.twig', {'button_label': 'Modifier'}) }}
+			<a href="{{ path('app_time_slot_index') }}" class="mt-5">← Retour</a>
 		</twig:Card>
 	</twig:Container>
 {% endblock %}

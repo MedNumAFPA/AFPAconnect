@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau créneau{% endblock %}
+
+{% block body %}
+
+	<twig:Container>
+		<twig:Card>
+			<twig:PageTitle>Nouveau créneau</twig:PageTitle>
+			{{ include('time_slot/_form.html.twig') }}
+			<a href="{{ path('app_time_slot_index') }}" class="m-5">← Retour</a>
+
+		</twig:Card>
+	</twig:Container>
+{% endblock %}
