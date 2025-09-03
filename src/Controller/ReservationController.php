@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/reservations')]
+#[Route('/reservation')]
 final class ReservationController extends AbstractController
 {
-    #[Route(name: 'app_reservations_index', methods: ['GET'])]
+    #[Route(name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationsRepository): Response
     {
-        return $this->render('reservations/index.html.twig', [
+        return $this->render('reservation/index.html.twig', [
             'reservations' => $reservationsRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app_reservations_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $reservation = new Reservation();
@@ -33,25 +33,25 @@ final class ReservationController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
             $this->addFlash('success', 'Your reservation well received!');
-            return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
         $this->addFlash('danger', 'Something went wrong!');
 
-        return $this->render('reservations/new.html.twig', [
+        return $this->render('reservation/new.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reservations_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_reservation_show', methods: ['GET'])]
     public function show(Reservation $reservation): Response
     {
-        return $this->render('reservations/show.html.twig', [
+        return $this->render('reservation/show.html.twig', [
             'reservation' => $reservation,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_reservations_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ReservationType::class, $reservation);
@@ -61,16 +61,16 @@ final class ReservationController extends AbstractController
             $entityManager->flush();
             $this->addFlash('info', 'The reservation updated successfully!');
 
-            return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
         $this->addFlash('danger', 'Something went wrong!');
-        return $this->render('reservations/edit.html.twig', [
+        return $this->render('reservation/edit.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reservations_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_reservation_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->getPayload()->getString('_token'))) {
@@ -78,6 +78,6 @@ final class ReservationController extends AbstractController
             $entityManager->flush();
             $this->addFlash('danger', 'The reservation deleted successfully!');
         }
-        return $this->redirectToRoute('app_reservations_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
 }

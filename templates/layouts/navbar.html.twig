@@ -18,20 +18,20 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_workshops_index') }}"
-                       class="hover:text-green-600 {{ current_route starts with 'app_workshops_' ? 'text-primary font-bold' : '' }}">
+                    <a href="{{ path('app_workshop_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_workshop_' ? 'text-primary font-bold' : '' }}">
                         Ateliers
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_time_slots_index') }}"
-                       class="hover:text-green-600 {{ current_route starts with 'app_time_slots_' ? 'text-primary font-bold' : '' }}">
+                    <a href="{{ path('app_time_slot_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_time_slot_' ? 'text-primary font-bold' : '' }}">
                         Créneaux
                     </a>
                 </li>
                 <li>
-                    <a href="{{ path('app_reservations_index') }}"
-                       class="hover:text-green-600 {{ current_route starts with 'app_reservations_' ? 'text-primary font-bold' : '' }}">
+                    <a href="{{ path('app_reservation_index') }}"
+                       class="hover:text-green-600 {{ current_route starts with 'app_reservation_' ? 'text-primary font-bold' : '' }}">
                         Réservations
                     </a>
                 </li>
@@ -65,9 +65,9 @@
     <div id="mobileMenu" class="hidden flex-col mt-4 md:hidden space-y-2">
         <a href="{{ path('app_dashboard_admin') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Admin
             Dashboard</a>
-        <a href="{{ path('app_workshops_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Ateliers</a>
-        <a href="{{ path('app_time_slots_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Créneaux</a>
-        <a href="{{ path('app_reservations_index') }}"
+        <a href="{{ path('app_workshop_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Ateliers</a>
+        <a href="{{ path('app_time_slot_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Créneaux</a>
+        <a href="{{ path('app_reservation_index') }}"
            class="px-4 py-2 hover:bg-primary hover:text-white">Réservations</a>
         <a href="{{ path('app_user_index') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Utilisateurs</a>
         <a href="{{ path('app_qr_code') }}" class="px-4 py-2 hover:bg-primary hover:text-white">Qr-codes</a>

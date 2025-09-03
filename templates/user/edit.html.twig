@@ -5,18 +5,34 @@
 {% endblock %}
 
 {% block body %}
-	<twig:Container>
-		<twig:Card>
-			<twig:PageTitle>Modifier un utilisateur</twig:PageTitle>
-            <p class="text-sm text-gray-500 mb-4">
+    <twig:Container>
+        <twig:Card>
+            <twig:PageTitle>Modifier un utilisateur</twig:PageTitle>
+
+            <div class="mt-2 mb-2 ml-2">
+                <a href="{{ path('app_user_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
-			{{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
-			<a href="{{ path('app_password_edit', {'id': user.id}) }}">Changer le mots de passe</a>
-		</twig:Card>
-	</twig:Container>
+            {{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-	{# <a href="{{ path('app_user_index') }}">back to list</a>
+            <a class="flex bg-info items-center justify-center cursor-pointer h-fit text-center text-white p-4 rounded-md shadow-[0px_4px_6px_0px_#b5b5b5]
+hover:shadow-sm border-1 border-muted w-60 ml-3 mt-4"
+
+                href={{ path('app_password_edit', {'id': user.id}) }}>
+                Changer le mots de passe
+            </a>
+
+
+        </twig:Card>
+    </twig:Container>
+
+    {# <a href="{{ path('app_user_index') }}">back to list</a>
 
 			    {{ include('user/_delete_form.html.twig') }} #}
 {% endblock %}

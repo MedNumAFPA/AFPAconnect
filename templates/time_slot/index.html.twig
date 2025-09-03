@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créneaux{% endblock %}
+
+{% block body %}
+    <twig:Container>
+        {% include "layouts/flash_message.html.twig" %}
+        <twig:Card>
+            <twig:PageTitle class="mb-6">Créneaux</twig:PageTitle>
+            <twig:Link color="primary" href="{{ path('app_time_slot_new_batch') }}">Ajouter</twig:Link>
+
+            <div class="mt-8 mb-8 flex justify-center md:mt-4 md:mb-12 md:justify-start">
+                <a href="{{ path('app_dashboard_admin') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            {% if workshops is not empty %}
+
+                <div class="flex flex-col items-center space-y-4 w-full max-h-[80%] overflow-y-scroll">
+
+                    {% for workshop in workshops %}
+                        <div class="w-full">
+                            <div
+                                class="accordion-header border rounded-xl w-full p-3 bg-white hover:bg-gray-100 cursor-pointer flex justify-between items-center h-[50-px]">
+                                <h3 class="text-lg font-semibold">{{ workshop.name }}</h3>
+                                <span class="accordion-arrow transform transition-transform duration-300">▼</span>
+                            </div>
+
+                            <div class="accordion-content hidden max-h-[400px] overflow-y-scroll">
+
+                                {% if workshop.timeSlots is not empty %}
+                                    <twig:Table class="flex mt-0">
+                                        <thead class="uppercase border-b-2 text-xs">
+                                        <tr>
+                                            <th scope="col" class="px-2 py-3">ID</th>
+                                            <th scope="col" class="px-2 py-3">Date</th>
+                                            <th scope="col" class="px-2 py-3">Début</th>
+                                            <th scope="col" class="px-2 py-3">Fin</th>
+                                            <th scope="col" class="px-2 py-3">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for time_slot in workshop.timeSlots %}
+                                            <tr class="border-b dark:border-neutral-600">
+                                                <td class="px-2 py-4">{{ time_slot.id }}</td>
+                                                <td class="px-2 py-4">{{ time_slot.date ? time_slot.date|date('d/m/Y') : '' }}</td>
+                                                <td class="px-2 py-4">{{ time_slot.fromTime ? time_slot.fromTime|date('H:i') : '' }}</td>
+                                                <td class="px-2 py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
+                                                <td class="px-6 py-4">
+                                                    <div class="flex flex-row justify-center space-x-3">
+                                                        <twig:TableLink
+                                                            href="{{ path('app_time_slot_edit', {'id': time_slot.id}) }}"
+                                                            color="info">
+                                                            <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+                                                        </twig:TableLink>
+                                                        {{ include('time_slot/_delete_form.html.twig', { 'time_slot': time_slot }) }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </twig:Table>
+                                {% else %}
+                                    <p class="text-gray-500 p-3">Aucun créneau n'est défini pour cet atelier.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-gray-500 py-8 ">Aucun atelier n'a été créé pour le moment.</p>
+            {% endif %}
+
+        </twig:Card>
+    </twig:Container>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("turbo:load", function () {
+            const accordionHeaders = document.querySelectorAll(".accordion-header");
+
+            accordionHeaders.forEach((header) => {
+                header.addEventListener("click", () => {
+                    const accordionContent = header.nextElementSibling;
+                    const accordionArrow = header.querySelector(".accordion-arrow");
+                    const isOpen = !accordionContent.classList.contains("hidden");
+
+                    document.querySelectorAll(".accordion-content").forEach((content) => {
+                        content.classList.add("hidden");
+                    });
+                    document.querySelectorAll(".accordion-arrow").forEach((arrow) => {
+                        arrow.classList.remove("rotate-180");
+                    });
+
+                    if (!isOpen) {
+                        accordionContent.classList.remove("hidden");
+                        accordionArrow.classList.add("rotate-180");
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
