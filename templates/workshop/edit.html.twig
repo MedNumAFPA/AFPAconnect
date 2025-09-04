@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'atelier{% endblock  %}
+
+{% block body %}
+    <twig:Container>
+        <twig:Card>
+            <twig:PageTitle class="text-2xl font-bold mb-6">Modifier l'atelier</twig:PageTitle>
+
+            <div class="mt-2 mb-2 ml-2">
+                <a href="{{ path('app_workshop_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
+                Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
+            </p>
+            {{ include('workshop/_form.html.twig', {'button_label': 'Modifier '}) }}
+        </twig:Card>
+    </twig:Container>
+{% endblock %}

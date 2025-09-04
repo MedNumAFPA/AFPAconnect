@@ -7,19 +7,42 @@
     <twig:Container>
         <twig:Card>
             <twig:PageTitle class="text-2xl font-bold mb-6">Inscription</twig:PageTitle>
-            <p class="text-sm text-gray-500 mb-4">
+
+            <div class="mt-2 mb-2 ml-2">
+                <a href="{{ app.request.headers.get('referer') ?? path('app_user_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
             {{ form_errors(registrationForm) }}
 
             {{ form_start(registrationForm) }}
-                {{ form_row(registrationForm.email) }}
-                {{ form_row(registrationForm.nickname) }}
-                {{ form_row(registrationForm.plainPassword) }}
-                {{ form_row(registrationForm.agreeTerms) }}
-                <div class="flex items-center space-x-4 ml-3 mt-3">
-                    <twig:Button color="primary" type="submit">S'inscrire</twig:Button>
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.nickname) }}
+            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+
+            <div class="mb-3 flex items-center">
+                <label for="{{ registrationForm.agreeTerms.vars.id }}">
+                    J'accepte les
+                    <a href="{{ path('app_privacy') }}"
+                       target="_blank"
+                       class="text-blue-600 hover:text-blue-800 underline hover:no-underline transition-colors duration-200">
+                        conditions d'utilisation
+                    </a>
+                </label>
+                <div class="ml-2 registration-checkbox">
+                    {{ form_widget(registrationForm.agreeTerms) }}
                 </div>
+            </div>
+
+            <div class="flex items-center space-x-4 ml-3 mt-3">
+                <twig:Button color="primary" type="submit">S'inscrire</twig:Button>
+            </div>
             {{ form_end(registrationForm) }}
 
         </twig:Card>

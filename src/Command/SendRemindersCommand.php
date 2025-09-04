@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
     name: 'app:send-reminders',
-    description: 'Finds reservations due for a reminder and sends them.',
+    description: 'Finds reservation due for a reminder and sends them.',
 )]
 class SendRemindersCommand extends Command
 {

@@ -20,7 +20,7 @@ class ReservationRepository extends ServiceEntityRepository
 
 
     /**
-     * Finds reservations where the reminder is active, not yet sent, and the workshop
+     * Finds reservation where the reminder is active, not yet sent, and the workshop
      * is scheduled within the given time window.
      *
      * @return Reservation[] // Corrected based on your entity name

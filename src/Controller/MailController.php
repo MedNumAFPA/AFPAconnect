@@ -24,7 +24,7 @@ class MailController extends AbstractController
 
 
         // Define the time window, exactly like the console command will.
-        // This finds workshops scheduled between 23 and 25 hours from now.
+        // This finds workshop scheduled between 23 and 25 hours from now.
         $startTime = new \DateTimeImmutable('+23 hours');
         $endTime = new \DateTimeImmutable('+25 hours');
 

@@ -13,7 +13,7 @@ final class WorkshopsControllerTest extends WebTestCase
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $workshopRepository;
-    private string $path = '/workshops/';
+    private string $path = '/workshop/';
 
     protected function setUp(): void
     {
@@ -104,7 +104,7 @@ final class WorkshopsControllerTest extends WebTestCase
             'workshop[timeSlots]' => 'Something New',
         ]);
 
-        self::assertResponseRedirects('/workshops/');
+        self::assertResponseRedirects('/workshop/');
 
         $fixture = $this->workshopRepository->findAll();
 
@@ -131,7 +131,7 @@ final class WorkshopsControllerTest extends WebTestCase
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
         $this->client->submitForm('Delete');
 
-        self::assertResponseRedirects('/workshops/');
+        self::assertResponseRedirects('/workshop/');
         self::assertSame(0, $this->workshopRepository->count([]));
     }
 }
