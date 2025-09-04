@@ -52,15 +52,15 @@
                     </li>
                 {% endif %}
                 <li>
-                    <a href="{{ path('app_homepage') }}"
-                       class="hover:text-green-600 {{ current_route == 'app_homepage' ? 'text-primary font-bold' : '' }}">
+                    <a href="{{ path('app_homepage_visitor') }}"
+                       class="hover:text-green-600 {{ current_route == 'app_homepage_visitor' ? 'text-primary font-bold' : '' }}">
                         Visiteurs
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ path('app_qr_code') }}"
-                       class="hover:text-green-600 {{ current_route == 'app_intern' ? 'text-primary font-bold' : '' }}">
+                    <a href="{{ path('app_homepage_intern') }}"
+                       class="hover:text-green-600 {{ current_route == 'app_homepage_intern' ? 'text-primary font-bold' : '' }}">
                         Stagiaires de l'Afpa
                     </a>
                 </li>

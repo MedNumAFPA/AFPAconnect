@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AFPA Connect{% endblock %}
+
+{% block body %}
+
+	<div class="min-h-[100vh]">
+
+		<div class="max-h-[50vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
+			<twig:Container>
+				<twig:Card>
+
+					<div id="logo" class="flex flex-col items-center justify-center">
+						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher Visitor sur
+						</h1>
+						<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
+						<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
+						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre																																																							                            rendez-vous avec nos experts !</p>
+					
+					</div>
+				</twig:Card>
+			</twig:Container>
+		</div>
+	</div>
+
+{% endblock %}

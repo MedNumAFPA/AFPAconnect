@@ -41,7 +41,25 @@ final class QrCodeController extends AbstractController
     #[Route('/visitor', name: 'app_qr_code_visitor')]
     public function visitorQrCode(BuilderInterface $builder): Response
     {
-        $urlVisitor = $this->generateUrl('app_visitor', [], true);
+        $urlVisitor = $this->generateUrl('app_homepage_visitor', [], true);
+
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor); // Create the QR code with the data
+
+        // Génère l'image PNG
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        return new Response(
+            $result->getString(),
+            Response::HTTP_OK,
+            ['Content-Type' => $result->getMimeType()]
+        );
+    }
+
+    #[Route('/stagiaire', name: 'app_qr_code_intern')]
+    public function internQrCode(BuilderInterface $builder): Response
+    {
+        $urlVisitor = $this->generateUrl('app_homepage_intern', [], true);
 
         $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor); // Create the QR code with the data
 
