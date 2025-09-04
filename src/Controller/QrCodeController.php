@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/admin/qr-code')]
+
 final class QrCodeController extends AbstractController
 {
-    #[Route('/', name: 'app_qr_code')]
+    #[Route('/admin/qr-code', name: 'app_qr_code')]
     public function index(): Response
     {
         return $this->render('qr_code/index.html.twig', [
@@ -20,14 +20,12 @@ final class QrCodeController extends AbstractController
         ]);
     }
 
-    #[Route('/reservation', name: 'app_qr_code_reservation')]
+    #[Route('/admin/reservation', name: 'app_qr_code_reservation')]
     public function reservationQrCode(BuilderInterface $builder): Response
     {
-        $urlReservation = $this->generateUrl('app_qr_code_reservation-template', [], true);
+        $urlReservation = $this->generateUrl('app_homepage', [], true);
 
-        $qrCode = new QrCode($urlReservation); // Create the QR code with the data
-        $qrCode->getSize(500);
-        $qrCode->getMargin(10);
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlReservation); // Create the QR code with the data
 
         // Génère l'image PNG
         $writer = new PngWriter();
@@ -39,7 +37,7 @@ final class QrCodeController extends AbstractController
             ['Content-Type' => $result->getMimeType()]
         );
     }
-    #[Route('/reservation-template', name: 'app_qr_code_reservation-template')]
+    #[Route('/', name: 'app_qrcode_homepage')]
     public function reservation(): Response
     {
         // logique de la page de réservation
