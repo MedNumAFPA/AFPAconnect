@@ -15,4 +15,20 @@ final class HomepageController extends AbstractController
             'controller_name' => 'HomepageController',
         ]);
     }
+
+    #[Route('/visitor', name: 'app_homepage_visitor')]
+    public function indexVisitor(): Response
+    {
+        return $this->render('homepage/index-visitor.html.twig', [
+            'controller_name' => 'HomepageController',
+        ]);
+    }
+
+    #[Route('/stagiaire', name: 'app_homepage_intern')]
+    public function indexIntern(): Response
+    {
+        return $this->render('homepage/index-intern.html.twig', [
+            'controller_name' => 'HomepageController',
+        ]);
+    }
 }
