@@ -19,10 +19,10 @@ final class QrCodeController extends AbstractController
         ]);
     }
 
-    #[Route('/qr-code/reservation', name: 'qr_code_reservation')]
+    #[Route('/qr-code/reservation', name: 'app_qr_code_reservation')]
     public function reservationQrCode(BuilderInterface $builder): Response
     {
-        $urlReservation = $this->generateUrl('reservation_page', [], true);
+        $urlReservation = $this->generateUrl('app_qr_code_reservation-template', [], true);
 
         $qrCode = new QrCode($urlReservation); // Create the QR code with the data
         $qrCode->getSize(500);
@@ -38,11 +38,11 @@ final class QrCodeController extends AbstractController
             ['Content-Type' => $result->getMimeType()]
         );
     }
-    #[Route('/reservation', name: 'reservation_page')]
-    public function reservation()
+    #[Route('/qr-code/reservation-template', name: 'app_qr_code_reservation-template')]
+    public function reservation(): Response
     {
         // logique de la page de réservation
-        return $this->render('qr_code/reservation.html.twig');
+//        return $this->render('qr_code/reservation.html.twig');
     }
 }
 
@@ -60,7 +60,7 @@ final class QrCodeController extends AbstractController
 //         ->build();
 
 //     return new QrCodeResponse($result);
-    
+
 // }
 // #[Route('/reservation', name: 'reservation_page')]
 // public function reservation()

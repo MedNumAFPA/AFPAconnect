@@ -1,11 +1,4 @@
-{# {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Ajouter') }}</button>
-{{ form_end(form) }} #}
-
-
 {{ form_start(form) }}
-
 
 {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
 {{ form_widget(form.name, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
@@ -18,10 +11,11 @@
 
 {{ form_label(form.roomNumber, 'N° de salle', {'label_attr': {'class': 'font-medium text-gray-700'}}) }}
 {{ form_widget(form.roomNumber, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
+
 <div class="flex items-center space-x-4 ml-3 mt-3">
-    <twig:Button color="primary">
-        {{ button_label|default('Ajouter') }}
-    </twig:Button>
+	<twig:Button color="primary">
+		{{ button_label|default('Ajouter') }}
+	</twig:Button>
 </div>
-<a class="mt-5" href="{{ path('app_workshops_index') }}">Retour</a>
+
 {{ form_end(form) }}

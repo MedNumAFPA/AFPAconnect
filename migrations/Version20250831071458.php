@@ -20,12 +20,12 @@ final class Version20250831071458 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE reservations ADD reminder_sent_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('ALTER TABLE reservation ADD reminder_sent_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE reservations DROP reminder_sent_at');
+        $this->addSql('ALTER TABLE reservation DROP reminder_sent_at');
     }
 }

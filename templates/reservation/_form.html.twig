@@ -1,9 +1,11 @@
 {{ form_start(form) }}
+
 {{ form_widget(form) }}
 
 <div class="flex items-center space-x-4 ml-3 mt-3">
-	<twig:Button color="primary">
-		{{ button_label|default('Ajouter') }}
-	</twig:Button>
+    <twig:Button color="primary">
+        {{ button_label|default('Ajouter') }}
+    </twig:Button>
 </div>
+
 {{ form_end(form) }}

@@ -25,7 +25,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request,UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, ['is_add' => true]);
@@ -39,10 +39,9 @@ final class UserController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $entityManager->persist($user);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        $this->addFlash('danger', 'Something went wrong!');
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -64,9 +63,14 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $this->addFlash('info', 'User updated successfully!');
             $entityManager->flush();  
+          
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
+        $this->addFlash('danger', 'Something went wrong!');
+
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
@@ -79,13 +83,13 @@ final class UserController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
+            $this->addFlash('danger', 'User deleted successfully!');
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
     // Ajouter une route pour modifier le mdp 
-
     #[Route('/{id}/editpassword', name: 'app_password_edit', methods: ['GET', 'POST'])]
     public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher,EntityManagerInterface $entityManager): Response
     {
@@ -110,5 +114,4 @@ final class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 }
