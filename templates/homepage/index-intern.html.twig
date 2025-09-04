@@ -9,8 +9,8 @@
 
 		<div class="max-h-[50vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
 			<twig:Container>
-				<twig:CardHome>
 
+				<twig:CardHome>
 					<div id="logo" class="flex flex-col items-center justify-center">
 						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher stagiaire sur
 						</h1>
@@ -21,8 +21,29 @@
 						</twig:Link> #}
 					</div>
 
+					<div class=" border-t border-t-1 border-dashed mt-6 pt-6">
+						<div class="flex flex-col items-center justify-center mt-15">
+							<h3 class="font-extrabold text-center lg:text-3xl">Les Atelier Disponibles
+							</h3>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+							{% for workshop in workshops %}
+								<div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+								<h3 class="font-semibold text-xl mb-2">{{ workshop.name }}</h3>
+								<p class="text-gray-600 mb-2">{{ workshop.description }}</p>
+								{# <small class="text-sm font-normal block">Horaire: {{ timeslot.workshop.fromTime|date('H:i') }} - {{ timeslot.workshop.toTime|date('H:i') }}</small> #}
+								{# <span class="text-sm text-lime-600">{{ atelier.date|date('d/m/Y') }}</span> #}
+								</div>
+							{% else %}
+								<p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
+							{% endfor %}
+							</div>
+					</div>
+
 				</twig:CardHome>
+
 			</twig:Container>
+			
 		</div>
 	</div>
 	 <script>
