@@ -9,7 +9,8 @@
 
 		<div class="max-h-[50vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
 			<twig:Container>
-				<twig:Card>
+
+				<twig:CardHome>
 					<div id="logo" class="flex flex-col items-center justify-center">
 						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher stagiaire sur
 						</h1>
@@ -19,6 +20,7 @@
 						{# <twig:Link href="{{ path('app_reservation_new') }}" color="primary">Prendre Rendez-vous
 						</twig:Link> #}
 					</div>
+
 					<div class=" border-t border-t-1 border-dashed mt-6 pt-6">
 						<div class="flex flex-col items-center justify-center mt-15">
 							<h3 class="font-extrabold text-center lg:text-3xl">Les Atelier Disponibles
@@ -37,10 +39,8 @@
 							{% endfor %}
 							</div>
 					</div>
-				</twig:Card>
 
-
-
+				</twig:CardHome>
 
 			</twig:Container>
 			
