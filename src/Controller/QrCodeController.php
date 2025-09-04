@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
+#[Route('/admin/qr-code')]
 final class QrCodeController extends AbstractController
 {
-    #[Route('/admin/qr-code', name: 'app_qr_code')]
+    #[Route('/', name: 'app_qr_code')]
     public function index(): Response
     {
         return $this->render('qr_code/index.html.twig', [
@@ -20,7 +20,7 @@ final class QrCodeController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/qr-code/homepage', name: 'app_qr_code_homepage')]
+    #[Route('/homepage', name: 'app_qr_code_homepage')]
     public function homepageQrCode(BuilderInterface $builder): Response
     {
         $urlHomepage = $this->generateUrl('app_homepage', [], true);
@@ -38,7 +38,7 @@ final class QrCodeController extends AbstractController
         );
     }
 
-    #[Route('/admin/qr-code/visitor', name: 'app_qr_code_visitor')]
+    #[Route('/visitor', name: 'app_qr_code_visitor')]
     public function visitorQrCode(BuilderInterface $builder): Response
     {
         $urlVisitor = $this->generateUrl('app_visitor', [], true);
