@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[Route('/user')]
+#[Route('/admin/user')]
 final class UserController extends AbstractController
 {
     #[Route(name: 'app_user_index', methods: ['GET'])]
@@ -87,7 +87,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // Ajouter une route pour modifier le mdp 
+    // Ajouter une route pour modifier le mdp
     #[Route('/{id}/editpassword', name: 'app_password_edit', methods: ['GET', 'POST'])]
     public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -103,6 +103,7 @@ final class UserController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
             $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès !');
+
         } else {
             //  $this->addFlash('danger', 'Le mots de pas saisie est incorrect.');
         }
