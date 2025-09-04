@@ -1,106 +1,102 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ateliers{% endblock %}
+{% block title %}Ateliers
+{% endblock %}
 
 {% block body %}
-    <twig:Container>
-        {% include "layouts/flash_message.html.twig" %}
-        <twig:Card>
-            <twig:PageTitle>Ateliers</twig:PageTitle>
-            <twig:Link color="primary" href="{{ path('app_workshop_new') }}">Ajouter</twig:Link>
+	<twig:Container>
+		<twig:Card>
+			<twig:PageTitle>Ateliers</twig:PageTitle>
+			<twig:Link color="primary" href="{{ path('app_workshop_new') }}">Ajouter</twig:Link>
 
-            <div class="mt-8 mb-4 flex justify-center md:mt-4 md:mb-0 md:justify-start">
-                <a href="{{ path('app_dashboard_admin') }}"
-                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
-                    ← Retour
-                </a>
-            </div>
+			<div class="mt-8 mb-4 flex justify-center md:mt-4 md:mb-0 md:justify-start">
+				<a href="{{ path('app_dashboard_admin') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+					← Retour
+				</a>
+			</div>
 
-            <twig:Table class="hidden md:flex">
-                <thead class="uppercase border-b-2 border-neutral-600">
-                <tr>
-                    <th scope="col" class="px-2 py-4">Id</th>
-                    <th scope="col" class="px-2 py-4">Nom</th>
-                    <th scope="col" class="px-2 py-4">Description</th>
-                    <th scope="col" class="px-2 py-4">Places maximum</th>
-                    <th scope="col" class="px-2 py-4">N° de salle</th>
-                    <th scope="col" class="px-2 py-4">Actions</th>
-                </tr>
-                </thead>
-                <tbody name="body" class="border-x border-b border-gray-300 rounded-b-lg">
+			<twig:Table class="hidden md:flex">
+				<thead class="uppercase border-b-2 ">
+					<tr>
+						<th scope="col" class="px-2 py-4">Id</th>
+						<th scope="col" class="px-2 py-4">Nom</th>
+						<th scope="col" class="px-2 py-4">Description</th>
+						<th scope="col" class="px-2 py-4">Places maximum</th>
+						<th scope="col" class="px-2 py-4">N° de salle</th>
+						<th scope="col" class="px-2 py-4">Actions</th>
+					</tr>
+				</thead>
+				<tbody name="body">
 
-                {% for workshop in workshops %}
-                    <tr class="border-b dark:border-neutral-600">
-                        <td class="px-2 py-4">{{ workshop.id }}</td>
-                        <td class="px-2 py-4 font-medium text-gray-900">
-                            <a href="{{ path('app_workshop_show', {'id': workshop.id}) }}" class=" hover:text-blue-600">
-                                {{ workshop.name }}
-                            </a>
-                        </td>
-                        <td class="px-2 py-4">{{ workshop.description }}</td>
-                        <td class="px-2 py-4">{{ workshop.maxSlots }}</td>
-                        <td class="px-2 py-4">{{ workshop.roomNumber }}</td>
-                        <td class="px-2 py-4 space-x-2">
-                            <div class="flex flex-row justify-center space-x-3 actions">
-                                <twig:TableLink color="info"
-                                                href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
-                                    <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-                                </twig:TableLink>
+					{% for workshop in workshops %}
+						<tr class="border-b dark:border-neutral-600">
+							<td class="px-2 py-4">{{ workshop.id }}</td>
+							<td class="px-2 py-4 font-medium text-gray-900">
+								<a href="{{ path('app_workshop_show', {'id': workshop.id}) }}" class=" hover:text-blue-600">
+									{{ workshop.name }}
+								</a>
+							</td>
+							<td class="px-2 py-4">{{ workshop.description }}</td>
+							<td class="px-2 py-4">{{ workshop.maxSlots }}</td>
+							<td class="px-2 py-4">{{ workshop.roomNumber }}</td>
+							<td class="px-2 py-4 space-x-2">
+								<div class="flex flex-row justify-center space-x-3 actions">
+									<twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
+										<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+									</twig:TableLink>
 
-                                {{ include('workshop/_delete_form.html.twig') }}
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                            Aucun atelier pour le moment.
-                        </td>
-                    </tr>
-                {% endfor %}
+									{{ include('workshop/_delete_form.html.twig') }}
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="6" class="px-6 py-4 text-center text-gray-500">
+								Aucun atelier pour le moment.
+							</td>
+						</tr>
+					{% endfor %}
 
-                </tbody>
-            </twig:Table>
+				</tbody>
+			</twig:Table>
 
 
-            <div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
+			<div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
 
-                {% for workshop in workshops %}
-                    <twig:RecordCard title="{{ workshop.name }}">
-                        <table class="text-left my-5"></tr>
+				{% for workshop in workshops %}
+					<twig:RecordCard title="{{ workshop.name }}">
+						<table class="text-left my-5"></tr>
 
-                            <tr>
-                                <th scope="row" class="py-1">Nom :</th>
+						<tr>
+							<th scope="row" class="py-1">Nom :</th>
 
-                                <td class="">{{ workshop.name }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="py-1">Description :</th>
+							<td class="">{{ workshop.name }}</td>
+						</tr>
+						<tr>
+							<th scope="row" class="py-1">Description :</th>
 
-                                <td class="">{{ workshop.description |length > 12 ? workshop.description | slice(0, 12) ~ ' ...' : workshop.description }}</td>
-                            </tr>
-                            <tr></tr>
-                            <th scope="row" class="py-1">Places max :</th>
+							<td class="">{{ workshop.description |length > 12 ? workshop.description | slice(0, 12) ~ ' ...' : workshop.description }}</td>
+						</tr>
+						<tr></tr>
+						<th scope="row" class="py-1">Places max :</th>
 
-                            <td class="">{{ workshop.maxSlots }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="py-1">N° de salle :</th>
+						<td class="">{{ workshop.maxSlots }}</td>
+					</tr>
+					<tr>
+						<th scope="row" class="py-1">N° de salle :</th>
 
-                                <td class="">{{ workshop.roomNumber }}</td>
-                            </tr>
-                        </table>
-                        <div class="flex flex-row justify-center items-center space-x-3 actions">
-                            <twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
-                                <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-                            </twig:TableLink>
-                            {{ include('workshop/_delete_form.html.twig') }}
-                        </div>
-                    </twig:RecordCard>
-                {% endfor %}
+						<td class="">{{ workshop.roomNumber }}</td>
+					</tr>
+				</table>
+				<div class="flex flex-row justify-center items-center space-x-3 actions">
+					<twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
+						<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+					</twig:TableLink>
+					{{ include('workshop/_delete_form.html.twig') }}
+				</div>
+			</twig:RecordCard>
+		{% endfor %}
 
-            </div>
+	</div>
 
-        </twig:Card>
-    </twig:Container>
-{% endblock %}
+</twig:Card></twig:Container>{% endblock %}

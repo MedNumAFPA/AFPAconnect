@@ -35,7 +35,6 @@ final class ReservationController extends AbstractController
             $this->addFlash('success', 'Your reservation well received!');
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
-        $this->addFlash('danger', 'Something went wrong!');
 
         return $this->render('reservation/new.html.twig', [
             'reservation' => $reservation,
@@ -63,7 +62,6 @@ final class ReservationController extends AbstractController
 
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
-        $this->addFlash('danger', 'Something went wrong!');
         return $this->render('reservation/edit.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
