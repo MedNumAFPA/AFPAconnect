@@ -12,32 +12,35 @@
 
 				<twig:CardHome>
 					<div id="logo" class="flex flex-col items-center justify-center">
-						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher stagiaire sur
-						</h1>
-						<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
-						<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
+						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher stagiaire sur</h1>
+						<div class="flex flex-row items-center justify-center">
+							<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
+							<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
+						</div>
 						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre																																																							                            rendez-vous avec nos experts !</p>
 						{# <twig:Link href="{{ path('app_reservation_new') }}" color="primary">Prendre Rendez-vous
 						</twig:Link> #}
 					</div>
 
-					<div class=" border-t border-t-1 border-dashed mt-6 pt-6">
+					<div class=" border-t border-primary mt-6 pt-6">
 						<div class="flex flex-col items-center justify-center mt-15">
 							<h3 class="font-extrabold text-center lg:text-3xl">Les Atelier Disponibles
 							</h3>
 						</div>
 						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
 							{% for workshop in workshops %}
-								<div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
-								<h3 class="font-semibold text-xl mb-2">{{ workshop.name }}</h3>
-								<p class="text-gray-600 mb-2">{{ workshop.description }}</p>
-								{# <small class="text-sm font-normal block">Horaire: {{ timeslot.workshop.fromTime|date('H:i') }} - {{ timeslot.workshop.toTime|date('H:i') }}</small> #}
-								{# <span class="text-sm text-lime-600">{{ atelier.date|date('d/m/Y') }}</span> #}
+								<div class="bg-white rounded-lg shadow shadow-primary p-4 flex flex-col items-center">
+									<h3 class="font-semibold text-3xl mb-2 text-[#22bb33]">{{ workshop.name }}</h3>
+									<p class="text-gray-600 text-xl mb-2">{{ workshop.description }}</p>
 								</div>
 							{% else %}
 								<p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
 							{% endfor %}
-							</div>
+						</div>
+					</div>
+					<div class="flex flex-row items-center justify-center mt-15">
+						<twig:Link href="#" color="primary">je m'inscrit sur une atelier</twig:Link>
+						<twig:Link href="#" color="primary">je hésite! je prend un rendez vous</twig:Link>
 					</div>
 
 				</twig:CardHome>
@@ -46,11 +49,11 @@
 			
 		</div>
 	</div>
-	 <script>
-					document.addEventListener("turbo:load", () => {
-					    window.screen.width < 450 &&
-					        document.getElementById("logo").scrollIntoView({ behavior: "smooth" });
-					});
-					</script>
+	<script>
+		document.addEventListener("turbo:load", () => {
+			window.screen.width < 450 &&
+			document.getElementById("logo").scrollIntoView({ behavior: "smooth" });
+	});
+	</script>
 
 {% endblock %}
