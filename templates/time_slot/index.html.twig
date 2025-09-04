@@ -74,7 +74,7 @@
 														<td>{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
 													</tr>
 												</table>
-												<div class="flex flex-row justify-center items-center space-x-3">
+												<div class="flex flex-row justify-center items-center space-x-3 actions">
 													<twig:TableLink href="{{ path('app_time_slot_edit', {'id': time_slot.id}) }}" color="info">
 														<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
 													</twig:TableLink>
@@ -106,20 +106,20 @@
 	 <script>
 	        document.addEventListener("turbo:load", function () {
 	            const accordionHeaders = document.querySelectorAll(".accordion-header");
-	
+
 	            accordionHeaders.forEach((header) => {
 	                header.addEventListener("click", () => {
 	                    const accordionContent = header.nextElementSibling;
 	                    const accordionArrow = header.querySelector(".accordion-arrow");
 	                    const isOpen = !accordionContent.classList.contains("hidden");
-	
+
 	                    document.querySelectorAll(".accordion-content").forEach((content) => {
 	                        content.classList.add("hidden");
 	                    });
 	                    document.querySelectorAll(".accordion-arrow").forEach((arrow) => {
 	                        arrow.classList.remove("rotate-180");
 	                    });
-	
+
 	                    if (!isOpen) {
 	                        accordionContent.classList.remove("hidden");
 	                        accordionArrow.classList.add("rotate-180");

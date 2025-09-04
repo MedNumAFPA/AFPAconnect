@@ -20,12 +20,12 @@ final class QrCodeController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/reservation', name: 'app_qr_code_reservation')]
-    public function reservationQrCode(BuilderInterface $builder): Response
+    #[Route('/admin/qr-code/homepage', name: 'app_qr_code_homepage')]
+    public function homepageQrCode(BuilderInterface $builder): Response
     {
-        $urlReservation = $this->generateUrl('app_homepage', [], true);
+        $urlHomepage = $this->generateUrl('app_homepage', [], true);
 
-        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlReservation); // Create the QR code with the data
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlHomepage); // Create the QR code with the data
 
         // Génère l'image PNG
         $writer = new PngWriter();
@@ -37,12 +37,31 @@ final class QrCodeController extends AbstractController
             ['Content-Type' => $result->getMimeType()]
         );
     }
-    #[Route('/', name: 'app_qrcode_homepage')]
-    public function reservation(): Response
+
+    #[Route('/admin/qr-code/visitor', name: 'app_qr_code_visitor')]
+    public function visitorQrCode(BuilderInterface $builder): Response
     {
-        // logique de la page de réservation
-//        return $this->render('qr_code/reservation.html.twig');
+        $urlVisitor = $this->generateUrl('app_visitor', [], true);
+
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor); // Create the QR code with the data
+
+        // Génère l'image PNG
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        return new Response(
+            $result->getString(),
+            Response::HTTP_OK,
+            ['Content-Type' => $result->getMimeType()]
+        );
     }
+
+//    #[Route('/', name: 'app_qrcode_homepage')]
+//    public function reservation(): Response
+//    {
+//        // logique de la page de réservation
+////        return $this->render('qr_code/reservation.html.twig');
+//    }
 }
 
 
