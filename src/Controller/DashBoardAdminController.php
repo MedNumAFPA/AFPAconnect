@@ -7,9 +7,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/admin')]
 final class DashBoardAdminController extends AbstractController
 {
-    #[Route('/dashboardadmin', name: 'app_dashboard_admin')]
+    #[Route('/dashboard', name: 'app_dashboard_admin')]
     public function dashboard(TimeSlotRepository $timeSlotRepository): Response
     {
         $week = [];

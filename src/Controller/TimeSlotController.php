@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\WorkshopTimeSlotType;
 
-#[Route('/timeslots')]
+#[Route('/admin/timeslots')]
 final class TimeSlotController extends AbstractController
 {
     #[Route(name: 'app_time_slot_index', methods: ['GET'])]

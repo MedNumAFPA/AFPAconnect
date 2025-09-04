@@ -9,9 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/admin/qr-code')]
 final class QrCodeController extends AbstractController
 {
-    #[Route('/qr-code', name: 'app_qr_code')]
+    #[Route('/', name: 'app_qr_code')]
     public function index(): Response
     {
         return $this->render('qr_code/index.html.twig', [
@@ -19,7 +20,7 @@ final class QrCodeController extends AbstractController
         ]);
     }
 
-    #[Route('/qr-code/reservation', name: 'app_qr_code_reservation')]
+    #[Route('/reservation', name: 'app_qr_code_reservation')]
     public function reservationQrCode(BuilderInterface $builder): Response
     {
         $urlReservation = $this->generateUrl('app_qr_code_reservation-template', [], true);
@@ -38,7 +39,7 @@ final class QrCodeController extends AbstractController
             ['Content-Type' => $result->getMimeType()]
         );
     }
-    #[Route('/qr-code/reservation-template', name: 'app_qr_code_reservation-template')]
+    #[Route('/reservation-template', name: 'app_qr_code_reservation-template')]
     public function reservation(): Response
     {
         // logique de la page de réservation
