@@ -65,6 +65,7 @@ input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_worksho
 }
 
 input[type="checkbox"] {
+    @apply md:top-4 top-1 md:left-0 left-1/2 -translate-y-1/2;
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -75,7 +76,6 @@ input[type="checkbox"] {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     position: relative;
-    top: 12px;
 }
 
 input[type="checkbox"]:hover {

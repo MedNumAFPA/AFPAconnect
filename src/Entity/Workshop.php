@@ -27,7 +27,7 @@ class Workshop
     /**
      * @var Collection<int, TimeSlot>
      */
-    #[ORM\OneToMany(targetEntity: TimeSlot::class, mappedBy: 'workshop', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: TimeSlot::class, mappedBy: 'workshop', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $timeSlots;
 
     #[ORM\Column(length: 255, nullable: true)]
