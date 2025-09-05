@@ -6,4 +6,6 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 
-class CardHome {}
+class CardHome {
+
+}
