@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <twig:Container>
+    <twig:ContainerMobile>
         {% include "layouts/flash_message.html.twig" %}
 
         <twig:Card>
@@ -28,7 +28,7 @@
                     <th scope="col" class="px-2 py-4">Nom</th>
                     <th scope="col" class="px-2 py-4">Email</th>
                     <th scope="col" class="px-2 py-4">N° téléphone</th>
-                    <th scope="col" class="px-2 py-4">N° formation</th>
+                    <th scope="col" class="px-2 py-4">Formation</th>
                     <th scope="col" class="px-2 py-4">Rappel activé ?</th>
                     <th scope="col" class="px-2 py-4">Rappel envoyé ?</th>
                     <th scope="col" class="px-2 py-4">Créneau</th>
@@ -100,12 +100,12 @@
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">N.Téléphone :</th>
+                                <th scope="row" class="py-1">N°Téléphone :</th>
                                 <td class="">{{ reservation.phoneNumber }}</td>
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">N.Formation :</th>
+                                <th scope="row" class="py-1">Formation :</th>
                                 <td class="">
                                     {{ reservation.formationName |length > 14 ? reservation.formationName | slice(0, 14) ~ ' ...' : reservation.formationName }}
                                 </td>
@@ -148,5 +148,5 @@
 
 
         </twig:Card>
-    </twig:Container>
+    </twig:ContainerMobile>
 {% endblock %}

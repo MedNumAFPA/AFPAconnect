@@ -17,6 +17,11 @@ class WorkshopTimeSlotType extends AbstractType
                 'class' => Workshop::class,
                 'choice_label' => 'name',
                 'label' => 'Sélectionnez un atelier',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'class' => 'w-full p-2 border border-gray-300 rounded-md bg-gray-50 focus:ring-primary focus:border-primary'
+                ],
+                'placeholder' => 'Choisissez dans la liste...'
             ])
             ->add('dailySlots', CollectionType::class, [
                 'entry_type' => DailyTimeSlotType::class,

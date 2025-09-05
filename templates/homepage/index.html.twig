@@ -5,30 +5,37 @@
 
 {% block body %}
 
-	<div class="min-h-[100vh]">
+    <div class="md:min-h-[80vh] min-h-[70vh]">
 
-		<div class="max-h-[50vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
-			<twig:Container>
-				<twig:CardHome>
+        <div class="md:h-[40vh] h-[35vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
+            <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[70vh] min-w-[100vw]">
+                {#                <twig:CardHome> #}
+                <div class="flex flex-col mx-6 shadow-[2px_7px_13px_0px_rgba(0,0,0,0.2)]
+	                        max-h-[85%] h-[50%px]
+	                        min-w-[90%] max-w-[90%] md:min-w-[60%] md:max-w-[70%]
+	                        border-t-primary border-t-7 m-2.5 px-2 py-6 md:p-10 rounded-2xl border-solid bg-white">
 
-					<div id="logo" class="flex flex-col items-center justify-center">
-						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue sur
-						</h1>
-						<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
-						<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
-						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre																																																							                            rendez-vous avec nos experts !</p>
-						<twig:Link href="{{ path('app_reservation_new') }}" color="primary">Prendre Rendez-vous
-						</twig:Link>
-					</div>
-				</twig:CardHome>
-			</twig:Container>
-		</div>
-	</div>
-	 <script>
-					document.addEventListener("turbo:load", () => {
-					    window.screen.width < 450 &&
-					        document.getElementById("logo").scrollIntoView({ behavior: "smooth" });
-					});
-					</script>
+                    <div id="logo" class="flex flex-col items-center justify-center">
+                        <h1 class="font-extrabold text-center lg:text-6xl">Bienvenue sur
+                        </h1>
+                        <img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="logo-text AFPA Connect">
+                        <img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="logo AFPA Connect">
+                        <p class="text-[var(--foreground)] text-center mb-6">
+                            Cliquez ici si vous souhaitez prendre rendez-vous avec nos experts !
+                        </p>
+                        <twig:Link href="{{ path('app_reservation_new') }}" color="primary">Prendre Rendez-vous
+                        </twig:Link>
+                    </div>
+                </div>
+                {#                </twig:CardHome> #}
+            </div>
+        </div>
+    </div>
+    {#    <script> #}
+    {#        document.addEventListener("turbo:load", () => { #}
+    {#            window.screen.width < 450 && #}
+    {#            document.getElementById("logo").scrollIntoView({behavior: "smooth"}); #}
+    {#        }); #}
+    {#    </script> #}
 
 {% endblock %}

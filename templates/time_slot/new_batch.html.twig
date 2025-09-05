@@ -1,11 +1,35 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form _self %}
+
+{%- block _workshop_time_slot_dailySlots_entry_morningSlot_row -%}
+    <div class="mb-4">
+        {{ form_label(form, null, {'label_attr': {'class': 'font-semibold mb-2 block'}}) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{%- endblock -%}
+
+{%- block _workshop_time_slot_dailySlots_entry_afternoonSlot_row -%}
+    <div class="mb-4">
+        {{ form_label(form, null, {'label_attr': {'class': 'font-semibold mb-2 block'}}) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{%- endblock -%}
+
 {% block title %}Nouveaux créneaux{% endblock %}
 
 {% block body %}
-    <twig:Container>
+    <twig:ContainerMobile>
         <twig:Card>
             <twig:PageTitle>Nouveaux créneaux</twig:PageTitle>
+
+            <div class="mt-8 mb-8 flex justify-center md:mt-4 md:mb-12 md:justify-start">
+                <a href="{{ path('app_time_slot_index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
 
             <p class="text-sm text-gray-500 mb-4">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
@@ -14,7 +38,7 @@
 
             {{ form_row(form.workshop) }}
 
-            <h3 class="text-lg font-semibold mt-6 mb-2">Jours</h3>
+            <h3 class="text-lg font-semibold mt-6 mb-2 ml-3 text-center">Jours</h3>
 
             {% set prototype %}
                 {{ form_row(form.dailySlots.vars.prototype.date) }}
@@ -61,7 +85,7 @@
 
             {{ form_end(form) }}
         </twig:Card>
-    </twig:Container>
+    </twig:ContainerMobile>
 {% endblock %}
 
 {% block javascripts %}

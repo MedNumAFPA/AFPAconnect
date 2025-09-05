@@ -1,14 +1,25 @@
-<footer class="bg-gradient-to-tr from-green-500 to-green-600 border-t border-gray-200 py-4">
-    <div class="container mx-auto px-4 text-center text-white">
-             <a href="{{ path('app_contact') }}" class="text-white hover:text-gray-200 transition">
-            Contact
-        </a>
-        <a href="{{ path('app_privacy') }}" class="text-white hover:text-gray-200 transition">
-            - Politique de confidentialité - Copyright &copy; {{ "now"|date("Y") }}
-        </a>
+<footer class="md:h-[10vh] h-[15vh] bg-gradient-to-r from-green-600 to-green-800 md:py-6 py-2 text-white">
+    <div class="container mx-auto px-4 text-center">
 
-        <div class="text-white mt-1">
-            Amine - Arnaud - Saria
+        <div class="flex flex-col items-center space-y-2">
+
+            <div class="flex flex-col space-y-2 text-sm sm:flex-row sm:space-y-0 sm:space-x-4">
+                <a href="{{ path('app_contact') }}" class="hover:underline">Contact</a>
+                <a href="{{ path('app_privacy') }}" class="hover:underline">Politique de confidentialité</a>
+            </div>
+
+            <div class="text-xs text-green-200">
+                <p>Copyright &copy; {{ "now"|date("Y") }} - Afpa Connect</p>
+                <p class="mt-1">
+                    <a href="https://github.com/amineshwarz">Amine</a>
+                    -
+                    <a href="https://github.com/Arnauw">Arnaud</a>
+                    -
+                    <a href="https://github.com/shamashan">Saria</a>
+                </p>
+
+            </div>
+
         </div>
     </div>
 </footer>
