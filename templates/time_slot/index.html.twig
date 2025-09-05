@@ -4,7 +4,9 @@
 {% endblock %}
 
 {% block body %}
-	<twig:Container>
+{#	<twig:ContainerMobile>#}
+        <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[20vh] min-w-[100vw] mt-0">
+
 		{% include "layouts/flash_message.html.twig" %}
 		<twig:Card>
 			<twig:PageTitle class="mb-6">Créneaux</twig:PageTitle>
@@ -97,7 +99,8 @@
 			{% endif %}
 
 		</twig:Card>
-	</twig:Container>
+        </div>
+{#	</twig:ContainerMobile>#}
 {% endblock %}
 
 
