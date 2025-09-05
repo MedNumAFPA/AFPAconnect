@@ -24,14 +24,14 @@ class Workshop
     #[ORM\Column]
     private ?int $maxSlots = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $roomNumber = null;
-
     /**
      * @var Collection<int, TimeSlot>
      */
     #[ORM\OneToMany(targetEntity: TimeSlot::class, mappedBy: 'workshop', cascade: ['persist'])]
     private Collection $timeSlots;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $roomNumber = null;
 
     public function __construct()
     {
@@ -75,18 +75,6 @@ class Workshop
         $this->maxSlots = $maxSlots;
         return $this;
     }
-
-    public function getRoomNumber(): ?int
-    {
-        return $this->roomNumber;
-    }
-
-    public function setRoomNumber(int $roomNumber): static
-    {
-        $this->roomNumber = $roomNumber;
-        return $this;
-    }
-
     /**
      * @return Collection<int, TimeSlot>
      */
@@ -111,6 +99,18 @@ class Workshop
                 $timeSlot->setWorkshop(null);
             }
         }
+        return $this;
+    }
+
+    public function getRoomNumber(): ?string
+    {
+        return $this->roomNumber;
+    }
+
+    public function setRoomNumber(?string $roomNumber): static
+    {
+        $this->roomNumber = $roomNumber;
+
         return $this;
     }
 }

@@ -38,6 +38,12 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private ?TimeSlot $timeslot = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $idAfpa = null;
+
+    // #[ORM\Column]
+    // private ?int $idAfpa = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +141,30 @@ class Reservation
     public function setTimeslot(?TimeSlot $timeslot): static
     {
         $this->timeslot = $timeslot;
+
+        return $this;
+    }
+
+    // public function getIdAfpa(): ?int
+    // {
+    //     return $this->idAfpa;
+    // }
+
+    // public function setIdAfpa(int $idAfpa): static
+    // {
+    //     $this->idAfpa = $idAfpa;
+
+    //     return $this;
+    // }
+
+    public function getIdAfpa(): ?string
+    {
+        return $this->idAfpa;
+    }
+
+    public function setIdAfpa(string $idAfpa): static
+    {
+        $this->idAfpa = $idAfpa;
 
         return $this;
     }

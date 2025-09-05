@@ -49,6 +49,14 @@ class ReservationType extends AbstractType
                     'placeholder' => 'Entrez votre numéro de téléphone...'
                 ]
             ])
+            ->add('idAfpa', TextType::class, [
+                'label' => 'Numero AFPA',
+                'required' => true,
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez votre numero de formation... (Optionnel, laissez vide si non applicable)'
+                ]
+            ])
             ->add('formationName', TextType::class, [
                 'label' => 'Nom de la formation',
                 'required' => false,
