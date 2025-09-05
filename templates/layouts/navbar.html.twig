@@ -1,7 +1,7 @@
-<nav class="relative z-50 bg-white shadow-md p-4 md:h-[10vh] h-[15vh]">
+<nav class="relative z-50 bg-white shadow-md  md:h-[10vh] h-[15vh] flex items-center px-4">
 
 
-    <div class="w-full flex items-center md:mt-2 mt-4
+    <div class="w-full flex items-center
 {{ is_granted('ROLE_USER') ? 'justify-between' : 'justify-center' }}">
         <div class="flex items-center  space-x-6">
             <div class="flex space-x-2 items-center">
@@ -73,8 +73,9 @@
         <div class="hidden md:flex space-x-2">
             {% if app.user %}
                 <a href="{{ path('app_logout') }}"
-                   class="flex items-center justify-center cursor-pointer h-fit text-center text-white p-4 rounded-md shadow-[0px_4px_6px_0px_#b5b5b5] hover:shadow-sm border-1 border-muted self-center
-              bg-red-500/85 hover:bg-red-600/90 transition-colors duration-150"
+                   class="flex items-center justify-center cursor-pointer h-fit text-center text-white p-4 rounded-md shadow-[0px_4px_6px_0px_#b5b5b5]
+                   hover:shadow-sm border-1 border-muted self-center
+                   bg-danger hover:bg-red-600/90 transition-colors duration-150"
                    onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">
                     Déconnexion
                 </a>
@@ -84,7 +85,7 @@
             {% endif %}
         </div>
         {% if is_granted('ROLE_USER') %}
-            <button id="burgerBtn" class="flex md:hidden text-xl">
+            <button id="burgerBtn" class="flex md:hidden text-xl mr-6">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
         {% endif %}
@@ -120,7 +121,7 @@
         </a>
 
         {% if app.user %}
-            <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-red-600 hover:bg-red-500 hover:text-white"
+            <a href="{{ path('app_logout') }}" class="block px-4 py-4 text-red-600 hover:bg-red-500 hover:text-white border-t border-gray-400"
                onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">Déconnexion</a>
         {% endif %}
 

@@ -4,11 +4,11 @@
 {% endblock %}
 
 {% block body %}
-{#    <twig:ContainerMobile>#}
+    {#    <twig:ContainerMobile> #}
     <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[20vh] min-w-[100vw] mt-0">
 
 
-    <twig:Card>
+        <twig:CardHome>
 
             <form method="post">
                 {% if error %}
@@ -69,8 +69,8 @@
                     </twig:Button>
                 </div>
             </form>
-        </twig:Card>
+        </twig:CardHome>
     </div>
-{#    </twig:ContainerMobile>#}
+    {#    </twig:ContainerMobile> #}
 
 {% endblock %}

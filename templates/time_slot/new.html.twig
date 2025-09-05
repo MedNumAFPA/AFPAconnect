@@ -4,19 +4,20 @@
 
 {% block body %}
 
-	<twig:ContainerMobile>
-		<twig:Card>
-			<twig:PageTitle>Nouveau créneau</twig:PageTitle>
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>Nouveau créneau</twig:PageTitle>
 
             <div class="mt-8 mb-8 flex justify-center md:mt-4 md:mb-12 md:justify-start">
-                <a href="{{ path('app_time_slot_index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                <a href="{{ path('app_time_slot_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
                     ← Retour
                 </a>
             </div>
 
-			{{ include('time_slot/_form.html.twig') }}
-			<a href="{{ path('app_time_slot_index') }}" class="m-5">← Retour</a>
+            {{ include('time_slot/_form.html.twig') }}
+            <a href="{{ path('app_time_slot_index') }}" class="m-5">← Retour</a>
 
-		</twig:Card>
-	</twig:ContainerMobile>
+        </twig:CardHome>
+    </twig:ContainerMobile>
 {% endblock %}

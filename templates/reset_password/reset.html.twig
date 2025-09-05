@@ -4,7 +4,7 @@
 
 {% block body %}
     <twig:ContainerMobile>
-        <twig:Card>
+        <twig:CardHome>
             <twig:PageTitle>Réinitialisez votre mot de passe</twig:PageTitle>
 
             {{ form_start(resetForm) }}
@@ -15,6 +15,6 @@
                 <twig:Button color="primary">Réinitialiser le mot de passe</twig:Button>
             </div>
             {{ form_end(resetForm) }}
-        </twig:Card>
+        </twig:CardHome>
     </twig:ContainerMobile>
 {% endblock %}

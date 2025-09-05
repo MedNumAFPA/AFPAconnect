@@ -22,11 +22,12 @@
 
 {% block body %}
     <twig:ContainerMobile>
-        <twig:Card>
+        <twig:CardHome>
             <twig:PageTitle>Nouveaux créneaux</twig:PageTitle>
 
             <div class="mt-8 mb-8 flex justify-center md:mt-4 md:mb-12 md:justify-start">
-                <a href="{{ path('app_time_slot_index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                <a href="{{ path('app_time_slot_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
                     ← Retour
                 </a>
             </div>
@@ -84,7 +85,7 @@
             </div>
 
             {{ form_end(form) }}
-        </twig:Card>
+        </twig:CardHome>
     </twig:ContainerMobile>
 {% endblock %}
 
@@ -163,7 +164,7 @@
             });
 
             // --- NOUVELLE LOGIQUE POUR LE BOUTON "SUPPRIMER" ---
-            removeDayButton.addEventListener('click', function() {
+            removeDayButton.addEventListener('click', function () {
                 const lastDay = list.querySelector('li:last-child');
                 if (lastDay) {
                     list.removeChild(lastDay);

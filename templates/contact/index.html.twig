@@ -4,26 +4,29 @@
 {% endblock %}
 
 {% block body %}
-	<twig:ContainerMobile>
-		<twig:Card>
-			<twig:PageTitle>Rejoignez-l'AFPA</twig:PageTitle>
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>Rejoignez-l'AFPA</twig:PageTitle>
 
-
-			<div class="flex flex-col md:flex-row space-y-5 md:space-x-5 m-5">
-				<div class="bg-white p-6 rounded-lg border-muted border-1 text-gray-700 shadow md:h-full md:max-w-[50%]">
-					<h2 class=" text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-						En transport
-					</h2>
-					<p class="leading-relaxed text-sm">
-						Accès : Bus de Bordeaux ligne 15 arrêt «Cité Thorez» ou «Allende» De gare Saint Jean ligne 16 "Mérignac centre" arrêt "Capucin" ou ligne 9 "Place Maran" arrêt "Rue de Bègles" puis ligne 15 arrêt « Cité Thorez » ou « Allende » Tram C de la gare Saint Jean, direction Bègles "Lycée Vaclav Havel" arrêt "Parc de Mussonville. Parking gratuit sur site.
-					</p>
-				</div>
-				<div class="relative  overflow-hidden flex justify-center items-center md:max-w-[50%]">
-					<iframe width="800" height="400" style="border: 1px solid #dadada; border-radius: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=44.801583,-0.557583&z=15&output=embed"></iframe>
-
-
-				</div>
-			</div>
-		</twig:Card>
-	</twig:ContainerMobile>
+            <div class="flex flex-col md:flex-row space-y-5 md:space-x-5 m-5">
+                <div
+                    class="bg-white p-6 rounded-lg border-muted border-1 text-gray-700 shadow md:h-full md:max-w-[50%]">
+                    <h2 class=" text-lg font-semibold text-primary mb-4 flex items-center gap-2">
+                        En transport
+                    </h2>
+                    <p class="leading-relaxed text-sm">
+                        Accès : Bus de Bordeaux ligne 15 arrêt «Cité Thorez» ou «Allende» De gare Saint Jean ligne 16
+                        "Mérignac centre" arrêt "Capucin" ou ligne 9 "Place Maran" arrêt "Rue de Bègles" puis ligne 15
+                        arrêt « Cité Thorez » ou « Allende » Tram C de la gare Saint Jean, direction Bègles "Lycée
+                        Vaclav Havel" arrêt "Parc de Mussonville. Parking gratuit sur site.
+                    </p>
+                </div>
+                <div class="relative  overflow-hidden flex justify-center items-center md:max-w-[50%]">
+                    <iframe width="800" height="400" style="border: 1px solid #dadada; border-radius: 10px;"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps?q=44.801583,-0.557583&z=15&output=embed"></iframe>
+                </div>
+            </div>
+        </twig:CardHome>
+    </twig:ContainerMobile>
 {% endblock %}

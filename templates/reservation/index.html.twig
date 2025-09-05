@@ -8,7 +8,7 @@
     <twig:ContainerMobile>
         {% include "layouts/flash_message.html.twig" %}
 
-        <twig:Card>
+        <twig:CardHome>
             <twig:PageTitle>Réservations</twig:PageTitle>
 
             <twig:Link color="primary" href="{{ path('app_reservation_new') }}">Ajouter</twig:Link>
@@ -72,11 +72,8 @@
             </twig:Table>
 
 
-
-
-
-{# mobile part#}
-            <div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
+            {# mobile part #}
+            <div class="flex flex-col items-center h-[200px] md:hidden text-sm text-center w-full p-3">
 
                 {% for reservation in reservations %}
                     <twig:RecordCard title="{{ reservation.firstname }} {{ reservation.lastname }}">
@@ -146,7 +143,6 @@
             </div>
 
 
-
-        </twig:Card>
+        </twig:CardHome>
     </twig:ContainerMobile>
 {% endblock %}
