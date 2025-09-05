@@ -42,19 +42,24 @@ label {
     min-width: 25%;
 }
 
-form {
-    margin-right: 20px;
-}
+/*form {*/
+/*    margin-right: 20px;*/
+/*}*/
 /* fix center actions */
-.actions form{
-    margin-right: 0;
-}
+/*.actions form{*/
+/*    margin-right: 0;*/
+/*}*/
 
 label.required::after {
     content: " *";
     color: red;
     margin-left: 2px;
 }
+
+input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_workshop {
+    @apply md:w-full w-[240px]
+}
+
 
 
 input[type="checkbox"] {
