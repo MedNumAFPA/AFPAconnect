@@ -48,13 +48,13 @@ function initializeTabs() {
         buttons.forEach(otherBtnId => {
           const otherBtn = document.getElementById(otherBtnId);
           if (otherBtn) {
-            otherBtn.classList.remove('bg-gray-100', 'text-blue-400');
-            otherBtn.classList.add('bg-gray-50', 'text-gray-500');
+            otherBtn.classList.remove('bg-lime-600', 'text-white');
+            otherBtn.classList.add('bg-gray-100', 'text-gray-600');
           }
         });
   
-        btn.classList.remove('bg-gray-50', 'text-gray-500');
-        btn.classList.add('bg-gray-100', 'text-blue-400');
+        btn.classList.remove('bg-gray-100', 'text-gray-600');
+        btn.classList.add('bg-lime-600', 'text-white');
       });
     });
   };

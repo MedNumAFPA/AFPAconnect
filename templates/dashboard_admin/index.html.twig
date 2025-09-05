@@ -94,14 +94,14 @@
                 {% for i in 0..3 %}
                     {% set week_num = start_week|number_format + i %}
                     <li>
-                        <button onclick="showTab('tab{{ i + 1 }}')"
-                                id="btn{{ i + 1 }}"
-                                class="px-0 py-0 rounded-t-md font-medium
-									{% if i == 0 %}
-									bg-primary text-white
-									{% else %}
-									bg-gray-100 text-gray-600 hover:text-lime-600
-									{% endif %}">
+                        <button
+                            id="btn{{ i + 1 }}"
+                            class="px-0 py-0 w-32 h-10 rounded-t-md font-medium
+                            {% if i == 0 %}
+                                bg-lime-600 text-white
+                            {% else %}
+                                bg-gray-100 text-gray-600
+                            {% endif %}">
                             Semaine {{ week_num }}
                         </button>
                     </li>
