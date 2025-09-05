@@ -11,12 +11,13 @@
 				<twig:CardHome>
 
 					<div id="logo" class="flex flex-col items-center justify-center">
-						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher Visitor sur
-						</h1>
-						<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
-						<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
-						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si vous souhaitez prendre																																																							                            rendez-vous avec nos experts !</p>
-
+						<h1 class="font-extrabold text-center lg:text-6xl">Bienvenue cher Visiteur sur</h1>
+						<div class="flex flex-row items-center justify-center">
+							<img class=" max-w-[30%] mb-6" src="{{ asset('images/logo-txt.svg') }}" alt="">
+							<img class="max-w-[25%] mb-6" src="{{ asset('images/logo.svg') }}" alt="">
+						</div>
+						<p class="text-[var(--foreground)] text-center mb-6">Cliquez ici si pour repondre à notre questionnaire</p>
+						<twig:Link href="#" color="primary">Quiz</twig:Link>
 					</div>
 				</twig:CardHome>
 			</twig:ContainerMobile>
