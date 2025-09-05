@@ -60,7 +60,9 @@ input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_worksho
     @apply md:w-full w-[240px]
 }
 
-
+#workshop_time_slot_workshop {
+    margin-left: 12px;
+}
 
 input[type="checkbox"] {
     -webkit-appearance: none;
