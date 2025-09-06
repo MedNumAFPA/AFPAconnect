@@ -17,7 +17,7 @@ class UpdatePasswordFormType extends AbstractType
         $builder
         ->add('plainpassword', RepeatedType::class, [
             'type' => PasswordType::class,
-            'first_options' => ['label' => 'Ajouter nouveau mot de passe'],
+            'first_options' => ['label' => 'Nouveau mot de passe'],
             'second_options' => ['label' => 'Répétez le nouveau mot de passe'],
             'invalid_message' => 'Les mots de passe ne correspondent pas.',
             'mapped' => false,

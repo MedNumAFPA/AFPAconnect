@@ -4,8 +4,7 @@
 {% endblock %}
 
 {% block body %}
-        <twig:ContainerMobile>
-{#    <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[20vh] min-w-[100vw] mt-0">#}
+    <twig:ContainerMobile>
 
         {% include "layouts/flash_message.html.twig" %}
 
@@ -28,16 +27,16 @@
 
                             <div
                                 class="accordion-header border rounded-xl w-full p-3 bg-white hover:bg-gray-100 cursor-pointer flex justify-between items-center h-[50-px]">
-                                <h3 class="text-lg font-semibold">{{ workshop.name }}</h3>
+                                <h3 class="w-full text-center text-lg font-semibold">{{ workshop.name }}</h3>
                                 <span class="accordion-arrow transform transition-transform duration-300">▼</span>
                             </div>
 
                             <div
-                                class="accordion-content hidden max-h-[440px] overflow-y-scroll rounded-b-lg">
+                                class="accordion-content hidden max-h-[440px] overflow-y-scroll rounded-b-lg overflow-hidden">
 
                                 {% if workshop.timeSlots is not empty %}
 
-                                    <twig:Table class="hidden md:block mt-0">
+                                    <twig:Table class="hidden md:block mt-0 overflow-hidden">
                                         <thead class="uppercase border-b-2 text-xs">
                                         <tr>
                                             <th scope="col" class="px-2 py-3">ID</th>
@@ -110,8 +109,7 @@
             {% endif %}
 
         </twig:CardHome>
-{#    </div>#}
-        </twig:ContainerMobile>
+    </twig:ContainerMobile>
 {% endblock %}
 
 

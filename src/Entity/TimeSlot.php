@@ -32,7 +32,7 @@ class TimeSlot
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'timeslot', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'timeslot', cascade: ['remove'],  orphanRemoval: true)]
     private Collection $reservations;
 
     public function __construct()

@@ -64,7 +64,18 @@ input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_worksho
     margin-left: 12px;
 }
 
+#reservation {
+    @apply w-full
+}
+
+input[for="reservation_isReminderActive"] {
+    @apply w-full md:ml-0 ml-4
+}
+
 input[type="checkbox"] {
+    @apply md:-left-2 mr-8;
+    /* @apply left-1/2;*/
+    /* @apply -translate-y-1/2;*/
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -75,7 +86,6 @@ input[type="checkbox"] {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     position: relative;
-    top: 12px;
 }
 
 input[type="checkbox"]:hover {
@@ -88,9 +98,9 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::after {
+    @apply md:left-[6px] left-[5px];
     content: "";
     position: absolute;
-    left: 6px;
     top: 2px;
     width: 5px;
     height: 10px;

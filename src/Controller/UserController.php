@@ -101,12 +101,14 @@ final class UserController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $entityManager->flush();
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-            $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès !');
 
-        } else {
-            //  $this->addFlash('danger', 'Le mots de pas saisie est incorrect.');
+            $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès !');
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+
+
         }
+//              $this->addFlash('danger', 'Le mots de pas saisie est incorrect.');
+
         return $this->render('user/update-password.html.twig', [
             'user' => $user,
             'form' => $form->createView(),

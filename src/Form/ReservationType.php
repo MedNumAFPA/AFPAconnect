@@ -50,7 +50,7 @@ class ReservationType extends AbstractType
                 ]
             ])
             ->add('idAfpa', TextType::class, [
-                'label' => 'Numero AFPA',
+                'label' => 'Identifiant AFPA',
                 'required' => true,
                 'label_attr' => ['class' => 'required'],
                 'attr' => [

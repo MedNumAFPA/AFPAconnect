@@ -18,6 +18,15 @@
     </div>
 {%- endblock -%}
 
+{%- block _workshop_time_slot_dailySlots_entry_hasAfternoonSlot_row -%}
+    <div class="flex items-center space-x-2 my-4">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+
+        {{ form_errors(form) }}
+    </div>
+{%- endblock -%}
+
 {% block title %}Nouveaux créneaux{% endblock %}
 
 {% block body %}
@@ -32,14 +41,14 @@
                 </a>
             </div>
 
-            <p class="text-sm text-gray-500 mb-4">
+            <p class="text-sm text-gray-500 mb-4 ml-3">
                 Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
             </p>
             {{ form_start(form) }}
 
             {{ form_row(form.workshop) }}
 
-            <h3 class="text-lg font-semibold mt-6 mb-2 ml-3 text-center">Jours</h3>
+            <h3 class="text-lg font-semibold mt-6 mb-2 text-center">Jours</h3>
 
             {% set prototype %}
                 {{ form_row(form.dailySlots.vars.prototype.date) }}
