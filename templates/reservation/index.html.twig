@@ -30,8 +30,8 @@
                     <th scope="col" class="px-2 py-4">Email</th>
                     <th scope="col" class="px-2 py-4">N° téléphone</th>
                     <th scope="col" class="px-2 py-4">Formation</th>
-                    <th scope="col" class="px-2 py-4">Rappel activé ?</th>
-                    <th scope="col" class="px-2 py-4">Rappel envoyé ?</th>
+                    <th scope="col" class="px-2 py-4">Rappel activé</th>
+                    <th scope="col" class="px-2 py-4">Rappel envoyé</th>
                     <th scope="col" class="px-2 py-4">Créneau</th>
                     <th scope="col" class="px-2 py-4">Actions</th>
                 </tr>
@@ -82,49 +82,55 @@
 
                         <table class="text-left my-5">
                             <tr>
-                                <th scope="row" class="py-1">Prénom :</th>
+                                <th scope="row" class="py-1">Prénom</th>
                                 <td class="py-1">{{ reservation.firstname }}</td>
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">Nom :</th>
+                                <th scope="row" class="py-1">Nom</th>
                                 <td class="">{{ reservation.lastname }}</td>
                             </tr>
 
+
                             <tr>
                                 <th scope="row" class="py-1">Email :</th>
-                                <td class=" text-wrap">
-                                    {{ reservation.email |length > 12 ? reservation.email | slice(0, 12) ~ '...'  : reservation.email }}
+                                <td class="py-1">
+                                    {# Ce conteneur va gérer la troncature #}
+                                    <div class="truncate max-w-xs">
+                                        {{ reservation.email }}
+                                    </div>
                                 </td>
                             </tr>
 
+
+
                             <tr>
-                                <th scope="row" class="py-1">N°Téléphone :</th>
+                                <th scope="row" class="py-1">N° Tél</th>
                                 <td class="">{{ reservation.phoneNumber }}</td>
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">Formation :</th>
+                                <th scope="row" class="py-1">Formation</th>
                                 <td class="">
                                     {{ reservation.formationName |length > 14 ? reservation.formationName | slice(0, 14) ~ ' ...' : reservation.formationName }}
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row" class="py-1">Rpl activé ?:</th>
+                                <th scope="row" class="py-1">Rpl activé</th>
                                 <td class="">
                                     {{ reservation.isReminderActive ? 'Oui' : 'Non' }}
                                 </td>
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">Rpl envoyé a :</th>
+                                <th scope="row" class="py-1">Rpl envoyé</th>
                                 <td class="">
                                     {{ reservation.reminderSentAt ? reservation.reminderSentAt|date('d/m/Y à H:i') : 'Non envoyé' }}
                                 </td>
                             </tr>
 
                             <tr>
-                                <th scope="row" class="py-1">Créneau :</th>
+                                <th scope="row" class="py-1">Créneau</th>
                                 <td class="">
                                     {{ reservation.timeslot.fromTime|format_time(locale='fr', pattern='HH:mm') }}
                                     -

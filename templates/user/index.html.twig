@@ -76,21 +76,34 @@
                 {% endfor %}
                 </tbody>
             </twig:Table>
+
+
+
+            {# mobile part #}
             <div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
 
                 {% for user in users %}
-                    <twig:RecordCard title="{{ user.email }}">
+                    <twig:RecordCard title="
+                        {{ user.nickname|length > 16 ? user.nickname|slice(0, 15) ~ '...' : user.nickname }}
+                    " class="w-full mb-4 break-words">
                         <table class="text-left my-5">
                             <tr>
                                 <th scope="row" class="p-1">Id :</th>
                                 <td class="p-1">{{ user.id }}</td>
-
                             </tr>
                             <tr>
                                 <th scope="row" class="p-1">email :</th>
-
-                                <td class="p-1">{{ user.email }}</td>
-
+                                {# LA CORRECTION EST SUR LA LIGNE SUIVANTE #}
+                                <td class="p-1 break-words">
+                                    {# If the email is longer than 11 characters... #}
+                                    {% if user.email|length > 15 %}
+                                        {# ...slice the first 8 characters and add "..." #}
+                                        {{ user.email|slice(0, 15) ~ '...' }}
+                                    {% else %}
+                                        {# ...otherwise, show the whole email. #}
+                                        {{ user.email }}
+                                    {% endif %}
+                                </td>
                             </tr>
                             <tr class="">
                                 <th scope="row " class="p-1 pt-2">Role :</th>
@@ -106,22 +119,20 @@
                                             {{ role|capitalize }}
                                         {% endif %}
                                     {% endfor %}
-
                                 </td>
                             </tr>
-
                         </table>
                         <div class="flex flex-row justify-center space-x-3 actions">
                             <twig:TableLink color="info" href="{{ path('app_user_edit', {'id': user.id}) }}">
                                 <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-
                             </twig:TableLink>
                             {{ include('user/_delete_form.html.twig') }}
-
                         </div>
                     </twig:RecordCard>
                 {% endfor %}
             </div>
+
+
         </twig:CardHome>
         {#    </div> #}
     </twig:ContainerMobile>

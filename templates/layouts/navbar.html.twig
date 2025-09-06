@@ -85,7 +85,9 @@
             {% endif %}
         </div>
         {% if is_granted('ROLE_USER') %}
-            <button id="burgerBtn" class="flex md:hidden text-xl mr-6">
+            <button data-controller="burger-menu"
+{#                id="burgerBtn"#}
+                    class="flex md:hidden text-xl mr-6">
                 <i class="fa fa-bars fa-lg"></i>
             </button>
         {% endif %}
@@ -130,18 +132,3 @@
     </div>
 </nav>
 
-<script>
-    document.addEventListener("turbo:load", () => {
-        const burgerBtn = document.getElementById("burgerBtn");
-        const mobileMenu = document.getElementById("mobileMenu");
-
-        if (burgerBtn && mobileMenu && !burgerBtn.dataset.bound) {
-            burgerBtn.addEventListener("click", () => {
-                mobileMenu.classList.toggle("hidden");
-                mobileMenu.classList.toggle("flex");
-            });
-            // Mark as already bound
-            burgerBtn.dataset.bound = "true";
-        }
-    });
-</script>

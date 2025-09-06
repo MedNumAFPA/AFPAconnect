@@ -16,25 +16,43 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nickname')
+            ->add('nickname', null, [
+                'label' => 'Peusdo',
+                'label_attr' => ['class' => 'required'],
+                'attr' => [
+                    'placeholder' => 'Entrez un pseudo valide...'
+                ]
+            ])
             ->add('email', null, [
                 'label' => 'Adresse email',
                 'label_attr' => ['class' => 'required'],
                 'attr' => [
-                'placeholder' => 'Entrez une adresse email valide...'
+                    'placeholder' => 'Entrez une adresse email valide...'
                 ]
-                ]);
-            if ($options['is_add']) {
-                $builder->add('plainpassword', RepeatedType::class, [
-                    'type' => PasswordType::class,
-                    'first_options' => ['label' => 'Ajouter nouveau mot de passe'],
-                    'second_options' => ['label' => 'Répétez le nouveau mot de passe'],
-                    'invalid_message' => 'Les mots de passe ne correspondent pas.',
-                    'mapped' => false,
-                    'required' => true,
-                ]);
+            ]);
+        if ($options['is_add']) {
+            $builder->add('plainpassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'label_attr' => ['class' => 'required'],
+                    'attr' => [
+                        'placeholder' => 'Entrez un mot de passe valide...'
+                    ]
+                ],
+                'second_options' => [
+                    'label' => 'Répètez mot de passe',
+                    'label_attr' => ['class' => 'required'],
+                    'attr' => [
+                        'placeholder' => 'Répètez votre mot de passe...'
+                    ]
+                ],
+                'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                'mapped' => false,
+                'required' => true,
+            ]);
         }
-        if ($options['allow_roles_update'] ?? false){
+        if ($options['allow_roles_update'] ?? false) {
             $builder->add('roles', ChoiceType::class, [
                 'label' => 'Rôles Utilisateur',
                 'choices' => [

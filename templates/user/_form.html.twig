@@ -1,26 +1,36 @@
-{# {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }} #}
-
-
 {{ form_start(form) }}
 
+    {{ form_row(form.email) }}
+    {{ form_row(form.nickname) }}
 
-{{ form_label(form.email, 'Email') }}
-{{ form_widget(form.email) }}
+    {{ form_rest(form) }}
 
-{{ form_label(form.nickname, 'Pseudo') }}
-{{ form_widget(form.nickname) }}
-
-    {% if form.plainpassword is defined %}
-        {{ form_label(form.plainpassword, 'Nouveau mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}
-        {{ form_widget(form.plainpassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
-     {% endif %}
-    <div class="flex items-center space-x-4 ml-3 mt-3">
-        <twig:Button color="primary">
-            {{ button_label|default('Ajouter') }}
-        </twig:Button>
-    </div>
+<div class="flex justify-center items-center space-x-4 md:ml-0 md:mt-3 ">
+    <twig:Button color="primary">
+        {{ button_label|default('Ajouter') }}
+    </twig:Button>
+</div>
 
 {{ form_end(form) }}
+
+
+{#{{ form_start(form) }}#}
+
+
+{#{{ form_label(form.email, 'Email') }}#}
+{#{{ form_widget(form.email) }}#}
+
+{#{{ form_label(form.nickname, 'Pseudo') }}#}
+{#{{ form_widget(form.nickname) }}#}
+
+{#    {% if form.plainpassword is defined %}#}
+{#        {{ form_label(form.plainpassword, 'Nouveau mot de passe', {'label_attr': {'class': 'text-gray-700'}}) }}#}
+{#        {{ form_widget(form.plainpassword, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}#}
+{#    {% endif %}#}
+{#<div class="flex items-center space-x-4 ml-3 mt-3">#}
+{#    <twig:Button color="primary">#}
+{#        {{ button_label|default('Ajouter') }}#}
+{#    </twig:Button>#}
+{#</div>#}
+
+{#{{ form_end(form) }}#}

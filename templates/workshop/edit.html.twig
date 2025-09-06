@@ -5,8 +5,8 @@
 {% block body %}
     <twig:ContainerMobile>
         <twig:CardHome>
-            <twig:PageTitle class="text-2xl font-bold mb-6">Modifier l'atelier</twig:PageTitle>
-
+            <twig:PageTitle class="text-2xl font-bold mb-6">Modifier l'atelier :</twig:PageTitle>
+                <h1 class="text-2xl font-bold mb-6 text-center">{{ workshop.name }}</h1>
             <div class="mt-2 mb-2 ml-2">
                 <a href="{{ path('app_workshop_index') }}"
                    class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
