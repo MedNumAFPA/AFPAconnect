@@ -43,19 +43,24 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {% for workshop in workshops %}
 
-                                    <a href="{{ path('app_workshop_subscribe', {'id': workshop.id}) }}"
-                                       class="relative group block bg-gray-50 rounded-lg p-4 flex flex-col items-center hover:shadow-lg hover:scale-105 transition-transform duration-200">
+                                    {% if workshop.name != 'Entretien Individuel' %}
 
-                                        <h3 class="font-semibold text-xl mb-2 text-[#22bb33]">{{ workshop.name }}</h3>
-                                        <p class="text-gray-600">{{ workshop.description|slice(0, 30) ~ (workshop.description|length > 30 ? '...' : '') }}</p>
+                                        <a href="{{ path('app_workshop_subscribe', {'id': workshop.id}) }}"
+                                           class="relative group block bg-gray-50 rounded-lg p-4 flex flex-col items-center hover:shadow-lg hover:scale-105 transition-transform duration-200">
 
-                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                                                    opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300">
+                                            <h3 class="font-semibold text-xl mb-2 text-[#22bb33]">{{ workshop.name }}</h3>
+                                            <p class="text-gray-600">{{ workshop.description|slice(0, 30) ~ (workshop.description|length > 30 ? '...' : '') }}</p>
 
-                                            <div
-                                                class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800"></div>
-                                        </div>
-                                    </a>
+                                            {# Le tooltip caché #}
+                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
+                        opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300">
+                                                {{ workshop.description }}
+                                                <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800"></div>
+                                            </div>
+                                        </a>
+
+                                    {% endif %}
+
                                 {% else %}
                                     <p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
                                 {% endfor %}
@@ -69,7 +74,8 @@
                             un entretien individuel :
                         </p>
                         <div class="flex flex-row items-center justify-center mt-15 mb-6 gap-4">
-                            <twig:Link href="{{ path('app_reservation_new') }}" color="primary">Prendre Rendez-vous
+                            <twig:Link href="{{ path('app_rendez_vous_new') }}" color="primary">
+                                Prendre Rendez-vous
                             </twig:Link>
                         </div>
 
