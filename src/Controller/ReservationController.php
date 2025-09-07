@@ -6,6 +6,7 @@ use App\Entity\Reservation;
 use App\Entity\Workshop;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
+use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,6 +119,46 @@ final class ReservationController extends AbstractController
 
         return $this->render('reservation/subscribe.html.twig', [
             'workshop' => $workshop,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/rendez-vous', name: 'app_rendez_vous_new')]
+    public function newRendezVous(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        WorkshopRepository $workshopRepository
+    ): Response {
+        $reservation = new Reservation();
+
+        // 1. Find the specific "Entretien Individuel" workshop.
+        // We find it by a unique, hardcoded name.
+        $entretienWorkshop = $workshopRepository->findOneBy(['name' => 'Entretien Individuel']);
+
+        if (!$entretienWorkshop) {
+            // Handle the case where the admin hasn't created the workshop yet.
+            $this->addFlash('warning', 'Les entretiens individuels ne sont pas disponibles pour le moment.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+//dd($reservation);
+
+        // 2. Pass the workshop ID to the form options.
+        $form = $this->createForm(ReservationType::class, $reservation, [
+            'workshop_id' => $entretienWorkshop->getId(),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre rendez-vous a été enregistré avec succès !');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        return $this->render('reservation/new_rendez_vous.html.twig', [
             'form' => $form->createView(),
         ]);
     }
