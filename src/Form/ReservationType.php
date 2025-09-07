@@ -65,7 +65,13 @@ class ReservationType extends AbstractType
                     'placeholder' => 'Entrez votre nom de formation... (Optionnel, laissez vide si non applicable)'
                 ]
             ])
-            ->add('timeslot', EntityType::class, [
+            ->add('isReminderActive', CheckboxType::class, [
+                'label' => 'Activer le rappel par email?',
+                'required' => false,
+            ]);
+
+        if (!$options['is_workshop_subscription']) {
+            $builder->add('timeslot', EntityType::class, [
                 'class' => TimeSlot::class,
                 'choice_label' => 'choiceLabel',
                 'label' => 'Atelier et créneaux',
@@ -75,17 +81,16 @@ class ReservationType extends AbstractType
                     'class' => 'form-combo'
                 ],
                 'placeholder' => 'Sélectionnez un créneau',
-            ])
-            ->add('isReminderActive', CheckboxType::class, [
-                'label' => 'Activer le rappel par email?',
-                'required' => false,
             ]);
+        }
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Reservation::class,
+            'is_workshop_subscription' => false,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
+use App\Entity\Workshop;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,7 +69,7 @@ final class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/reservation/{id}', name: 'app_reservation_delete', methods: ['POST'])]
+    #[Route('/admin/reservation/{id}/delete', name: 'app_reservation_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->getPayload()->getString('_token'))) {
@@ -77,5 +78,47 @@ final class ReservationController extends AbstractController
             $this->addFlash('danger', 'Réservation supprimée avec succès !');
         }
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/workshop/{id}/subscribe', name: 'app_workshop_subscribe')]
+    public function subscribeToWorkshop(
+        Workshop $workshop,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $reservationTemplate = new Reservation();
+
+        $form = $this->createForm(ReservationType::class, $reservationTemplate, [
+            'is_workshop_subscription' => true,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $timeSlots = $workshop->getTimeSlots();
+
+            if ($timeSlots->isEmpty()) {
+                $this->addFlash('danger', 'Cet atelier n\'a pas de créneaux disponibles.');
+                return $this->redirectToRoute('app_homepage');
+            }
+
+            foreach ($timeSlots as $timeSlot) {
+
+                $newReservation = clone $reservationTemplate;
+                $newReservation->setTimeslot($timeSlot);
+
+                $entityManager->persist($newReservation);
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre inscription à l\'atelier "' . $workshop->getName() . '" a été enregistrée avec succès !');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        return $this->render('reservation/subscribe.html.twig', [
+            'workshop' => $workshop,
+            'form' => $form->createView(),
+        ]);
     }
 }

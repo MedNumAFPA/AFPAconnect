@@ -24,21 +24,24 @@
         {{ form_widget(form.formationName) }}
         {{ form_errors(form.formationName) }}
 
-        {{ form_label(form.timeslot) }}
-        {{ form_widget(form.timeslot) }}
-        {{ form_errors(form.timeslot) }}
+
+        {% if form.timeslot is defined %}
+            {{ form_label(form.timeslot) }}
+            {{ form_widget(form.timeslot) }}
+            {{ form_errors(form.timeslot) }}
+        {% endif %}
 
 
-    <div class="flex items-center space-x-2 my-4 w-full">
-        {{ form_label(form.isReminderActive) }}
-        {{ form_widget(form.isReminderActive) }}
-        {{ form_errors(form.isReminderActive) }}
-    </div>
+<div class="flex items-center space-x-2 my-4 w-full">
+    {{ form_label(form.isReminderActive) }}
+    {{ form_widget(form.isReminderActive) }}
+    {{ form_errors(form.isReminderActive) }}
+</div>
 
-    <div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
-        <twig:Button color="primary">
-            {{ button_label|default('Ajouter') }}
-        </twig:Button>
-    </div>
+<div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
+    <twig:Button color="primary">
+        {{ button_label|default('Ajouter') }}
+    </twig:Button>
+</div>
 
 {{ form_end(form) }}
