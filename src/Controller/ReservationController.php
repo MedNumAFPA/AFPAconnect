@@ -32,7 +32,7 @@ final class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reservation);
             $entityManager->flush();
-            $this->addFlash('success', 'Your reservation well received!');
+            $this->addFlash('success', 'Réservation ajoutée avec succès !');
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -58,7 +58,7 @@ final class ReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $this->addFlash('info', 'The reservation updated successfully!');
+            $this->addFlash('info', 'Réservation modifiée avec succès !');
 
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -74,7 +74,7 @@ final class ReservationController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($reservation);
             $entityManager->flush();
-            $this->addFlash('danger', 'The reservation deleted successfully!');
+            $this->addFlash('danger', 'Réservation supprimée avec succès !');
         }
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
