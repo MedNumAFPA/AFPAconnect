@@ -10,10 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class HomepageController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    public function index(): Response
+    public function index(WorkshopRepository $workshopRepository): Response
     {
         return $this->render('homepage/index.html.twig', [
-            'controller_name' => 'HomepageController',
+            'workshops' => $workshopRepository->findAll(),
         ]);
     }
 
@@ -25,11 +25,10 @@ final class HomepageController extends AbstractController
         ]);
     }
 
-    #[Route('/stagiaire', name: 'app_homepage_intern')]
+    #[Route('/intern', name: 'app_homepage_intern')]
     public function indexIntern(WorkshopRepository $workshopRepository): Response
     {
         return $this->render('homepage/index-intern.html.twig', [
-            'controller_name' => 'HomepageController',
             'workshops' => $workshopRepository->findAll(),
         ]);
     }

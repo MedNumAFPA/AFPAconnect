@@ -69,7 +69,7 @@ final class WorkshopController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_workshop_delete')]
+    #[Route('/{id}/delete', name: 'app_workshop_delete')]
     public function delete(Request $request, Workshop $workshop, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $workshop->getId(), $request->getPayload()->getString('_token'))) {

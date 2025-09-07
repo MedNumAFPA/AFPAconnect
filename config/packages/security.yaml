@@ -17,7 +17,7 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_homepage
+                login_path: app_login
                 check_path: app_login
                 default_target_path: app_dashboard_admin  # nom de la route vers laquelle rediriger après connexion
                 enable_csrf: true

@@ -37,8 +37,11 @@ final class UserController extends AbstractController
 
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Utilisateur ajouté avec succès !');
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('user/new.html.twig', [
@@ -63,7 +66,7 @@ final class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->addFlash('info', 'User updated successfully!');
+            $this->addFlash('info', 'Utilisateur modifié avec succès !');
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
@@ -75,19 +78,18 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
-            $this->addFlash('danger', 'User deleted successfully!');
+            $this->addFlash('danger', 'Utilisateur supprimé avec succès !');
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // Ajouter une route pour modifier le mdp
     #[Route('/{id}/editpassword', name: 'app_password_edit', methods: ['GET', 'POST'])]
     public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -98,20 +100,22 @@ final class UserController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainpassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès !');
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-
-
         }
-//              $this->addFlash('danger', 'Le mots de pas saisie est incorrect.');
+
+        $response = new Response();
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // Code 422
+        }
 
         return $this->render('user/update-password.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-        ]);
+        ], $response);
     }
 }

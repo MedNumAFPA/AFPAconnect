@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription à l'atelier : {{ workshop.name }}{% endblock %}
+
+{% block body %}
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>Inscription à l'atelier : </twig:PageTitle>
+            <p class="text-2xl font-bold mb-6 text-center">{{ workshop.name }}</p>
+
+            <p class="text-sm text-gray-500 mb-4">
+                Veuillez remplir vos informations pour vous inscrire à tous les créneaux de cet atelier.
+            </p>
+
+            {{ include('reservation/_form.html.twig', {'button_label': 'M\'inscrire'}) }}
+
+        </twig:CardHome>
+    </twig:ContainerMobile>
+{% endblock %}

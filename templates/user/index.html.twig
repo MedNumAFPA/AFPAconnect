@@ -93,16 +93,9 @@
                             </tr>
                             <tr>
                                 <th scope="row" class="p-1">email :</th>
-                                {# LA CORRECTION EST SUR LA LIGNE SUIVANTE #}
+
                                 <td class="p-1 break-words">
-                                    {# If the email is longer than 11 characters... #}
-                                    {% if user.email|length > 15 %}
-                                        {# ...slice the first 8 characters and add "..." #}
-                                        {{ user.email|slice(0, 15) ~ '...' }}
-                                    {% else %}
-                                        {# ...otherwise, show the whole email. #}
-                                        {{ user.email }}
-                                    {% endif %}
+                                {{ user.email|length > 15 ? user.email|slice(0, 15) ~ '...' : user.email }}
                                 </td>
                             </tr>
                             <tr class="">
