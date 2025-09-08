@@ -32,11 +32,11 @@
                             </div>
 
                             <div
-                                class="accordion-content hidden max-h-[440px] overflow-y-scroll rounded-b-lg overflow-hidden">
+                                class="accordion-content hidden max-h-[440px] overflow-y-auto rounded-b-lg">
 
                                 {% if workshop.timeSlots is not empty %}
 
-                                    <twig:Table class="hidden md:block mt-0 overflow-hidden">
+                                    <twig:TableTimeSlots class="">
                                         <thead class="uppercase border-b-2 text-xs">
                                         <tr>
                                             <th scope="col" class="px-2 py-3">ID</th>
@@ -67,7 +67,7 @@
                                             </tr>
                                         {% endfor %}
                                         </tbody>
-                                    </twig:Table>
+                                    </twig:TableTimeSlots>
 
                                     <div class="flex flex-col items-center md:hidden text-sm text-center w-full">
                                         {% for time_slot in workshop.timeSlots %}

@@ -77,18 +77,18 @@
 
             <div class="flex justify-center items-center gap-2 space-x-4 mt-4">
                 <button type="button" id="add-day-button"
-                        class="bg-green-800 text-white p-4 md:mr-0 mr-0 rounded-md shadow-md hover:shadow-sm">
+                        class="bg-green-800 text-white p-4 md:mr-0 mr-0 rounded-md shadow-md hover:shadow-sm cursor-pointer">
                     Ajouter un autre jour
                 </button>
                 <button type="button" id="remove-day-button"
-                        class="bg-red-600 text-white p-4 rounded-md shadow-md hover:shadow-sm hidden">
+                        class="bg-red-600 text-white p-4 rounded-md shadow-md hover:shadow-sm hidden cursor-pointer">
                     Supprimer le dernier jour
                 </button>
             </div>
 
             <div class="mt-6 flex justify-center">
                 <button type="submit"
-                        class="bg-primary text-white p-4 rounded-md shadow-md hover:shadow-sm">
+                        class="bg-primary text-white p-4 rounded-md shadow-md hover:shadow-sm cursor-pointer">
                     Sauvegarder les créneaux
                 </button>
             </div>
@@ -104,7 +104,7 @@
         document.addEventListener('turbo:load', function () {
             const list = document.getElementById('daily-slots-list');
             const addDayButton = document.getElementById('add-day-button');
-            const removeDayButton = document.getElementById('remove-day-button'); // On récupère le nouveau bouton
+            const removeDayButton = document.getElementById('remove-day-button');
 
             if (!list || !addDayButton || !removeDayButton) {
                 return;
@@ -112,7 +112,7 @@
 
             const updateRemoveButtonVisibility = () => {
                 const dayCount = list.querySelectorAll('li').length;
-                // Si on a plus d'un jour, on montre le bouton, sinon on le cache.
+
                 if (dayCount > 1) {
                     removeDayButton.classList.remove('hidden');
                 } else {
@@ -120,7 +120,6 @@
                 }
             };
 
-            // La fonction pour la case à cocher (inchangée)
             const initializeDayFormLogic = (dayFormElement) => {
                 const checkbox = dayFormElement.querySelector('input[type="checkbox"][id$="_hasAfternoonSlot"]');
                 const afternoonWrapper = dayFormElement.querySelector('.afternoon-slot-wrapper');
@@ -132,15 +131,11 @@
                 updateVisibility();
             };
 
-            // On applique aux formulaires existants
             list.querySelectorAll('li').forEach(initializeDayFormLogic);
-            // On vérifie l'état initial du bouton supprimer
             updateRemoveButtonVisibility();
 
-
-            // --- GESTION DU BOUTON "AJOUTER" ---
             addDayButton.addEventListener('click', function () {
-                // ... votre logique pour ajouter une nouvelle journée ...
+
                 const lastDateInput = list.querySelector('li:last-child input[type="date"]');
                 let nextDate = new Date();
                 if (lastDateInput && lastDateInput.value) {
@@ -168,20 +163,17 @@
                 list.dataset.index = index + 1;
                 initializeDayFormLogic(newLi);
 
-                // On met à jour la visibilité du bouton supprimer
                 updateRemoveButtonVisibility();
             });
 
-            // --- NOUVELLE LOGIQUE POUR LE BOUTON "SUPPRIMER" ---
             removeDayButton.addEventListener('click', function () {
                 const lastDay = list.querySelector('li:last-child');
                 if (lastDay) {
                     list.removeChild(lastDay);
-                    // On décrémente l'index pour que le prochain ajout fonctionne
+
                     list.dataset.index = parseInt(list.dataset.index) - 1;
                 }
 
-                // On met à jour la visibilité du bouton supprimer
                 updateRemoveButtonVisibility();
             });
         });
