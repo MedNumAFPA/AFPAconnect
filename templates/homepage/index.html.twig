@@ -40,35 +40,9 @@
                         <div class="mt-20">
                             <h3 class="font-extrabold text-center text-3xl mb-8">Les Ateliers Disponibles</h3>
 
-                             {# <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {% for workshop in workshops %}
-
-                                    {% if workshop.name != 'Entretien Individuel' %}
-
-                                        <a href="{{ path('app_workshop_subscribe', {'id': workshop.id}) }}"
-                                           class="relative group block bg-gray-50 rounded-lg p-4 flex flex-col items-center hover:shadow-lg hover:scale-105 transition-transform duration-200">
-
-                                            <h3 class="font-semibold text-xl mb-2 text-[#22bb33]">{{ workshop.name }}</h3>
-                                            <p class="text-gray-600">{{ workshop.description|slice(0, 30) ~ (workshop.description|length > 30 ? '...' : '') }}</p>
-
-                                            
-                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 text-sm text-white bg-gray-800 rounded-lg shadow-lg
-                        opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300">
-                                                {{ workshop.description }}
-                                                <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800"></div>
-                                            </div>
-                                        </a>
-
-                                    {% endif %}
-
-                                {% else %}
-                                    <p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
-                                {% endfor %}
-                            </div> #}
-
                              <div class="flex flex-col md:flex-row items-center justify-center flex-wrap w-max-5xl mx-auto gap-4">
                                 {% for workshop in workshops %}
-                                
+
                                     {% if workshop.name != 'Entretien Individuel' %}
                                         <div class=" relative bg-gray-50 rounded-lg p-4 transition md:w-[30%] w-full h-20">
                                             <button class="accordion-header flex items-center justify-between w-full text-left focus:outline-none cursor-pointer">
@@ -95,7 +69,7 @@
                                                     {% for ts in workshop.timeslots %}
                                                         {% set jourEn = ts.date|date('l') %}
                                                         {% set jourFr = joursFr[jourEn] %}
-                                                        
+
                                                         {% if timeslotsParJour[jourFr] is not defined %}
                                                             {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): [ts] }) %}
                                                         {% else %}
@@ -112,24 +86,24 @@
                                                                 Salle: {{ ts.workshop.roomNumber }}
                                                             </p>
                                                         {% endfor %}
-                                                        
+
                                                     {% endfor %}
                                                 {% else %}
                                                     <p class="col-span-3 text-center text-gray-400 mb-3">Aucun Crénaux disponible.</p>
                                                 {% endif %}
-                                                <div class=" flex items-center justify-center mt-2">   
+                                                <div class=" flex items-center justify-center mt-2">
                                                     <a href="{{ path('app_workshop_subscribe', {'id': workshop.id}) }}"
                                                     class="block text-center bg-[#22bb33] text-white rounded px-4 py-2 font-medium hover:shadow-sm transition w-3xs">Réserver</a>
                                                 </div>
                                             </div>
-                                        </div>                         
+                                        </div>
                                     {% else %}
                                         <p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
                                     {% endif %}
                                 {% endfor %}
                             </div>
 
-                        </div> 
+                        </div>
                         <p class="text-[var(--foreground)] text-center my-6">
                             Si vous n'êtes pas sur et voudriez échanger pour avoir plus d'informations vous pouvez
                             demander
