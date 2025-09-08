@@ -91,12 +91,6 @@ final class ReservationController extends AbstractController
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
     #[Route('/workshop/{id}/subscribe', name: 'app_workshop_subscribe')]
     public function subscribeToWorkshop(
         Workshop               $workshop,
@@ -104,19 +98,15 @@ final class ReservationController extends AbstractController
         EntityManagerInterface $entityManager,
         Environment            $twig,
         KernelInterface        $kernel,
-        MailerInterface        $mailer,
-    ): Response
-    {
+        MailerInterface        $mailer
+    ): Response {
         $reservationTemplate = new Reservation();
-
         $form = $this->createForm(ReservationType::class, $reservationTemplate, [
             'is_workshop_subscription' => true,
         ]);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $timeSlots = $workshop->getTimeSlots();
 
             if ($timeSlots->isEmpty()) {
@@ -124,8 +114,10 @@ final class ReservationController extends AbstractController
                 return $this->redirectToRoute('app_homepage');
             }
 
-            foreach ($timeSlots as $timeSlot) {
+            $createdReservations = [];
+            $reservationsByDate = [];
 
+            foreach ($timeSlots as $timeSlot) {
                 $newReservation = clone $reservationTemplate;
                 $newReservation->setTimeslot($timeSlot);
                 $entityManager->persist($newReservation);
@@ -133,27 +125,27 @@ final class ReservationController extends AbstractController
                 $createdReservations[] = $newReservation;
             }
 
+            $entityManager->flush();
+
+            foreach ($createdReservations as $reservation) {
+                $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
+                $reservationsByDate[$dateKey][] = $reservation;
+            }
+
             $htmlContent = $twig->render('email/subscription.html.twig', [
-                'reservation' => $newReservation,
                 'reservations' => $createdReservations,
+                'reservationsByDate' => $reservationsByDate,
             ]);
 
             $email = (new Email())
-                ->from('Afpa Connect <subscribed@afpaconnect.fr>') // Change this later
-                ->to($newReservation->getEmail())
-                ->subject('Vous avez été inscrit â un atelier !')
-//            ->embedFromPath('public/images/logo.png', 'logo')
-                ->embedFromPath(
-                    $kernel->getProjectDir()
-                    .
-                    '/public/images/logo-txt.png', 'logo-txt')
-                ->text('This is the plain text version of the email.') // Fallback plain text
-                // Set the HTML body of the email
+                ->from('Afpa Connect <subscribed@afpaconnect.fr>')
+                ->to($reservationTemplate->getEmail())
+                ->subject('Confirmation de votre inscription à l\'atelier : ' . $workshop->getName())
+                ->embedFromPath($kernel->getProjectDir() . '/public/images/logo-txt.png', 'logo-txt')
                 ->html($htmlContent);
 
             $mailer->send($email);
 
-            $entityManager->flush();
             $this->addFlash('success', 'Votre inscription à l\'atelier "' . $workshop->getName() . '" a été enregistrée avec succès !');
             return $this->redirectToRoute('app_homepage');
         }

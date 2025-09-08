@@ -60,7 +60,6 @@
             border-bottom: 1px solid #eee;
         }
     </style>
-    {# On change le titre #}
     <title>Confirmation de votre inscription</title>
 </head>
 <body>
@@ -69,7 +68,6 @@
         <img src="{{ 'cid:logo-txt' }}" alt="Afpa Connect Logo" width="200">
     </div>
     <div class="content" style="color: #333333;">
-        {# On récupère une seule réservation pour le nom de la personne et de l'atelier #}
         {% set first_reservation = reservations|first %}
         {% set workshop = first_reservation.timeslot.workshop %}
 
@@ -79,19 +77,24 @@
             Nous vous confirmons votre inscription à l'atelier :
         </p>
 
-        <h2 style="color: #4CAF50;">{{ workshop.name }}</h2>
+        <h2 style="color: #4CAF50;" class="text-primary text-center">{{ workshop.name }}</h2>
 
         <p>
             Voici la liste de vos créneaux réservés :
         </p>
 
-        {# LA NOUVELLE PARTIE : la liste des créneaux #}
         <ul class="timeslots-list">
-            {% for reservation in reservations %}
+            {% for date, dailyReservations in reservationsByDate %}
                 <li>
-                    <strong>{{ reservation.timeslot.date | format_date(locale='fr', pattern='EEEE d MMMM yyyy') }}</strong>
-                    de {{ reservation.timeslot.fromTime | format_time(locale='fr', pattern='HH:mm') }}
-                    à {{ reservation.timeslot.toTime | format_time(locale='fr', pattern='HH:mm') }}
+                    <strong>{{ dailyReservations[0].timeslot.date | format_date(locale='fr', date_format='full') }}</strong>
+                    <ul>
+                        {% for reservation in dailyReservations %}
+                            <li>
+                                De {{ reservation.timeslot.fromTime|date('H:i', timezone='Europe/Paris') }}
+                                à {{ reservation.timeslot.toTime|date('H:i', timezone='Europe/Paris') }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
             {% endfor %}
         </ul>
@@ -103,7 +106,7 @@
 
         <br>
         <p style="text-align:center;">
-            <a href="https://devafpaconnect.arnaudrabel.com/" class="button"
+            <a href="{{ app_url }}" class="button"
                style="color: #ffffff; text-decoration: none;">Visiter notre site</a>
         </p>
     </div>
