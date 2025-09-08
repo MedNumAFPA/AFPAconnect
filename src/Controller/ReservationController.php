@@ -130,10 +130,12 @@ final class ReservationController extends AbstractController
                 $newReservation->setTimeslot($timeSlot);
                 $entityManager->persist($newReservation);
 
+                $createdReservations[] = $newReservation;
             }
 
             $htmlContent = $twig->render('email/subscription.html.twig', [
                 'reservation' => $newReservation,
+                'reservations' => $createdReservations,
             ]);
 
             $email = (new Email())

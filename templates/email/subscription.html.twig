@@ -10,6 +10,7 @@
             margin: 0;
             padding: 20px;
         }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -17,22 +18,26 @@
             border-radius: 8px;
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(to right, #4CAF50, #8BC34A);
             padding: 20px;
             text-align: center;
         }
+
         .content {
             padding: 30px;
             line-height: 1.6;
             font-size: 16px;
         }
+
         .footer {
             text-align: center;
             padding: 20px;
             font-size: 12px;
             color: #777;
         }
+
         .button {
             display: inline-block;
             background-color: #4CAF50;
@@ -42,41 +47,68 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
+        .timeslots-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .timeslots-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
     </style>
-    <title>Rappel de votre atelier !</title>
+    {# On change le titre #}
+    <title>Confirmation de votre inscription</title>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        {#        'cid:logo' uses the logo variables we set in the emailHandler and cid is to use for email images
-        It basically upload the image as attachement and then embed it in the mail  #}
         <img src="{{ 'cid:logo-txt' }}" alt="Afpa Connect Logo" width="200">
     </div>
     <div class="content" style="color: #333333;">
-        <h3>Bonjour {{ reservation.firstname }},</h3>
+        {# On récupère une seule réservation pour le nom de la personne et de l'atelier #}
+        {% set first_reservation = reservations|first %}
+        {% set workshop = first_reservation.timeslot.workshop %}
+
+        <h3>Bonjour {{ first_reservation.firstname }},</h3>
 
         <p>
-            Ceci est un rappel concernant votre inscription à l'atelier :
+            Nous vous confirmons votre inscription à l'atelier :
         </p>
 
-        <h2 style="color: #4CAF50;">{{ reservation.timeslot.workshop.name }}</h2>
+        <h2 style="color: #4CAF50;">{{ workshop.name }}</h2>
 
         <p>
-            Il est prévu pour le <strong>{{ reservation.timeslot.date | format_date(locale='fr', pattern='EEEE d MMMM yyyy') }}</strong>
-            à <strong>{{ reservation.timeslot.fromTime | format_time(locale='fr', pattern='HH:mm') }}</strong>.
+            Voici la liste de vos créneaux réservés :
         </p>
 
+        {# LA NOUVELLE PARTIE : la liste des créneaux #}
+        <ul class="timeslots-list">
+            {% for reservation in reservations %}
+                <li>
+                    <strong>{{ reservation.timeslot.date | format_date(locale='fr', pattern='EEEE d MMMM yyyy') }}</strong>
+                    de {{ reservation.timeslot.fromTime | format_time(locale='fr', pattern='HH:mm') }}
+                    à {{ reservation.timeslot.toTime | format_time(locale='fr', pattern='HH:mm') }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <br>
         <p>
             Nous avons hâte de vous voir !
         </p>
 
         <br>
         <p style="text-align:center;">
-            <a href="https://devafpaconnect.arnaudrabel.com/" class="button" style="color: #ffffff; text-decoration: none;">Visiter notre site</a>
+            <a href="https://devafpaconnect.arnaudrabel.com/" class="button"
+               style="color: #ffffff; text-decoration: none;">Visiter notre site</a>
         </p>
     </div>
     <div class="footer">
-        <p>Cet email est un rappel automatique. Merci de ne pas y répondre.</p>
+        <p>Cet email est une confirmation automatique. Merci de ne pas y répondre.</p>
     </div>
 </div>
 </body>
