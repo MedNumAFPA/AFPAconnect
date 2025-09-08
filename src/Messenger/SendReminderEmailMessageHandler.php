@@ -46,7 +46,7 @@ final class SendReminderEmailMessageHandler
         ]);
 
         $email = (new Email())
-            ->from('reminder@afpaconnect.fr') // Change this later
+            ->from('reminder@afpaconnect.fr',) // Change this later
             ->to($reservation->getEmail())
             ->subject('Rappel: Vous avez un atelier bientôt!')
 //            ->embedFromPath('public/images/logo.png', 'logo')

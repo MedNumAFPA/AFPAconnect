@@ -11,7 +11,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 
 final class ReservationController extends AbstractController
@@ -24,6 +32,7 @@ final class ReservationController extends AbstractController
         ]);
     }
 
+
     #[Route('/admin/reservation/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -34,6 +43,7 @@ final class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reservation);
             $entityManager->flush();
+
             $this->addFlash('success', 'Réservation ajoutée avec succès !');
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -83,20 +93,20 @@ final class ReservationController extends AbstractController
 
     #[Route('/workshop/{id}/subscribe', name: 'app_workshop_subscribe')]
     public function subscribeToWorkshop(
-        Workshop $workshop,
-        Request $request,
-        EntityManagerInterface $entityManager
+        Workshop               $workshop,
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        Environment            $twig,
+        KernelInterface        $kernel,
+        MailerInterface        $mailer
     ): Response {
         $reservationTemplate = new Reservation();
-
         $form = $this->createForm(ReservationType::class, $reservationTemplate, [
             'is_workshop_subscription' => true,
         ]);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $timeSlots = $workshop->getTimeSlots();
 
             if ($timeSlots->isEmpty()) {
@@ -104,15 +114,38 @@ final class ReservationController extends AbstractController
                 return $this->redirectToRoute('app_homepage');
             }
 
-            foreach ($timeSlots as $timeSlot) {
+            $createdReservations = [];
+            $reservationsByDate = [];
 
+            foreach ($timeSlots as $timeSlot) {
                 $newReservation = clone $reservationTemplate;
                 $newReservation->setTimeslot($timeSlot);
-
                 $entityManager->persist($newReservation);
+
+                $createdReservations[] = $newReservation;
             }
 
             $entityManager->flush();
+
+            foreach ($createdReservations as $reservation) {
+                $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
+                $reservationsByDate[$dateKey][] = $reservation;
+            }
+
+            $htmlContent = $twig->render('email/subscription.html.twig', [
+                'reservations' => $createdReservations,
+                'reservationsByDate' => $reservationsByDate,
+            ]);
+
+            $email = (new Email())
+                ->from('Afpa Connect <subscribed@afpaconnect.fr>')
+                ->to($reservationTemplate->getEmail())
+                ->subject('Confirmation de votre inscription à l\'atelier : ' . $workshop->getName())
+                ->embedFromPath($kernel->getProjectDir() . '/public/images/logo-txt.png', 'logo-txt')
+                ->html($htmlContent);
+
+            $mailer->send($email);
+
             $this->addFlash('success', 'Votre inscription à l\'atelier "' . $workshop->getName() . '" a été enregistrée avec succès !');
             return $this->redirectToRoute('app_homepage');
         }
@@ -125,10 +158,11 @@ final class ReservationController extends AbstractController
 
     #[Route('/rendez-vous', name: 'app_rendez_vous_new')]
     public function newRendezVous(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $entityManager,
-        WorkshopRepository $workshopRepository
-    ): Response {
+        WorkshopRepository     $workshopRepository
+    ): Response
+    {
         $reservation = new Reservation();
 
         // 1. Find the specific "Entretien Individuel" workshop.

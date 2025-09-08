@@ -42,14 +42,6 @@ label {
     min-width: 25%;
 }
 
-/*form {*/
-/*    margin-right: 20px;*/
-/*}*/
-/* fix center actions */
-/*.actions form{*/
-/*    margin-right: 0;*/
-/*}*/
-
 label.required::after {
     content: " *";
     color: red;
