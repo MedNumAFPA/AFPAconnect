@@ -15,8 +15,12 @@ final class QrCodeController extends AbstractController
     #[Route('/', name: 'app_qr_code')]
     public function index(): Response
     {
+        $urlHomepage = $this->generateUrl('app_homepage', [], true);
+
+        $qrCodeUrl =$_SERVER['APP_URL'] . $urlHomepage; // Create the QR code with the data
         return $this->render('qr_code/index.html.twig', [
             'controller_name' => 'QrCodeController',
+            'qrCodeUrl' => $qrCodeUrl,
         ]);
     }
 
