@@ -1,36 +1,48 @@
 {{ form_start(form) }}
 
-        {{ form_label(form.firstname) }}
-        {{ form_widget(form.firstname) }}
-        {{ form_errors(form.firstname) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+    {{ form_errors(form.firstname) }}
+</div>
 
-        {{ form_label(form.lastname) }}
-        {{ form_widget(form.lastname) }}
-        {{ form_errors(form.lastname) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.lastname) }}
+    {{ form_widget(form.lastname) }}
+    {{ form_errors(form.lastname) }}
+</div>
 
-        {{ form_label(form.email) }}
-        {{ form_widget(form.email) }}
-        {{ form_errors(form.email) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {{ form_errors(form.email) }}
+</div>
 
-        {{ form_label(form.phoneNumber) }}
-        {{ form_widget(form.phoneNumber) }}
-        {{ form_errors(form.phoneNumber) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.phoneNumber) }}
+    {{ form_widget(form.phoneNumber) }}
+    {{ form_errors(form.phoneNumber) }}
+</div>
 
-        {{ form_label(form.idAfpa) }}
-        {{ form_widget(form.idAfpa) }}
-        {{ form_errors(form.idAfpa) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.idAfpa) }}
+    {{ form_widget(form.idAfpa) }}
+    {{ form_errors(form.idAfpa) }}
+</div>
 
-        {{ form_label(form.formationName) }}
-        {{ form_widget(form.formationName) }}
-        {{ form_errors(form.formationName) }}
+<div class="flex flex-col mb-4">
+    {{ form_label(form.formationName) }}
+    {{ form_widget(form.formationName) }}
+    {{ form_errors(form.formationName) }}
+</div>
 
-
-        {% if form.timeslot is defined %}
-            {{ form_label(form.timeslot) }}
-            {{ form_widget(form.timeslot) }}
-            {{ form_errors(form.timeslot) }}
-        {% endif %}
-
+{% if form.timeslot is defined %}
+    <div class="flex flex-col mb-4">
+        {{ form_label(form.timeslot, 'Créneaux disponibles') }}
+        {{ form_widget(form.timeslot) }}
+        {{ form_errors(form.timeslot) }}
+    </div>
+{% endif %}
 
 <div class="flex items-center space-x-2 my-4 w-full">
     {{ form_label(form.isReminderActive) }}
@@ -40,7 +52,7 @@
 
 <div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
     <twig:Button color="primary">
-        {{ button_label|default('Ajouter') }}
+        {{ button_label|default("S'inscrire") }}
     </twig:Button>
 </div>
 

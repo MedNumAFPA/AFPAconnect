@@ -49,7 +49,7 @@ label.required::after {
 }
 
 input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_workshop {
-    @apply md:w-full w-[240px]
+    @apply md:w-[98%] w-[95%]
 }
 
 #workshop_time_slot_workshop {
