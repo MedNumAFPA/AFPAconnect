@@ -12,8 +12,46 @@ final class HomepageController extends AbstractController
     #[Route('/', name: 'app_homepage')]
     public function index(WorkshopRepository $workshopRepository): Response
     {
+        $allWorkshops = $workshopRepository->findAll();
+
+        // --- NOUVELLE LOGIQUE ---
+        $workshopsData = [];
+        foreach ($allWorkshops as $workshop) {
+            $isFull = false;
+            $remainingSlots = $workshop->getMaxSlots(); // On commence avec la capacité max
+
+            // On vérifie chaque créneau de l'atelier
+            foreach ($workshop->getTimeSlots() as $timeSlot) {
+                // Le nombre de places restantes pour ce créneau spécifique
+                $slotsLeftForThisTimeSlot = $workshop->getMaxSlots() - count($timeSlot->getReservations());
+
+                // Si UN SEUL créneau est plein, on considère l'atelier comme complet pour une souscription de groupe
+                if ($slotsLeftForThisTimeSlot <= 0) {
+                    $isFull = true;
+                }
+
+                // On met à jour le nombre de places restantes avec la valeur la plus basse trouvée
+                // C'est le "goulot d'étranglement" de l'atelier
+                if ($slotsLeftForThisTimeSlot < $remainingSlots) {
+                    $remainingSlots = $slotsLeftForThisTimeSlot;
+                }
+            }
+
+            // On s'assure que les places restantes ne sont pas négatives
+            if ($remainingSlots < 0) {
+                $remainingSlots = 0;
+            }
+
+            $workshopsData[] = [
+                'workshop' => $workshop,
+                'is_full' => $isFull,
+                'remaining_slots' => $remainingSlots,
+            ];
+        }
+
         return $this->render('homepage/index.html.twig', [
-            'workshops' => $workshopRepository->findAll(),
+            'workshopsData' => $workshopsData,
+            'workshops' => $allWorkshops
         ]);
     }
 

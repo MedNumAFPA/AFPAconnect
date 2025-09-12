@@ -65,6 +65,8 @@
                                             </button>
                                             <div
                                                 class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2">
+                                                <div>Places disponibles:</div>
+                                                <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }} / {{ workshop.maxSlots }}</div>
                                                 <p class="text-gray-700 mb-4 break-words whitespace-pre-wrap ">{{ workshop.description }}</p>
                                                 {% if workshop.timeslots|length > 0 %}
                                                     {% set joursFr = {
