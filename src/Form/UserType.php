@@ -17,7 +17,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('nickname', null, [
-                'label' => 'Peusdo',
+                'label' => 'Pseudo',
                 'label_attr' => ['class' => 'required'],
                 'attr' => [
                     'placeholder' => 'Entrez un pseudo valide...'
