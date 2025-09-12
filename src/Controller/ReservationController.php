@@ -164,7 +164,6 @@ final class ReservationController extends AbstractController
     ): Response
     {
         $reservation = new Reservation();
-
         // 1. Find the specific "Entretien Individuel" workshop.
         // We find it by a unique, hardcoded name.
         $entretienWorkshop = $workshopRepository->findOneBy(['name' => 'Entretien Individuel']);
