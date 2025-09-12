@@ -26,7 +26,7 @@ class ReservationType extends AbstractType
                 'attr' => ['placeholder' => 'Entrez votre prénom...']
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Nom de famille',
+                'label' => 'Nom',
                 'required' => true,
                 'label_attr' => ['class' => 'required'],
                 'attr' => ['placeholder' => 'Entrez votre nom de famille...']
