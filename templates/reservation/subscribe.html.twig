@@ -8,8 +8,21 @@
             <twig:PageTitle>Inscription à l'atelier : </twig:PageTitle>
             <p class="text-2xl font-bold mb-6 text-center">{{ workshop.name }}</p>
 
-            <p class="text-sm text-gray-500 mb-4">
+            <div class="mt-2 mb-2 ml-2">
+                <a href="{{ app.request.headers.get('referer') ?? path('app_homepage') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
                 Veuillez remplir vos informations pour vous inscrire à tous les créneaux de cet atelier.
+            </p>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
+                Les champs marqués d'un
+                <span class="text-red-500">*</span>
+                sont obligatoires.
             </p>
 
             {{ include('reservation/_form.html.twig', {'button_label': 'M\'inscrire'}) }}

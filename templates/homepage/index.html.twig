@@ -28,9 +28,11 @@
                                      alt="logo AFPA Connect"> #}
                             </div>
                             <div class="flex flex-col items-center ">
-                                <p class="text-gray-500 mb-2 text-justify px-3 md:px-0 text-sm md:text-base">
+                                <p class="text-center text-gray-500 mb-2 px-3 md:px-0 text-sm md:text-base">
                                     Besoin d'aide pour utiliser un ordinateur, créer un mail, chercher un emploi en
-                                    ligne ou toutes autres demandes ?<br>
+                                    ligne ou toutes autres demandes ?
+                                </p>
+                                <p class="text-center text-gray-500 mb-2 px-3 md:px-0 text-sm md:text-base">
                                     Afpa Connect est l'espace où vous trouverez l'aide dont vous avez besoin pour
                                     utiliser sereinement le numérique dans votre quotidien.
                                     Nous sommes là pour vous accompagner dans la bienveillance, peu importe votre
@@ -49,7 +51,7 @@
                         <div class="mt-20">
                             <h3 class="font-extrabold text-center text-3xl mb-8">Les Ateliers Disponibles</h3>
 
-                            <div
+                            <div data-controller="homepage-accordion"
                                 class="flex flex-col md:flex-row items-center justify-center flex-wrap w-max-5xl mx-auto gap-4">
                                 {% for workshop in workshops %}
 
@@ -152,22 +154,4 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.accordion-header').forEach(header => {
-                header.addEventListener('click', () => {
-                    const content = header.nextElementSibling;
-                    const icon = header.querySelector('.accordion-icon');
-                    if (content.classList.contains('hidden')) {
-                        content.classList.remove('hidden');
-                        icon.classList.add('rotate-180');
-                    } else {
-                        content.classList.add('hidden');
-                        icon.classList.remove('rotate-180');
-                    }
-                });
-            });
-        });
-    </script>
-
 {% endblock %}
