@@ -99,7 +99,8 @@ final class ReservationController extends AbstractController
         Environment            $twig,
         KernelInterface        $kernel,
         MailerInterface        $mailer
-    ): Response {
+    ): Response
+    {
         $reservationTemplate = new Reservation();
         $form = $this->createForm(ReservationType::class, $reservationTemplate, [
             'is_workshop_subscription' => true,
@@ -108,6 +109,7 @@ final class ReservationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $timeSlots = $workshop->getTimeSlots();
+            $maxSlots = $workshop->getMaxSlots();
 
             if ($timeSlots->isEmpty()) {
                 $this->addFlash('danger', 'Cet atelier n\'a pas de créneaux disponibles.');
@@ -118,6 +120,21 @@ final class ReservationController extends AbstractController
             $reservationsByDate = [];
 
             foreach ($timeSlots as $timeSlot) {
+
+                if (count($timeSlot->getReservations()) >= $maxSlots) {
+                    $this->addFlash(
+                        'danger',
+                        sprintf(
+                            'Désolé, l\'atelier "%s" est complet pour le créneau du %s à %s.',
+                            $workshop->getName(),
+                            $timeSlot->getDate()->format('d/m/Y'),
+                            $timeSlot->getFromTime()->format('H:i')
+                        )
+                    );
+                    return $this->redirectToRoute('app_homepage');
+                }
+
+
                 $newReservation = clone $reservationTemplate;
                 $newReservation->setTimeslot($timeSlot);
                 $entityManager->persist($newReservation);
@@ -150,13 +167,12 @@ final class ReservationController extends AbstractController
             return $this->redirectToRoute('app_homepage');
         }
 
-        return $this->render('reservation/subscribe.html.twig', [
-            'workshop' => $workshop,
-            'form' => $form->createView(),
-        ]);
+        return $this->render('reservation/subscribe.html.twig', ['workshop' => $workshop,
+            'form' => $form->createView(),]);
     }
 
-    #[Route('/rendez-vous', name: 'app_rendez_vous_new')]
+    #[
+        Route('/rendez-vous', name: 'app_rendez_vous_new')]
     public function newRendezVous(
         Request                $request,
         EntityManagerInterface $entityManager,
@@ -173,8 +189,6 @@ final class ReservationController extends AbstractController
             $this->addFlash('warning', 'Les entretiens individuels ne sont pas disponibles pour le moment.');
             return $this->redirectToRoute('app_homepage');
         }
-
-//dd($reservation);
 
         // 2. Pass the workshop ID to the form options.
         $form = $this->createForm(ReservationType::class, $reservation, [
