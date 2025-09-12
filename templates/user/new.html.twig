@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel utilisateur
+{% endblock %}
+
+{% block body %}
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle class="text-2xl font-bold mb-6">Ajouter un nouvel utilisateur</twig:PageTitle>
+
+            <div class="mt-2 mb-2 ml-2">
+                <a href="{{ path('app_user_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4 ml-2">
+                Les champs marqués d'un <span class="text-red-500">*</span> sont obligatoires.
+            </p>
+            {{ include('user/_form.html.twig') }}
+        </twig:CardHome>
+    </twig:ContainerMobile>
+{% endblock %}

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/admin')]
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
@@ -32,6 +33,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
+            $this->addFlash('success', 'You signed up successfully!');
 
             return $security->login($user, 'form_login', 'main');
         }

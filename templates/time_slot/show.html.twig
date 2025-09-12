@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Créneau : {{ time_slot.id }}
+{% endblock %}
+
+{% block body %}
+    <h1>Créneau : {{ time_slot.id }}</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ time_slot.id }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ time_slot.date ? time_slot.date|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>De</th>
+            <td>{{ time_slot.fromTime ? time_slot.fromTime|date('H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>A</th>
+            <td>{{ time_slot.toTime ? time_slot.toTime|date('H:i:s') : '' }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="m-5" href="{{ path('app_time_slot_index') }}">← Retour</a>
+
+
+    <a href="{{ path('app_time_slot_edit', {'id': time_slot.id}) }}">Modifier</a>
+
+    {{ include('time_slot/_delete_form.html.twig') }}
+{% endblock %}

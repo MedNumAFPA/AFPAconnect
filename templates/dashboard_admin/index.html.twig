@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[20vh] min-w-[100vw] mt-0">
+
+        <div class="flex flex-col w-full md:h-[80vh] h-[100vh] bg-gray-50">
+            <twig:PageTitle class="text-center">Dashboard Admin</twig:PageTitle>
+
+            {#--------- Onglets pour les semaines ----------------#}
+            <ul class="flex space-x-2 border-b justify-center">
+                {% set start_week = "now"|date('W') %}
+                {% for i in 0..3 %}
+                    {% set week_num = start_week|number_format + i %}
+                    <li>
+                        <button
+                            id="btn{{ i + 1 }}"
+                            class="px-2 py-1 w-20 sm:w-32 sm:h-10 rounded-t-md font-medium
+                            {% if i == 0 %}
+                                bg-lime-600 text-white
+                            {% else %}
+                                bg-gray-100 text-gray-600
+                            {% endif %}">
+                            Semaine {{ week_num }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+            {#--------- Contenu des onglets ----------------#}
+            {% for i in 1..4 %}
+                <div id="tab{{ i }}" class=" mt-6 overflow-x-auto overflow-y-auto bg-white border border-gray-300 rounded-b p-4 {% if i != 1 %}hidden{% endif %}">
+                    {#------- Table pour les écrans md et plus -------#}
+                    <table class=" hidden md:table min-w-full border-collapse text-sm md:text-base">
+                        <thead>
+                            <tr class="bg-gray-100 font-semibold text-center">
+                                <th class="p-2 border border-gray-300">Jour</th>
+                                {% for day in days %}
+                                    <th class="p-2 border border-gray-300">
+                                        {{ day|capitalize }}<br>
+                                        {{ weekDates['semaine' ~ i][day]|date('d/m/Y') }}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold p-2 border border-gray-300 text-center">Ateliers</td>
+                                {% set semaineKey = 'semaine' ~ i %}
+                                {% for day in days %}
+                                    <td class="p-2 border border-gray-300 align-top space-y-3">
+                                        {% set timeslotday = week[semaineKey][day] ?? [] %}
+                                        {% if timeslotday is not empty %}
+                                            {% for timeslot in timeslotday %}
+                                                <div class="rounded-lg p-2 shadow-md bg-gradient-to-r from-gray-500 to-gray-700 text-white font-semibold text-xs">
+                                                    {{ timeslot.workshop.name }}<br>
+                                                    <small class="text-sm font-normal block">Salle: {{ timeslot.workshop.roomNumber }}</small>
+                                                    <small class="text-sm font-normal block">Places max: {{ timeslot.reservations|length }} / {{ timeslot.workshop.maxSlots }}</small>
+                                                    <small class="text-sm font-normal block">Horaire: {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}</small>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="text-gray-400 italic text-sm">Aucun atelier disponible</div>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {# Version mobile #}
+                    <div class="md:hidden space-y-4 p-4 bg-white border border-gray-300 rounded-b">
+                        {% set semaineKey = 'semaine' ~ i %} 
+                        {% for day in days %}
+                            <div class="p-4 border border-gray-300 rounded-lg shadow-md">
+                            <h3 class="font-semibold mb-2">{{ day|capitalize }} - {{ weekDates[semaineKey][day]|date('d/m/Y') }}</h3>
+                            {% set timeslotday = week[semaineKey][day] ?? [] %}
+                            {% if timeslotday is not empty %}
+                                {% for timeslot in timeslotday %}
+                                <div class="bg-gradient-to-r from-gray-500 to-gray-700 text-white font-semibold p-2 rounded mb-2 text-xs">
+                                    {{ timeslot.workshop.name }}<br>
+                                    <small class="block font-normal">Salle: {{ timeslot.workshop.roomNumber }}</small>
+                                    <small class="block font-normal">Places max: {{ timeslot.reservations|length }}/{{ timeslot.workshop.maxSlots }}</small>
+                                    <small class="block font-normal">Horaire: {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}</small>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-gray-400 italic text-sm">Aucun atelier disponible</div>
+                            {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

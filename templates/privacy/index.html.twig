@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1>Politique de confidentialité</h1>
+
+        <p>
+            La présente politique de confidentialité décrit les données collectées, leur utilisation et vos droits
+            conformément au RGPD.
+        </p>
+
+        <h2>Données collectées</h2>
+        <ul>
+            <li>Informations personnelles (nom, email, etc.)</li>
+            <li>Données techniques (adresse IP, cookies)</li>
+        </ul>
+
+        <h2>Utilisation des données</h2>
+        <p>Les données sont utilisées uniquement pour...</p>
+
+        <h2>Vos droits</h2>
+        <ul>
+            <li>Accès, modification, suppression de vos données</li>
+            <li>Retrait du consentement à tout moment</li>
+        </ul>
+
+        <h2>Contact</h2>
+        <p>Pour exercer vos droits ou toute question : contact@votresite.com</p>
+
+        {% block footer %}
+            {# vide pour ne pas afficher le footer ici #}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QR Codes
+{% endblock %}
+
+{% block body %}
+
+
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>QR Codes</twig:PageTitle>
+
+            <div class="flex flex-col items-center">
+                <img class="cover max-w-[50%] self-center border-2" src="{{ path('app_qr_code_homepage') }}"
+                    alt="QR Code réservation">
+
+            <div class="relative flex flex-col items-center mt-10 bg-gray-100 rounded-lg p-4 text-gray-800 hover:text-lime-600 w-full md:w-3/4 lg:w-1/2">
+            <button onclick="copyQrUrl()" class="absolute top-2 right-2 p-2 text-gray-500 hover:text-lime-600 rounded-md focus:outline-none" title="Copier">
+                <!-- Icône SVG copie ici -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+            <span class="text-lg font-bold">URL du Qr Code</span>
+            <p id="qrCodeUrl" class="text-sm hover:text-lime-600 select-all">{{qrCodeUrl}}</p>
+            <span id="copiedMessage" class="absolute top-10 right-2 text-xs text-lime-600 font-bold hidden">Copié!</span>
+            </div>
+
+                <a href="{{ path('app_qr_code_homepage') }}" class="mt-4" download>
+                    <button class="flex bg-primary items-center justify-center cursor-pointer text-center text-white p-4 rounded-md shadow-[0px_4px_6px_0px_#b5b5b5] hover:shadow-sm border-1 border-muted h-fit">
+                        Télécharger l'image
+                    </button>
+                </a>
+        </twig:CardHome>
+    </twig:ContainerMobile>
+
+    <script>
+        function copyQrUrl() {
+        const qrText = document.getElementById('qrCodeUrl').textContent;
+        navigator.clipboard.writeText(qrText)
+            .then(() => {
+            // Affiche le message
+            const msg = document.getElementById('copiedMessage');
+            msg.classList.remove('hidden');
+            // Masque le message après 1,5s
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 1500);
+            });
+        }
+    </script>
+
+
+{% endblock %}

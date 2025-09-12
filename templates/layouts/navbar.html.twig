@@ -1,0 +1,134 @@
+<nav class="relative z-50 bg-white shadow-md  md:h-[10vh] h-[15vh] flex items-center px-4">
+
+
+    <div class="w-full flex items-center
+{{ is_granted('ROLE_USER') ? 'justify-between' : 'justify-center' }}">
+        <div class="flex items-center  space-x-6">
+            <div class="flex space-x-2 items-center">
+                <a href="{{ path('app_homepage') }}">
+                    <div class="flex space-x-2 items-center">
+                        <img class="max-w-[75px]" src="{{ asset('images/logo.svg') }}" alt="">
+                        <img class="max-w-[75px]" src="{{ asset('images/logo-txt.svg') }}" alt="">
+                    </div>
+                </a>
+            </div>
+            <ul class="hidden md:flex space-x-4 font-medium">
+
+                {% set current_route = app.request.attributes.get('_route') %}
+
+                {% if is_granted('ROLE_USER') %}
+                    <li>
+                        <a href="{{ path('app_dashboard_admin') }}"
+                           class="hover:text-green-600 {{ current_route == 'app_dashboard_admin' ? 'text-primary font-bold' : '' }}">
+                            Admin Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_workshop_index') }}"
+                           class="hover:text-green-600 {{ current_route starts with 'app_workshop_' ? 'text-primary font-bold' : '' }}">
+                            Ateliers
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_time_slot_index') }}"
+                           class="hover:text-green-600 {{ current_route starts with 'app_time_slot_' ? 'text-primary font-bold' : '' }}">
+                            Créneaux
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_reservation_index') }}"
+                           class="hover:text-green-600 {{ current_route starts with 'app_reservation_' ? 'text-primary font-bold' : '' }}">
+                            Réservations
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_user_index') }}"
+                           class="hover:text-green-600 {{ current_route starts with 'app_user_' ? 'text-primary font-bold' : '' }}">
+                            Utilisateurs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_qr_code') }}"
+                           class="hover:text-green-600 {{ current_route == 'app_qr_code' ? 'text-primary font-bold' : '' }}">
+                            Qr-codes
+                        </a>
+                    </li>
+                {% endif %}
+                {#                <li> #}
+                {#                    <a href="{{ path('app_homepage_visitor') }}" #}
+                {#                       class="hover:text-green-600 {{ current_route == 'app_homepage_visitor' ? 'text-primary font-bold' : '' }}"> #}
+                {#                        Visiteurs #}
+                {#                    </a> #}
+                {#                </li> #}
+
+                {#                <li> #}
+                {#                    <a href="{{ path('app_homepage_intern') }}" #}
+                {#                       class="hover:text-green-600 {{ current_route == 'app_homepage_intern' ? 'text-primary font-bold' : '' }}"> #}
+                {#                        Stagiaires de l'Afpa #}
+                {#                    </a> #}
+                {#                </li> #}
+
+            </ul>
+        </div>
+        <div class="hidden md:flex space-x-2">
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}"
+                   class="flex items-center justify-center cursor-pointer h-fit text-center text-white p-4 rounded-md shadow-[0px_4px_6px_0px_#b5b5b5]
+                   hover:shadow-sm border-1 border-muted self-center
+                   bg-danger hover:bg-red-600/90 transition-colors duration-150"
+                   onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">
+                    Déconnexion
+                </a>
+                {#            {% else %} #}
+                {#                <twig:Link href="{{ path('app_register') }}" color="primary">Inscription</twig:Link> #}
+                {#                <twig:Link href="{{ path('app_login') }}" color="info">Connexion</twig:Link> #}
+            {% endif %}
+        </div>
+        {% if is_granted('ROLE_USER') %}
+            <button data-controller="burger-menu"
+{#                id="burgerBtn"#}
+                    class="flex md:hidden text-xl mr-6">
+                <i class="fa fa-bars fa-lg"></i>
+            </button>
+        {% endif %}
+    </div>
+    <div id="mobileMenu"
+         class="hidden absolute top-[14vh] left-0 w-full flex-col space-y-2 md:hidden bg-white shadow-lg border-t border-gray-200">
+
+        {% set current_route = app.request.attributes.get('_route') %}
+
+        {# On ajoute la classe "block" à chaque lien #}
+        <a href="{{ path('app_dashboard_admin') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route == 'app_dashboard_admin' ? 'bg-primary text-white font-bold' : '' }}">
+            Admin Dashboard
+        </a>
+        <a href="{{ path('app_workshop_index') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route starts with 'app_workshop_' ? 'bg-primary text-white font-bold' : '' }}">
+            Ateliers
+        </a>
+        <a href="{{ path('app_time_slot_index') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route starts with 'app_time_slot_' ? 'bg-primary text-white font-bold' : '' }}">
+            Créneaux
+        </a>
+        <a href="{{ path('app_reservation_index') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route starts with 'app_reservation_' ? 'bg-primary text-white font-bold' : '' }}">
+            Réservations
+        </a>
+        <a href="{{ path('app_user_index') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route starts with 'app_user_' ? 'bg-primary text-white font-bold' : '' }}">
+            Utilisateurs
+        </a>
+        <a href="{{ path('app_qr_code') }}"
+           class="block px-4 py-2 hover:bg-primary hover:text-white {{ current_route == 'app_qr_code' ? 'bg-primary text-white font-bold' : '' }}">
+            Qr-codes
+        </a>
+
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}"
+               class="block px-4 py-4 text-red-600 hover:bg-red-500 hover:text-white border-t border-gray-400"
+               onclick="return confirm('Es-tu sûr de vouloir te déconnecter ?');">Déconnexion</a>
+        {% endif %}
+
+    </div>
+</nav>
+

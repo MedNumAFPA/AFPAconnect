@@ -1,3 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+    --color-background: #ffffff;
+    --color-foreground: oklch(0.32 0 0);
+    --color-muted: oklch(0.98 0 0);
+    --color-muted-foreground: hsl(220, 8%, 46%);
+    --color-primary: #60bf19;
+    --color-secondary: #fdfefa;
+    --color-danger: #dd191c;
+    --color-success: #22bb33;
+    --color-info: #ffd900;
+    /* --color-info: #bf1960; */
+}
+
+@source inline("bg-primary");
+@source inline("bg-danger");
+@source inline("bg-info");
+@source inline("bg-success");
+@source inline("bg-muted");
+@source inline("bg-muted-foreground");
+@source inline("bg-foreground");
+@source inline("bg-background");
+
+input,
+.form-combo {
+    font-size: 18px;
+    padding: 5px 5px;
+    outline: none;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid;
+    border-radius: 5px;
+    margin: 10px;
+    width: 100%;
+}
+
+label {
+    font-size: 18px;
+    color: #000000;
+    margin: 10px;
+    min-width: 25%;
+}
+
+label.required::after {
+    content: " *";
+    color: red;
+    margin-left: 2px;
+}
+
+input:not([type="checkbox"]), #reservation_timeslot, #workshop_time_slot_workshop {
+    @apply md:w-[98%] w-[95%]
+}
+
+#workshop_time_slot_workshop {
+    margin-left: 12px;
+}
+
+#reservation {
+    @apply w-full
+}
+
+input[for="reservation_isReminderActive"] {
+    @apply w-full md:ml-0 ml-4
+}
+
+input[type="checkbox"] {
+    @apply md:-left-2 mr-8;
+    /* @apply left-1/2;*/
+    /* @apply -translate-y-1/2;*/
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+input[type="checkbox"]:hover {
+    border-color: #4caf50;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
+input[type="checkbox"]:checked::after {
+    @apply md:left-[6px] left-[5px];
+    content: "";
+    position: absolute;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.registration-checkbox {
+    position: relative;
+    top: -8px;
+}
+
+/* montserrat-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../public/fonts/montserrat-v31-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* montserrat-600 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../../public/fonts/montserrat-v31-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
 body {
-    background-color: skyblue;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400; /* Regular */
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600; /* Semibold */
 }

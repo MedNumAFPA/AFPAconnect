@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le créneau : {{ time_slot.id }}{% endblock %}
+
+{% block body %}
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>Modifier le créneau : </twig:PageTitle>
+            <div class="text-2xl font-bold mb-6 text-center">{{ time_slot.id }}</div>
+            <div class="mt-8 mb-8 flex justify-center md:mt-4 md:mb-12 md:justify-start">
+                <a href="{{ path('app_time_slot_index') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                    ← Retour
+                </a>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4">
+                Les champs marqués d'un
+                <span class="text-red-500">*</span>
+                sont obligatoires.
+            </p>
+            {{ include('time_slot/_form.html.twig', {'button_label': 'Modifier'}) }}
+        </twig:CardHome>
+    </twig:ContainerMobile>
+{% endblock %}

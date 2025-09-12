@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Reservation : {{ reservation.id }}
+{% endblock %}
+
+{% block body %}
+    <h1>Reservation : {{ reservation.id }}</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ reservation.id }}</td>
+        </tr>
+        <tr>
+            <th>Prenom</th>
+            <td>{{ reservation.firstname }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ reservation.lastname }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ reservation.email }}</td>
+        </tr>
+        <tr>
+            <th>Numéro de téléphone</th>
+            <td>{{ reservation.phoneNumber }}</td>
+        </tr>
+        <tr>
+            <th>Nom de la formation</th>
+            <td>{{ reservation.formationName }}</td>
+        </tr>
+        <tr>
+            <th>Rappel activé ?</th>
+            <td>{{ reservation.isReminderActive ? 'Oui' : 'Non' }}</td>
+        </tr>
+        <tr>
+            <th>Rappel envoyé a :</th>
+            <td>{{ reservation.reminderSentAt ? reservation.reminderSentAt|date('d/m/Y à H:i') : 'Non envoyé' }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a class="m-5" href="{{ path('app_reservation_index') }}">← Retour</a>
+
+
+    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">Éditer</a>
+
+    {{ include('reservation/_delete_form.html.twig') }}
+{% endblock %}

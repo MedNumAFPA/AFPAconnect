@@ -1,14 +1,157 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomepageController!{% endblock %}
+{% block title %}AFPA Connect
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Hello {{ controller_name }}! ✅</h1>
-</div>
+    <div class="md:min-h-[80vh] min-h-[70vh]">
+
+        <div class="md:h-[40vh] h-[35vh] bg-gradient-to-br from-[#22bb33] via-[#22c55e] to-[#4ade80]">
+            {#            <div class="flex flex-col items-center #}
+            {#             justify-center #}
+            {#            md:min-h-[20vh] min-h-[70vh] #}
+            {#            min-w-[100vw]"> #}
+            <div class="flex flex-col items-center md:min-h-[80vh] min-h-[70vh] min-w-[100vw]">
+                <twig:Card>
+
+                    <div>
+
+
+                        <div id="logo" class="text-center md:mt-0 mt-8">
+
+                            <h1 class="font-extrabold text-4xl md:text-6xl md:mt-0 -mt-10">Bienvenue sur</h1>
+                            <div class="flex md:flex-row flex-col items-center justify-center">
+                                <img class="w-1/2 md:w-1/4" src="{{ asset('images/logo-txt.svg') }}"
+                                     alt="logo-text AFPA Connect">
+                                {# <img class="w-1/4 md:w-1/6" src="{{ asset('images/logo.svg') }}"
+                                     alt="logo AFPA Connect"> #}
+                            </div>
+                            <div class="flex flex-col items-center ">
+                                <p class="text-center text-gray-500 mb-2 px-3 md:px-0 text-sm md:text-base">
+                                    Besoin d'aide pour utiliser un ordinateur, créer un mail, chercher un emploi en
+                                    ligne ou toutes autres demandes ?
+                                </p>
+                                <p class="text-center text-gray-500 mb-2 px-3 md:px-0 text-sm md:text-base">
+                                    Afpa Connect est l'espace où vous trouverez l'aide dont vous avez besoin pour
+                                    utiliser sereinement le numérique dans votre quotidien.
+                                    Nous sommes là pour vous accompagner dans la bienveillance, peu importe votre
+                                    niveau.
+                                    Pour vous inscrire à un atelier ou prendre un rendez-vous,
+                                </p>
+                                <p class="text-sm text-gray-500 mt-6 mb-2">Faites défiler pour voir les ateliers</p>
+                                <div class="flex space-x-12">
+                                    <i class="fa-solid fa-chevron-down text-2xl text-gray-400 animate-bounce"></i>
+                                    <i class="fa-solid fa-chevron-down text-2xl text-gray-400 animate-bounce"></i>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-20">
+                            <h3 class="font-extrabold text-center text-3xl mb-8">Les Ateliers Disponibles</h3>
+
+                            <div data-controller="homepage-accordion"
+                                class="flex flex-col md:flex-row items-center justify-center flex-wrap w-max-5xl mx-auto gap-4">
+                                {% for workshop in workshops %}
+
+                                    {% if workshop.name != 'Entretien Individuel' and workshop.timeslots|length > 0 %}
+                                        <div
+                                            class=" relative bg-gray-50 rounded-lg p-4 transition md:w-[30%] w-full h-20">
+                                            <button
+                                                class="accordion-header flex items-center justify-between w-full text-left focus:outline-none cursor-pointer">
+                                                <h3 class="font-semibold text-xl text-[#22bb33]">{{ workshop.name }}</h3>
+                                                <svg
+                                                    class="accordion-icon transform transition-transform h-5 w-5 text-gray-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                </svg>
+                                            </button>
+                                            <div
+                                                class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2">
+                                                <div>Places disponibles:</div>
+                                                <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }}
+                                                    / {{ workshop.maxSlots }}</div>
+                                                <p class="text-gray-700 mb-4 break-words whitespace-pre-wrap ">{{ workshop.description }}</p>
+                                                {% if workshop.timeslots|length > 0 %}
+                                                    {% set joursFr = {
+                                                        'Monday': 'Lundi',
+                                                        'Tuesday': 'Mardi',
+                                                        'Wednesday': 'Mercredi',
+                                                        'Thursday': 'Jeudi',
+                                                        'Friday': 'Vendredi',
+                                                        'Saturday': 'Samedi',
+                                                        'Sunday': 'Dimanche'
+                                                    } %}
+
+                                                    {# Regrouper les timeslots par jour #}
+                                                    {% set timeslotsParJour = {} %}
+                                                    {% for ts in workshop.timeslots %}
+                                                        {% set jourEn = ts.date|date('l') %}
+                                                        {% set jourFr = joursFr[jourEn] %}
+
+                                                        {% if timeslotsParJour[jourFr] is not defined %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): [ts] }) %}
+                                                        {% else %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): timeslotsParJour[jourFr]|merge([ts]) }) %}
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                    {# Afficher les horaires regroupés #}
+                                                    {% for jour, listeTimeslots in timeslotsParJour %}
+                                                        <p class="font-semibold text-primary mt-2">{{ jour }}</p>
+                                                        {% for ts in listeTimeslots %}
+                                                            <p class="text-sm mb-3 ">
+                                                            <div class="-mt-2"><span
+                                                                    class="underline">Horaire</span>: {{ ts.fromTime|date('H:i') }}
+                                                                - {{ ts.toTime|date('H:i') }}</div>
+                                                            <div><span
+                                                                    class="underline">Salle</span>: {{ ts.workshop.roomNumber }}
+                                                            </div>
+                                                            </p>
+                                                        {% endfor %}
+
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <p class="col-span-3 text-center text-gray-400 mb-3">
+                                                        Aucun Crénaux disponible.
+                                                    </p>
+                                                {% endif %}
+                                                {% set isFull = workshop.timeSlots[0].reservations.count >= workshop.maxSlots %}
+                                                <div class="flex items-center justify-center mt-2">
+                                                    <a href="{{ isFull ? '#' : path('app_workshop_subscribe', {'id': workshop.id}) }}"
+                                                       class="block text-center text-white rounded px-4 py-2 font-medium transition w-3xs
+              {{ isFull
+                                                       ? 'bg-gray-400 cursor-not-allowed'
+                                                       : 'bg-[#22bb33] hover:shadow-sm' }}">
+                                                        {{ isFull ? 'Complet' : "S'inscrire" }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="col-span-3 text-center text-gray-400">Aucun atelier disponible.</p>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                        <p class="text-[var(--foreground)] text-center my-6">
+                            Si vous n'êtes pas sur et voudriez échanger pour avoir plus d'informations vous pouvez
+                            demander
+                            un entretien individuel :
+                        </p>
+                        <div class="flex flex-row items-center justify-center mt-15 mb-6 gap-4">
+                            <twig:Link href="{{ path('app_rendez_vous_new') }}" color="primary">
+                                Prendre Rendez-vous
+                            </twig:Link>
+                        </div>
+
+                    </div>
+
+                </twig:Card>
+            </div>
+        </div>
+    </div>
 {% endblock %}
