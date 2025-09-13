@@ -75,7 +75,7 @@ symfony console doctrine:migrations:migrate --no-interaction --allow-no-migratio
 # --allow-no-migration: Prevents an error if there are no new migrations to run.
 
 # 3. Build frontend assets (Updated Step)
-step "4. Building frontend assets for production..."
+step "3. Building frontend assets for production..."
 echo "--> Building Tailwind CSS..."
 symfony console tailwind:build --env=prod || handle_error "Tailwind build failed."
 
