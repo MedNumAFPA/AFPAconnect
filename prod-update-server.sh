@@ -18,9 +18,17 @@
 # =================================================================
 
 # --- Configuration ---
-# Set the absolute path to your project directory.
-# IMPORTANT: Change this to your actual project path.
-PROJECT_PATH="/var/www/DevAFPAconnect"
+# Get the absolute path of the directory where this script is located.
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+# Assume the project root is one level up from the 'scripts' directory.
+# If your script is in the project root, just use PROJECT_PATH="$SCRIPT_DIR"
+PROJECT_PATH=$(dirname "$SCRIPT_DIR")
+
+# --- Now you can use the variable safely ---
+echo "Running commands in project directory: $PROJECT_PATH"
+# shellcheck disable=SC2164
+cd "$PROJECT_PATH"
 
 # The Git branch to pull. Defaults to 'dev' if no argument is given.
 BRANCH_NAME=${1:-master}
