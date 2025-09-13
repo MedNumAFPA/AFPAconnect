@@ -193,3 +193,9 @@ Here is the checklist to follow after sending your code to the server (e.g., aft
     ```sh
     symfony console cache:clear --env=prod
     ```
+
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License**. See the `LICENSE` file for details.
+
+You are free to view, use, and modify this code for non-commercial purposes. If you wish to use this code for a commercial project, please contact me to discuss a commercial license.
