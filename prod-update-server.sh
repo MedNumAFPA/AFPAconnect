@@ -74,9 +74,16 @@ symfony console doctrine:migrations:migrate --no-interaction --allow-no-migratio
 # --no-interaction: Prevents it from asking "Are you sure?"
 # --allow-no-migration: Prevents an error if there are no new migrations to run.
 
-# 3. Build frontend assets
-step "3. Building Tailwind CSS assets..."
+# 3. Build frontend assets (Updated Step)
+step "3. Building frontend assets for production..."
+echo "--> Building Tailwind CSS..."
 symfony console tailwind:build --env=prod || handle_error "Tailwind build failed."
+
+echo "--> Removing old compiled assets..."
+rm -rf public/assets || handle_error "Could not remove old public/assets directory."
+
+echo "--> Compiling asset map..."
+symfony console asset-map:compile --env=prod || handle_error "Asset map compilation failed."
 # --env=prod
 
 # 4. Restarting the messenger worker
@@ -91,12 +98,12 @@ sudo systemctl status supervisord.service | grep -E "RUNNING|active \(running\)"
 
 # 5. Update PHP dependencies
 step "5. Updating Composer dependencies..."
-APP_ENV=prod APP_DEBUG=0 composer install --no-dev --optimize-autoloader || handle_error "Composer install failed."
+composer install --no-dev --optimize-autoloader || handle_error "Composer install failed."
 # --no-dev --optimize-autoloader
 
 # 6. Clear the application cache
 step "6. Clearing Symfony cache for production..."
-APP_DEBUG=0 symfony console cache:clear --env=prod || handle_error "Cache clear failed."
+symfony console cache:clear --env=prod || handle_error "Cache clear failed."
 # --env=prod
 
 # Final success message
@@ -107,9 +114,5 @@ echo "================================================="
 
 exit 0
 
-
 # symfony console doctrine:query:sql "TRUNCATE TABLE reset_password_request;"
 # This command unblock blocked password reset emails
-#
-#
-#

@@ -107,9 +107,5 @@ echo "================================================="
 
 exit 0
 
-
 # symfony console doctrine:query:sql "TRUNCATE TABLE reset_password_request;"
 # This command unblock blocked password reset emails
-#
-#
-#
