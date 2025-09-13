@@ -57,7 +57,7 @@
 
                                     {% if workshop.name != 'Entretien Individuel' and workshop.timeslots|length > 0 %}
                                         <div
-                                            class=" relative bg-gray-50 rounded-lg p-4 transition md:w-[30%] w-full h-20">
+                                            class="flex items-center relative bg-gray-50 rounded-lg p-4 transition md:w-[30%] w-full h-20">
                                             <button
                                                 class="accordion-header flex items-center justify-between w-full text-left focus:outline-none cursor-pointer">
                                                 <h3 class="font-semibold text-xl text-[#22bb33]">{{ workshop.name }}</h3>
@@ -65,12 +65,12 @@
                                                     class="accordion-icon transform transition-transform h-5 w-5 text-gray-400"
                                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                                          stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                          stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                                 </svg>
                                             </button>
                                             <div
                                                 class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2">
-                                                <div>Places disponibles:</div>
+                                                <div>Places prises / places max :</div>
                                                 <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }}
                                                     / {{ workshop.maxSlots }}</div>
                                                 <p class="text-gray-700 mb-4 break-words whitespace-pre-wrap ">{{ workshop.description }}</p>
@@ -146,6 +146,27 @@
                             <twig:Link href="{{ path('app_rendez_vous_new') }}" color="primary">
                                 Prendre Rendez-vous
                             </twig:Link>
+                        </div>
+
+                        <hr class="my-8 border-gray-200">
+                        <div class="text-center px-4">
+                            <p class="text-gray-500 mb-6 text-base leading-relaxed">
+                                Nous vous invitons à répondre, de manière anonyme, à une enquête
+                                sur vos usages numériques afin de nous aider dans la conception
+                                d'ateliers adaptés.
+                            </p>
+
+                            <a href="https://forms.gle/F1n5udhsmvJBkFbv5"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center justify-center bg-white border border-gray-300 rounded-lg px-6 py-3 font-medium text-gray-800 hover:bg-gray-50 transition-all shadow-sm mb-2">
+                                <span>Répondre à l'enquête *</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                            </a>
+
+                            <p class="text-xs text-gray-400 mt-2">
+                                *vous serez redirigé vers Google Forms, merci de n'y répondre qu'une seule fois.
+                            </p>
                         </div>
 
                     </div>
