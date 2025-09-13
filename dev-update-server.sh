@@ -23,7 +23,7 @@
 PROJECT_PATH="/var/www/DevAFPAconnect"
 
 # The Git branch to pull. Defaults to 'dev' if no argument is given.
-BRANCH_NAME=${1:-master}
+BRANCH_NAME=${1:-dev}
 
 # --- Script Functions ---
 
@@ -62,19 +62,19 @@ git pull origin "$BRANCH_NAME" || handle_error "Git pull failed."
 
 # 2. Update PHP dependencies
 step "2. Updating Composer dependencies..."
-composer install --no-dev --optimize-autoloader || handle_error "Composer install failed."
+composer install || handle_error "Composer install failed."
 # --no-dev --optimize-autoloader
 
 # 3. Update the database (if necessary)
 step "3. Running Doctrine migrations..."
-symfony console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=prod || handle_error "Doctrine migrations failed."
+symfony console doctrine:migrations:migrate --no-interaction --allow-no-migration || handle_error "Doctrine migrations failed."
 # --env=prod
 # --no-interaction: Prevents it from asking "Are you sure?"
 # --allow-no-migration: Prevents an error if there are no new migrations to run.
 
 # 4. Build frontend assets
 step "4. Building Tailwind CSS assets..."
-symfony console tailwind:build --env=prod || handle_error "Tailwind build failed."
+symfony console tailwind:build || handle_error "Tailwind build failed."
 # --env=prod
 
 # 5. Restarting the messenger worker
@@ -89,8 +89,13 @@ sudo systemctl status supervisord.service | grep -E "RUNNING|active \(running\)"
 
 # 6. Clear the application cache
 step "6. Clearing Symfony cache for production..."
-symfony console cache:clear --env=prod || handle_error "Cache clear failed."
+symfony console cache:clear || handle_error "Cache clear failed."
 # --env=prod
+
+# 7. Restart php-fpm to clear the OPcache
+# This will prevent the cache from one project ever affecting the other.
+step "7. Restarting PHP-FPM to clear OPcache..."
+sudo systemctl restart php-fpm || handle_error "Failed to restart php-fpm."
 
 # Final success message
 echo ""
