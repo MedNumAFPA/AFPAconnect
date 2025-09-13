@@ -24,13 +24,36 @@ use Twig\Error\SyntaxError;
 
 final class ReservationController extends AbstractController
 {
-    #[Route('/admin/reservation', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationsRepository): Response
+    #[Route('/admin/reservation', name: 'app_reservation_index')]
+    public function index(ReservationRepository $reservationRepository): Response
     {
+        $allReservations = $reservationRepository->findBy([], ['id' => 'DESC']);
+
+        $groupedSubscriptions = [];
+        foreach ($allReservations as $reservation) {
+            $workshop = $reservation->getTimeslot()->getWorkshop();
+
+            // Use the person's email and the workshop ID for a stable, unique key
+            $key = $reservation->getEmail() . '-' . $workshop->getId();
+
+            if (!isset($groupedSubscriptions[$key])) {
+                $groupedSubscriptions[$key] = [
+                    'main_reservation' => $reservation,
+                    'workshop' => $workshop,
+                    'individual_reservations' => [],
+                ];
+            }
+
+            // Add the full reservation object to the group
+            $groupedSubscriptions[$key]['individual_reservations'][] = $reservation;
+        }
+
         return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservationsRepository->findAll(),
+            'subscriptions' => $groupedSubscriptions,
+            'reservations' => $reservationRepository->findAll(),
         ]);
     }
+
 
 
     #[Route('/admin/reservation/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
