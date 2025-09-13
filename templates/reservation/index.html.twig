@@ -6,7 +6,7 @@
     <twig:ContainerMobile>
         {% include "layouts/flash_message.html.twig" %}
 
-        <twig:CardHome>
+        <twig:CardHome data-controller="accordion">
             <twig:PageTitle>Réservations</twig:PageTitle>
 
             <twig:Link color="primary" href="{{ path('app_reservation_new') }}">Ajouter</twig:Link>
@@ -142,38 +142,4 @@
 
         </twig:CardHome>
     </twig:ContainerMobile>
-{% endblock %}
-
-
-{% block javascripts %}
-    {{ parent() }}
-    {# This script is required for the accordion to work. The new tbody structure does not affect it. #}
-    <script>
-        document.addEventListener("turbo:load", function () {
-            const accordionHeaders = document.querySelectorAll(".accordion-header");
-
-            accordionHeaders.forEach((header) => {
-                header.addEventListener("click", () => {
-                    // Find the content row within the same tbody
-                    const accordionContent = header.parentElement.querySelector(".accordion-content");
-                    const accordionArrow = header.querySelector(".accordion-arrow");
-                    const isOpen = accordionContent && !accordionContent.classList.contains("hidden");
-
-                    // Close all other accordions first
-                    document.querySelectorAll(".accordion-content").forEach((content) => {
-                        content.classList.add("hidden");
-                    });
-                    document.querySelectorAll(".accordion-arrow").forEach((arrow) => {
-                        arrow.classList.remove("rotate-180");
-                    });
-
-                    // If the clicked one was closed, open it
-                    if (!isOpen && accordionContent && accordionArrow) {
-                        accordionContent.classList.remove("hidden");
-                        accordionArrow.classList.add("rotate-180");
-                    }
-                });
-            });
-        });
-    </script>
 {% endblock %}
