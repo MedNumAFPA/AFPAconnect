@@ -21,9 +21,8 @@
 # Get the absolute path of the directory where this script is located.
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
-# Assume the project root is one level up from the 'scripts' directory.
-# If your script is in the project root, just use PROJECT_PATH="$SCRIPT_DIR"
-PROJECT_PATH=$(dirname "$SCRIPT_DIR")
+# The project path is the same as the script's directory.
+PROJECT_PATH="$SCRIPT_DIR"
 
 # --- Now you can use the variable safely ---
 echo "Running commands in project directory: $PROJECT_PATH"
