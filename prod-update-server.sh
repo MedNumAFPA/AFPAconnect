@@ -60,25 +60,20 @@ git checkout "$BRANCH_NAME" || handle_error "Could not switch to branch '$BRANCH
 step "1. Pulling latest code from origin/$BRANCH_NAME..."
 git pull origin "$BRANCH_NAME" || handle_error "Git pull failed."
 
-# 2. Update PHP dependencies
-step "2. Updating Composer dependencies..."
-composer install --no-dev --optimize-autoloader || handle_error "Composer install failed."
-# --no-dev --optimize-autoloader
-
-# 3. Update the database (if necessary)
-step "3. Running Doctrine migrations..."
+# 2. Update the database (if necessary)
+step "2. Running Doctrine migrations..."
 symfony console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=prod || handle_error "Doctrine migrations failed."
 # --env=prod
 # --no-interaction: Prevents it from asking "Are you sure?"
 # --allow-no-migration: Prevents an error if there are no new migrations to run.
 
-# 4. Build frontend assets
-step "4. Building Tailwind CSS assets..."
+# 3. Build frontend assets
+step "3. Building Tailwind CSS assets..."
 symfony console tailwind:build --env=prod || handle_error "Tailwind build failed."
 # --env=prod
 
-# 5. Restarting the messenger worker
-step "5. Restarting the application worker..."
+# 4. Restarting the messenger worker
+step "4. Restarting the application worker..."
 sudo systemctl restart supervisord.service || handle_error "Failed to restart the supervisord service."
 # We add a small delay to give the worker time to start up before we check it.
 sleep 5
@@ -87,9 +82,14 @@ sleep 5
 # The 'grep' command will exit with an error if the worker is not found or in a failed state.
 sudo systemctl status supervisord.service | grep -E "RUNNING|active \(running\)" || handle_error "Worker is not running after restart. Check 'sudo systemctl status supervisord.service'."
 
+# 5. Update PHP dependencies
+step "5. Updating Composer dependencies..."
+APP_ENV=prod APP_DEBUG=0 composer install --no-dev --optimize-autoloader || handle_error "Composer install failed."
+# --no-dev --optimize-autoloader
+
 # 6. Clear the application cache
 step "6. Clearing Symfony cache for production..."
-symfony console cache:clear --env=prod || handle_error "Cache clear failed."
+APP_DEBUG=0 symfony console cache:clear --env=prod || handle_error "Cache clear failed."
 # --env=prod
 
 # Final success message
