@@ -92,6 +92,11 @@ step "6. Clearing Symfony cache for production..."
 APP_DEBUG=0 symfony console cache:clear --env=prod || handle_error "Cache clear failed."
 # --env=prod
 
+# 7. Restart php-fpm to clear the OPcache
+# This will prevent the cache from one project ever affecting the other.
+step "7. Restarting PHP-FPM to clear OPcache..."
+sudo systemctl restart php-fpm || handle_error "Failed to restart php-fpm."
+
 # Final success message
 echo ""
 echo "================================================="
