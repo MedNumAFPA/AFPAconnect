@@ -15,13 +15,16 @@
                     <li>
                         <button
                             id="btn{{ i + 1 }}"
-                            class="px-2 py-1 w-20 sm:w-32 sm:h-10 rounded-t-md font-medium
+                            class="cursor-pointer w-full md:px-2 py-2 font-medium rounded-t-md
                             {% if i == 0 %}
                                 bg-lime-600 text-white
                             {% else %}
                                 bg-gray-100 text-gray-600
                             {% endif %}">
-                            Semaine {{ week_num }}
+{#                            <span class="hidden sm:inline">Semaine</span>#}
+{#                            <span class="inline sm:hidden">Sem.</span>#}
+                            Semaine
+                            {{ week_num }}
                         </button>
                     </li>
                 {% endfor %}
@@ -69,7 +72,7 @@
 
                     {# Version mobile #}
                     <div class="md:hidden space-y-4 p-4 bg-white border border-gray-300 rounded-b">
-                        {% set semaineKey = 'semaine' ~ i %} 
+                        {% set semaineKey = 'semaine' ~ i %}
                         {% for day in days %}
                             <div class="p-4 border border-gray-300 rounded-lg shadow-md">
                             <h3 class="font-semibold mb-2">{{ day|capitalize }} - {{ weekDates[semaineKey][day]|date('d/m/Y') }}</h3>
