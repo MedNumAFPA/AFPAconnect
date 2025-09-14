@@ -241,7 +241,6 @@ final class ReservationController extends AbstractController
         $session = $request->getSession();
         $signedUrl = $session->get('unsubscribe_url');
 
-        // Remove the URL from the session immediately so it can only be used once.
         $session->remove('unsubscribe_url');
 
         // If there's no URL in the session, the user got here improperly.
@@ -275,7 +274,6 @@ final class ReservationController extends AbstractController
     }
 
     /**
-     * @throws ORMException
      * @throws SyntaxError
      * @throws TransportExceptionInterface
      * @throws RuntimeError
@@ -290,13 +288,12 @@ final class ReservationController extends AbstractController
         MailerInterface        $mailer,
         KernelInterface        $kernel,
         Packages               $assets,
-        Environment            $twig
+        Environment            $twig,
+        UriSigner              $uriSigner,
     ): Response
     {
         $reservation = new Reservation();
         $entretienWorkshop = $workshopRepository->findOneBy(['name' => 'Entretien Individuel']);
-
-        // ... (all your existing logic for checking availability and creating the form is correct)
 
         $form = $this->createForm(ReservationType::class, $reservation, [
             'workshop_id' => $entretienWorkshop->getId(),
@@ -305,33 +302,30 @@ final class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // ... (your existing logic for checking the selected timeslot is correct)
 
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            // --- START: NEW EMAIL SENDING LOGIC ---
+            $unsubscribeUrl = $this->generateUrl('app_rendezvous_unsubscribe_confirm', [
+                'id' => $reservation->getId(),
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            // Get the dynamic path for the logo asset
-            $logoPublicUrl = $assets->getUrl('images/logo-txt.png');
-            $logoFilesystemPath = $kernel->getProjectDir() . '/public' . $logoPublicUrl;
+            // Sign the URL to make it tamper-proof
+            $signedUnsubscribeUrl = $uriSigner->sign($unsubscribeUrl);
 
-            // Render the HTML content for the email from a new Twig template
             $htmlContent = $twig->render('email/rendez_vous_confirmation.html.twig', [
                 'reservation' => $reservation,
+                'signedUnsubscribeUrl' => $signedUnsubscribeUrl,
             ]);
 
-            // Create and send the email
             $email = (new Email())
                 ->from('Afpa Connect <rendezvous@afpaconnect.fr>')
                 ->to($reservation->getEmail())
                 ->subject('Confirmation de votre Entretien Individuel')
-                ->embedFromPath($logoFilesystemPath, 'logo-txt')
+                ->embedFromPath($kernel->getProjectDir() . '/public' . $assets->getUrl('images/logo-txt.png'), 'logo-txt')
                 ->html($htmlContent);
 
             $mailer->send($email);
-
-            // --- END: NEW EMAIL SENDING LOGIC ---
 
             $this->addFlash('success', 'Votre rendez-vous a été enregistré avec succès ! Un email de confirmation vous a été envoyé.');
             return $this->redirectToRoute('app_homepage');
@@ -341,6 +335,53 @@ final class ReservationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/rendez-vous/{id}/unsubscribe', name: 'app_rendezvous_unsubscribe_confirm', methods: ['GET'])]
+    public function unsubscribeRendezVousConfirm(Request $request, UriSigner $uriSigner, Reservation $reservation): Response
+    {
+        // The check uses the full URL the user arrived with.
+        if (!$uriSigner->check($request->getUri())) {
+            $this->addFlash('danger', 'Le lien d\'annulation est invalide ou a expiré.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        // Store the reservation ID in the session for the next step.
+        $request->getSession()->set('unsubscribe_rdv_id', $reservation->getId());
+
+        // Render the confirmation page.
+        return $this->render('reservation/unsubscribe_rendezvous_confirm.html.twig');
+    }
+
+    /**
+     * Handles the actual cancellation after confirmation.
+     */
+    #[Route('/rendez-vous/unsubscribe-handle', name: 'app_rendezvous_unsubscribe_handle', methods: ['POST'])]
+    public function unsubscribeRendezVousHandle(Request $request, EntityManagerInterface $entityManager, ReservationRepository $reservationRepository): Response
+    {
+        $session = $request->getSession();
+        $reservationId = $session->get('unsubscribe_rdv_id');
+
+        // Remove the ID from the session immediately so it can only be used once.
+        $session->remove('unsubscribe_rdv_id');
+
+        if (null === $reservationId) {
+            $this->addFlash('danger', 'Session d\'annulation invalide. Veuillez utiliser le lien de votre email.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        $reservation = $reservationRepository->find($reservationId);
+
+        if (!$reservation) {
+            $this->addFlash('warning', 'Ce rendez-vous a déjà été annulé.');
+        } else {
+            $entityManager->remove($reservation);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre rendez-vous a été annulé avec succès.');
+        }
+
+        return $this->redirectToRoute('app_homepage');
+    }
+
 
     #[Route('/subscription/{id}/delete', name: 'app_reservation_subscription_delete', methods: ['POST'])]
     public function deleteSubscription(
