@@ -14,11 +14,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -55,8 +57,6 @@ final class ReservationController extends AbstractController
             'reservations' => $reservationRepository->findAll(),
         ]);
     }
-
-
 
     #[Route('/admin/reservation/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -126,6 +126,7 @@ final class ReservationController extends AbstractController
         KernelInterface        $kernel,
         MailerInterface        $mailer,
         Packages               $assets,
+        UriSigner              $uriSigner,
     ): Response
     {
         $reservationTemplate = new Reservation();
@@ -176,6 +177,13 @@ final class ReservationController extends AbstractController
 
             $entityManager->flush();
 
+            $unsubscribeUrl = $this->generateUrl('app_workshop_unsubscribe_confirm', [
+                'workshopId' => $workshop->getId(),
+                'email' => $reservationTemplate->getEmail(),
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $signedUnsubscribeUrl = $uriSigner->sign($unsubscribeUrl);
+
             $reservationsByDate = [];
             foreach ($createdReservations as $reservation) {
                 $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
@@ -185,6 +193,7 @@ final class ReservationController extends AbstractController
             $htmlContent = $twig->render('email/subscription.html.twig', [
                 'reservations' => $createdReservations,
                 'reservationsByDate' => $reservationsByDate,
+                'signedUnsubscribeUrl' => $signedUnsubscribeUrl,
             ]);
 
             $email = (new Email())
@@ -202,6 +211,67 @@ final class ReservationController extends AbstractController
 
         return $this->render('reservation/subscribe.html.twig', ['workshop' => $workshop,
             'form' => $form->createView(),]);
+    }
+
+    #[Route('/workshop/unsubscribe', name: 'app_workshop_unsubscribe_confirm', methods: ['GET'])]
+    public function unsubscribeConfirm(Request $request, UriSigner $uriSigner): Response
+    {
+
+        $fullUrl = $request->getUri();
+
+        // Check the signature of the full URL.
+        if (!$uriSigner->check($fullUrl)) {
+            $this->addFlash('danger', 'Le lien de désinscription est invalide ou a expiré.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        $request->getSession()->set('unsubscribe_url', $fullUrl);
+
+        return $this->render('reservation/unsubscribe_confirm.html.twig');
+    }
+
+    #[Route('/workshop/unsubscribe-handle', name: 'app_workshop_unsubscribe_handle', methods: ['POST'])]
+    public function unsubscribeHandle(
+        Request $request,
+        ReservationRepository $reservationRepository,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+
+        $session = $request->getSession();
+        $signedUrl = $session->get('unsubscribe_url');
+
+        // Remove the URL from the session immediately so it can only be used once.
+        $session->remove('unsubscribe_url');
+
+        // If there's no URL in the session, the user got here improperly.
+        if (null === $signedUrl) {
+            $this->addFlash('danger', 'Session de désinscription invalide. Veuillez utiliser le lien de votre email.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
+        // Manually parse the query string from the VALID signed URL.
+        $queryParams = [];
+        parse_str((string)parse_url($signedUrl, PHP_URL_QUERY), $queryParams);
+
+        $workshopId = $queryParams['workshopId'] ?? null;
+        $email = $queryParams['email'] ?? null;
+
+        if ($workshopId && $email) {
+            $reservationsToDelete = $reservationRepository->findByEmailAndWorkshop($email, (int)$workshopId);
+
+            if (empty($reservationsToDelete)) {
+                $this->addFlash('warning', 'Votre inscription a déjà été annulée.');
+            } else {
+                foreach ($reservationsToDelete as $reservation) {
+                    $entityManager->remove($reservation);
+                }
+                $entityManager->flush();
+                $this->addFlash('success', 'Votre inscription a été annulée avec succès.');
+            }
+        }
+
+        return $this->redirectToRoute('app_homepage');
     }
 
     /**
