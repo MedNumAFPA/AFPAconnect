@@ -243,4 +243,39 @@ final class ReservationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // src/Controller/ReservationController.php
+
+    #[Route('/subscription/{id}/delete', name: 'app_reservation_subscription_delete', methods: ['POST'])]
+    public function deleteSubscription(
+        Request $request,
+        Reservation $mainReservation, // This is one reservation from the group
+        EntityManagerInterface $entityManager,
+        ReservationRepository $reservationRepository
+    ): Response
+    {
+        // Security: Check for the CSRF token from the form
+        if ($this->isCsrfTokenValid('delete_subscription'.$mainReservation->getId(), (string)$request->request->get('_token'))) {
+
+            // Find all reservations for this person for this workshop
+            $workshopId = $mainReservation->getTimeSlot()->getWorkshop()->getId();
+            $email = $mainReservation->getEmail();
+
+            $reservationsToDelete = $reservationRepository->findByEmailAndWorkshop($email, $workshopId);
+
+            foreach ($reservationsToDelete as $reservation) {
+                $entityManager->remove($reservation);
+            }
+
+            $entityManager->flush();
+
+            $this->addFlash('danger', sprintf(
+                'L\'inscription de "%s %s" à l\'atelier a été supprimée avec succès.',
+                $mainReservation->getFirstname(),
+                $mainReservation->getLastname()
+            ));
+        }
+
+        return $this->redirectToRoute('app_reservation_index');
+    }
 }

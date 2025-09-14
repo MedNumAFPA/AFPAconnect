@@ -28,14 +28,15 @@
                     <th scope="col" class="px-2 py-4">Email</th>
                     <th scope="col" class="px-2 py-4">Atelier</th>
                     <th scope="col" class="px-2 py-4">Créneaux</th>
+                    <th scope="col" class="px-2 py-4 text-center">Actions</th>
                     <th scope="col" class="px-2 py-4 text-center">Détails</th>
                 </tr>
                 </thead>
 
                 {% for subscription in subscriptions %}
+                    {% set main_reservation = subscription.main_reservation %}
 
                     <tbody class="border-b dark:border-neutral-600">
-                    {% set main_reservation = subscription.main_reservation %}
                     <tr class="accordion-header cursor-pointer hover:bg-gray-50">
                         <td class="px-2 py-4">{{ main_reservation.id }}</td>
                         <td class="px-2 py-4">{{ main_reservation.firstname }}</td>
@@ -48,12 +49,17 @@
                                     {{ subscription.individual_reservations|length }} créneaux
                                 </span>
                         </td>
+                        <td class="px-2 py-4">
+                            <div class="flex justify-center">
+                                {{ include('reservation/_delete_subscription_form.html.twig') }}
+                            </div>
+                        </td>
                         <td class="px-2 py-4 text-center">
                             <span class="accordion-arrow transform transition-transform duration-300">▼</span>
                         </td>
                     </tr>
                     <tr class="accordion-content hidden">
-                        <td colspan="8" class="p-0">
+                        <td colspan="9" class="p-0">
                             <div class="p-4 bg-gray-50">
                                 <h4 class="font-semibold mb-2">Détail des réservations :</h4>
                                 <table class="w-full text-sm text-left">
@@ -62,8 +68,8 @@
                                         <th class="px-2 py-2">ID Res.</th>
                                         <th class="px-2 py-2">Date</th>
                                         <th class="px-2 py-2">Horaire</th>
-                                        <th class="px-2 py-2">Rappel</th>
-                                        <th class="px-2 py-2">Envoyé</th>
+                                        <th class="px-2 py-2">Rappel Actif</th>
+                                        <th class="px-2 py-2">RappelEnvoyé</th>
                                         <th class="px-2 py-2 text-center">Actions</th>
                                     </tr>
                                     </thead>
@@ -113,6 +119,9 @@
                                 <div
                                     class="font-bold text-base text-left">{{ main_reservation.firstname }} {{ main_reservation.lastname }}</div>
                                 <div class="text-gray-600 text-left">{{ subscription.workshop.name }}</div>
+                            </div>
+                            <div class="flex items-center">
+                                {{ include('reservation/_delete_subscription_form.html.twig') }}
                             </div>
                             <span class="accordion-arrow transform transition-transform duration-300">▼</span>
                         </div>
