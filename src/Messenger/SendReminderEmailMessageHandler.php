@@ -4,6 +4,7 @@ namespace App\Messenger;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -23,6 +24,7 @@ final class SendReminderEmailMessageHandler
         private readonly EntityManagerInterface $entityManager,
         private readonly Environment            $twig,
         private readonly KernelInterface        $kernel,
+        private readonly Packages               $assets,
     )
     {
 
@@ -49,9 +51,10 @@ final class SendReminderEmailMessageHandler
             ->to($reservation->getEmail())
             ->subject('Rappel: Vous avez un atelier bientôt!')
             ->embedFromPath(
-                $this->kernel->getProjectDir()
-                .
-                '/public/images/logo-txt.png', 'logo-txt')
+                $this->kernel->getProjectDir() .
+                '/public' .
+                $this->assets->getUrl('images/logo-txt.png'), 'logo-txt'
+            )
             // Fallback plain text
             ->text('This is the plain text version of the email.')
             ->html($htmlContent);

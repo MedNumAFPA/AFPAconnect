@@ -11,6 +11,7 @@ use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -122,7 +123,8 @@ final class ReservationController extends AbstractController
         EntityManagerInterface $entityManager,
         Environment            $twig,
         KernelInterface        $kernel,
-        MailerInterface        $mailer
+        MailerInterface        $mailer,
+        Packages               $assets,
     ): Response
     {
         $reservationTemplate = new Reservation();
@@ -173,7 +175,7 @@ final class ReservationController extends AbstractController
                 ->from('Afpa Connect <subscribed@afpaconnect.fr>')
                 ->to($reservationTemplate->getEmail())
                 ->subject('Confirmation de votre inscription à l\'atelier : ' . $workshop->getName())
-                ->embedFromPath($kernel->getProjectDir() . '/public/images/logo-txt.png', 'logo-txt')
+                ->embedFromPath($kernel->getProjectDir() . '/public' . $assets->getUrl('images/logo-txt.png'), 'logo-txt')
                 ->html($htmlContent);
 
             $mailer->send($email);

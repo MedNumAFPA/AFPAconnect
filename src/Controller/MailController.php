@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ReservationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -17,7 +18,12 @@ class MailController extends AbstractController
 //     * @throws TransportExceptionInterface
 //     */
     #[Route('/mailtest', name: 'app_mail')]
-    public function index(MailerInterface $mailer, ReservationRepository $reservationsRepository, KernelInterface $kernel): Response
+    public function index(
+        MailerInterface $mailer,
+        ReservationRepository $reservationsRepository,
+        KernelInterface $kernel,
+        Packages        $assets,
+    ): Response
     {
 
 
@@ -30,9 +36,14 @@ class MailController extends AbstractController
 
         $reservations = $reservationsRepository->findRemindersDueToSend($startTime, $endTime);
 
-        dd($startTime, $endTime, $reservations, $kernel->getProjectDir());
 
+        $test = $kernel->getProjectDir() . '/public' . $assets->getUrl('images/logo-txt.png');
 
+//        dd($test);
+
+        return $this->render('email/index.html.twig', [
+            'test' => $test
+        ]);
 
 //        $email = (new Email())
 //            ->from('me@arnaudrabel.com')

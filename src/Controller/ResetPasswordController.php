@@ -8,6 +8,7 @@ use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,13 +28,14 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    public function __construct
-    (
+    public function __construct(
         private readonly ResetPasswordHelperInterface $resetPasswordHelper,
-        private readonly EntityManagerInterface $entityManager
-    )
-    {
-    }
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MailerInterface $mailer,
+        private readonly TranslatorInterface $translator,
+        private readonly KernelInterface $kernel,
+        private readonly Packages $assets,
+    ) {}
 
     /**
      * Display & process form to request a password reset.
@@ -42,11 +44,7 @@ class ResetPasswordController extends AbstractController
     #[Route('', name: 'app_forgot_password_request')]
     public function request(
         Request $request,
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
-        KernelInterface $kernel,
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
@@ -54,13 +52,7 @@ class ResetPasswordController extends AbstractController
             /** @var string $email */
             $email = $form->get('email')->getData();
 
-            return $this->processSendingPasswordResetEmail
-            (
-                $email,
-                $mailer,
-                $translator,
-                $kernel,
-            );
+            return $this->processSendingPasswordResetEmail($email,);
         }
 
         return $this->render('reset_password/request.html.twig', [
@@ -89,7 +81,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, ?string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, ?string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -111,8 +103,8 @@ class ResetPasswordController extends AbstractController
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash('reset_password_error', sprintf(
                 '%s - %s',
-                $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE, [], 'ResetPasswordBundle'),
-                $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
+                $this->translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE, [], 'ResetPasswordBundle'),
+                $this->translator->trans($e->getReason(), [], 'ResetPasswordBundle')
             ));
 
             return $this->redirectToRoute('app_forgot_password_request');
@@ -147,18 +139,13 @@ class ResetPasswordController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    private function processSendingPasswordResetEmail(
-        string              $emailFormData,
-        MailerInterface     $mailer,
-        TranslatorInterface $translator,
-        KernelInterface     $kernel,
-    ): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData,): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 
-//        dd($user);
+        //        dd($user);
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
@@ -172,32 +159,35 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-//            dd($e->getMessage());
+            //            dd($e->getMessage());
 
             $this->addFlash('reset_password_error', sprintf(
                 '%s - %s',
-                $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
-                $translator->trans($e->getReason(), [], 'ResetPasswordBundle')
+                $this->translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_HANDLE, [], 'ResetPasswordBundle'),
+                $this->translator->trans($e->getReason(), [], 'ResetPasswordBundle')
             ));
 
             return $this->redirectToRoute('app_check_email');
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address
-            (
+            ->from(new Address(
                 'reset-password@afpaconnect.fr',
                 'Afpa Connect',
             ))
             ->to((string)$user->getEmail())
             ->subject('Email de réinitialisation du mot de passe')
             ->htmlTemplate('reset_password/email.html.twig')
-            ->embedFromPath($kernel->getProjectDir() . '/public/images/logo-txt.png', 'logo-txt')
+            ->embedFromPath(
+                $this->kernel->getProjectDir() .
+                '/public' .
+                $this->assets->getUrl('images/logo-txt.png'), 'logo-txt'
+            )
             ->context([
                 'resetToken' => $resetToken,
             ]);
 
-        $mailer->send($email);
+        $this->mailer->send($email);
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
