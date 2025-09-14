@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_reservation_subscription_delete', {'id': main_reservation.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer TOUTES les réservations pour cette inscription ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete_subscription' ~ main_reservation.id) }}">
+    <button type="submit" class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition w-[40px] h-[40px]">
+        <i class="fa-solid fa-trash fa-lg m-1"></i>
+    </button>
+</form>
