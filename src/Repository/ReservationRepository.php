@@ -41,7 +41,21 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
+    /**
+     * Finds all reservations for a specific email address and workshop.
+     * @return Reservation[]
+     */
+    public function findByEmailAndWorkshop(string $email, int $workshopId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->innerJoin('r.timeslot', 'ts')
+            ->where('ts.workshop = :workshopId')
+            ->andWhere('r.email = :email')
+            ->setParameter('workshopId', $workshopId)
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects
