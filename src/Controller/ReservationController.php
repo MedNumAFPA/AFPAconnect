@@ -121,6 +121,7 @@ final class ReservationController extends AbstractController
         Workshop               $workshop,
         Request                $request,
         EntityManagerInterface $entityManager,
+        ReservationRepository  $reservationRepository,
         Environment            $twig,
         KernelInterface        $kernel,
         MailerInterface        $mailer,
@@ -134,6 +135,21 @@ final class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $existingReservations = $reservationRepository->findByEmailAndWorkshop(
+                $reservationTemplate->getEmail(),
+                $workshop->getId()
+            );
+
+            if (!empty($existingReservations)) {
+                $this->addFlash('danger', sprintf(
+                    'L\'adresse email "%s" est déjà inscrite à l\'atelier "%s".',
+                    $reservationTemplate->getEmail(),
+                    $workshop->getName()
+                ));
+                return $this->redirectToRoute('app_homepage');
+            }
+
             $timeSlots = $workshop->getTimeSlots();
             $maxSlots = $workshop->getMaxSlots();
 
@@ -244,12 +260,10 @@ final class ReservationController extends AbstractController
         ]);
     }
 
-    // src/Controller/ReservationController.php
-
     #[Route('/subscription/{id}/delete', name: 'app_reservation_subscription_delete', methods: ['POST'])]
     public function deleteSubscription(
         Request $request,
-        Reservation $mainReservation, // This is one reservation from the group
+        Reservation $mainReservation,
         EntityManagerInterface $entityManager,
         ReservationRepository $reservationRepository
     ): Response
