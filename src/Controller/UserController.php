@@ -25,7 +25,11 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, ['is_add' => true]);
@@ -91,7 +95,11 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/editpassword', name: 'app_password_edit', methods: ['GET', 'POST'])]
-    public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function editPassword(
+        Request $request, User $user,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
         $form = $this->createForm(UpdatePasswordFormType::class, $user);
         $form->handleRequest($request);

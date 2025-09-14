@@ -6,7 +6,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 
-class TableTimeSlots {
-
+class TableTimeSlots
+{
     public string $class = "";
 }

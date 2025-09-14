@@ -8,6 +8,5 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 class RecordCard
 {
-
     public String $title = "";
 }

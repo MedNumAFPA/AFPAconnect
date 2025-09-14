@@ -20,20 +20,19 @@ class DailyTimeSlotType extends AbstractType
             ])
             ->add('morningSlot', TimeSlotType::class, [
                 'label' => 'Créneau du matin',
-                // On passe les valeurs par défaut au sous-formulaire
+
                 'default_from_time' => new \DateTime('08:00'),
                 'default_to_time' => new \DateTime('12:00'),
             ])
             ->add('hasAfternoonSlot', CheckboxType::class, [
                 'label' => 'Ajouter un créneau l\'après-midi ?',
                 'required' => false,
-                'mapped' => false, // Important : ce champ n'est pas lié à une entité
-                'data' => true, // La case sera cochée par défaut
+                'mapped' => false,
+                'data' => true,
             ])
             ->add('afternoonSlot', TimeSlotType::class, [
                 'label' => 'Créneau de l\'après-midi',
                 'required' => false,
-                // On passe les valeurs par défaut au sous-formulaire
                 'default_from_time' => new \DateTime('13:30'),
                 'default_to_time' => new \DateTime('17:30'),
             ]);
@@ -41,7 +40,6 @@ class DailyTimeSlotType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        // Ce formulaire n'est pas lié à une entité, c'est un simple conteneur
         $resolver->setDefaults([
             'data_class' => null,
         ]);

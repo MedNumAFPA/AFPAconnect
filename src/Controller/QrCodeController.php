@@ -31,7 +31,7 @@ final class QrCodeController extends AbstractController
 
         $qrCode = new QrCode($_SERVER['APP_URL'] . $urlHomepage); // Create the QR code with the data
 
-        // Génère l'image PNG
+        // Generate PNG
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
 
@@ -47,9 +47,10 @@ final class QrCodeController extends AbstractController
     {
         $urlVisitor = $this->generateUrl('app_homepage_visitor', [], true);
 
-        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor); // Create the QR code with the data
+        // Create the QR code with the data
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor);
 
-        // Génère l'image PNG
+        // Generate PNG
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
 
@@ -65,9 +66,10 @@ final class QrCodeController extends AbstractController
     {
         $urlVisitor = $this->generateUrl('app_homepage_intern', [], true);
 
-        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor); // Create the QR code with the data
+        // Create the QR code with the data
+        $qrCode = new QrCode($_SERVER['APP_URL'] . $urlVisitor);
 
-        // Génère l'image PNG
+        // Generate PNG
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
 
@@ -77,34 +79,4 @@ final class QrCodeController extends AbstractController
             ['Content-Type' => $result->getMimeType()]
         );
     }
-
-//    #[Route('/', name: 'app_qrcode_homepage')]
-//    public function reservation(): Response
-//    {
-//        // logique de la page de réservation
-////        return $this->render('qr_code/reservation.html.twig');
-//    }
 }
-
-
-// #[Route('/qr-code/reservation', name: 'qr_code_reservation')]
-// public function reservationQrCode(BuilderInterface $qrCodeBuilder): Response
-// {
-//     $urlReservation = $this->generateUrl('reservation_page', [], true);
-
-//     $result = $qrCodeBuilder
-//         // ->data($urlReservation)  // Contenu du QR code
-//         // ->size(300)             // Taille du QR code
-//         // ->margin(10)            // Marge blanche
-//         // ->margin(10)            // Marge blanche
-//         ->build();
-
-//     return new QrCodeResponse($result);
-
-// }
-// #[Route('/reservation', name: 'reservation_page')]
-// public function reservation()
-// {
-//     // logique de la page de réservation
-//     return $this->render('reservation/page.html.twig');
-// }

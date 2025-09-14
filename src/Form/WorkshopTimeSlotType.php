@@ -26,10 +26,10 @@ class WorkshopTimeSlotType extends AbstractType
             ->add('dailySlots', CollectionType::class, [
                 'entry_type' => DailyTimeSlotType::class,
                 'label' => 'Jours et créneaux',
-                'allow_add' => true, // Permet d'ajouter de nouveaux éléments
-                'allow_delete' => true, // Permet de supprimer des éléments
+                'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
-                'prototype' => true, // Essentiel pour le JavaScript !
+                'prototype' => true, // Essential for JS
             ]);
     }
 }

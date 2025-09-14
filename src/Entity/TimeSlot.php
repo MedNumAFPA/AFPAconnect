@@ -119,13 +119,13 @@ class TimeSlot
 
     public function getChoiceLabel(): string
     {
-        // On récupère le nom de l'atelier et on formate la date et l'heure
+        // We get the workshop name and format the date and time
         $workshopName = $this->getWorkshop()->getName();
         $date = $this->getDate()->format('d/m/Y');
         $fromTime = $this->getFromTime()->format('H:i');
         $toTime = $this->getToTime()->format('H:i');
 
-        // On retourne une chaîne de caractères complète et claire
+        // We return a complete and clear string
         return sprintf(
             '%s - %s (%s - %s)',
             $workshopName,

@@ -59,11 +59,7 @@ class ReservationType extends AbstractType
                 'required' => false,
             ]);
 
-        // --- THIS IS THE DEFINITIVE FIX ---
-
-        // We only add the 'timeslot' field if we are NOT in workshop subscription mode.
         if (!$options['is_workshop_subscription']) {
-
 
             $timeslotOptions = [
                 'class' => TimeSlot::class, // <-- THE FIX
@@ -80,13 +76,13 @@ class ReservationType extends AbstractType
                 $timeslotOptions['query_builder'] = function (TimeSlotRepository $tsr) use ($workshopId) {
                     return $tsr->createQueryBuilder('ts')
                         ->where('ts.workshop = :workshopId')
+                        ->andWhere('ts.reservations IS EMPTY')
                         ->setParameter('workshopId', $workshopId)
                         ->orderBy('ts.date', 'ASC')
                         ->addOrderBy('ts.fromTime', 'ASC');
                 };
             }
 
-            // 3. Add the field to the builder ONCE with the final, complete set of options.
             $builder->add('timeslot', EntityType::class, $timeslotOptions);
         }
     }

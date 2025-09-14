@@ -10,7 +10,6 @@
     --color-danger: #dd191c;
     --color-success: #22bb33;
     --color-info: #ffd900;
-    /* --color-info: #bf1960; */
 }
 
 @source inline("bg-primary");
@@ -66,8 +65,6 @@ input[for="reservation_isReminderActive"] {
 
 input[type="checkbox"] {
     @apply md:-left-2 mr-8;
-    /* @apply left-1/2;*/
-    /* @apply -translate-y-1/2;*/
     -webkit-appearance: none;
     appearance: none;
     width: 20px;

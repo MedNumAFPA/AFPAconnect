@@ -6,7 +6,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 
-class Link
+class TableLink
 {
     public string $color = 'primary';
     public string $href = '';
