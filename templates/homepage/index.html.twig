@@ -43,10 +43,10 @@
                             <h3 class="font-extrabold text-center text-3xl mb-8">Les Ateliers Disponibles</h3>
 
                             <div data-controller="homepage-accordion"
-                                class="flex flex-col md:flex-row items-center justify-center flex-wrap w-max-5xl mx-auto gap-4">
+                                 class="flex flex-col md:flex-row items-center justify-center flex-wrap w-max-5xl mx-auto gap-4">
                                 {% for workshop in workshops %}
 
-                                    {% if workshop.name != 'Entretien Individuel' and workshop.timeslots|length > 0 %}
+                                    {% if workshop.name != 'Entretien Individuel' %}
                                         <div
                                             class="flex items-center relative bg-gray-100 rounded-lg p-4 transition md:w-[30%] w-full h-20">
                                             <button
@@ -61,9 +61,14 @@
                                             </button>
                                             <div
                                                 class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2">
-                                                <div>Places prises / places max :</div>
-                                                <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }}
-                                                    / {{ workshop.maxSlots }}</div>
+                                                {% if workshop.timeSlots|length > 0 %}
+                                                    <div>
+                                                        <div>Places prises / places max :</div>
+                                                        <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }}
+                                                            / {{ workshop.maxSlots }}</div>
+                                                    </div>
+                                                {% endif %}
+
                                                 <p class="text-gray-700 mb-4 break-words whitespace-pre-wrap ">{{ workshop.description }}</p>
                                                 {% if workshop.timeslots|length > 0 %}
                                                     {% set joursFr = {
@@ -106,16 +111,20 @@
                                                         Aucun Crénaux disponible.
                                                     </p>
                                                 {% endif %}
-                                                {% set isFull = workshop.timeSlots[0].reservations.count >= workshop.maxSlots %}
+
+                                                {% set noTimeSlots = workshop.timeSlots|length == 0 %}
+                                                {% set isFull = noTimeSlots or (workshop.timeSlots[0].reservations.count >= workshop.maxSlots) %}
+
                                                 <div class="flex items-center justify-center mt-2">
                                                     <a href="{{ isFull ? '#' : path('app_workshop_subscribe', {'id': workshop.id}) }}"
                                                        class="block text-center text-white rounded px-4 py-2 font-medium transition w-3xs
-              {{ isFull
-                                                       ? 'bg-gray-400 cursor-not-allowed'
-                                                       : 'bg-[#22bb33] hover:shadow-sm' }}">
-                                                        {{ isFull ? 'Complet' : "S'inscrire" }}
+                                                        {{ isFull ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#22bb33] hover:shadow-sm' }}">
+                                                        {{ noTimeSlots ? 'Aucun créneau disponible' : (isFull ? 'Complet' : "S'inscrire") }}
                                                     </a>
                                                 </div>
+
+
+
                                             </div>
                                         </div>
                                     {% endif %}
@@ -136,10 +145,12 @@
                                     Prendre Rendez-vous
                                 </twig:Link>
                             {% else %}
-                                <span class="block text-center text-white rounded px-4 py-2 font-medium bg-gray-400 cursor-not-allowed">
+                                <span
+                                    class="block text-center text-white rounded px-4 py-2 font-medium bg-gray-400 cursor-not-allowed">
                                     Rendez-vous Indisponibles
                                 </span>
-                                <p class="text-gray-500 mb-6 text-base leading-relaxed">Il n'y a plus de créneaux disponibles pour le moment.</p>
+                                <p class="text-gray-500 mb-6 text-base leading-relaxed">Il n'y a plus de créneaux
+                                    disponibles pour le moment.</p>
                             {% endif %}
                         </div>
 
