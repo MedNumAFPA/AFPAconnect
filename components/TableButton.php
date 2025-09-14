@@ -6,7 +6,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 
-class Button
+class TableButton
 {
     public string $color = '';
 }

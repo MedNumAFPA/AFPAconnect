@@ -5,7 +5,6 @@
 
 {% block body %}
     <twig:ContainerMobile>
-        {#    <div class="flex flex-col items-center justify-center md:min-h-[80vh] min-h-[20vh] min-w-[100vw] -mt-12"> #}
 
         <twig:CardHome>
             <twig:PageTitle>Gestion des utilisateurs</twig:PageTitle>
@@ -18,13 +17,6 @@
                     ← Retour
                 </a>
             </div>
-
-            {#        <div class="mt-2"> #}
-            {#            <a href="{{ path('app_dashboard_admin') }}" #}
-            {#               class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition"> #}
-            {#                ← Retour #}
-            {#            </a> #}
-            {#        </div> #}
 
             <twig:Table class="hidden md:flex">
                 <thead class="uppercase border-b-2 border-neutral-600">
@@ -99,7 +91,7 @@
                                 </td>
                             </tr>
                             <tr class="">
-                                <th scope="row " class="p-1 pt-2">Role :</th>
+                                <th scope="row" class="p-1 pt-2">Role :</th>
                                 <td class="">
                                     {% for role in user.roles %}
                                         {% if role == 'ROLE_ADMIN' %}
@@ -125,8 +117,6 @@
                 {% endfor %}
             </div>
 
-
         </twig:CardHome>
-        {#    </div> #}
     </twig:ContainerMobile>
 {% endblock %}

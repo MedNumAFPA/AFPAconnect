@@ -21,7 +21,7 @@ class MailController extends AbstractController
     {
 
 
-
+// THIS IS JUST A TEST CONTROLLER
 
         // Define the time window, exactly like the console command will.
         // This finds workshop scheduled between 23 and 25 hours from now.

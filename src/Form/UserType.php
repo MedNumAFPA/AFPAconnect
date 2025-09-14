@@ -70,8 +70,8 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'allow_roles_update' => false, // Par défaut, l'édition des rôles est désactivée
-            'is_add' => false,  // valeur par défaut
+            'allow_roles_update' => false,
+            'is_add' => false,
         ]);
     }
 }

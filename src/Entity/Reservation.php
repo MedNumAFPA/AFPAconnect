@@ -41,9 +41,6 @@ class Reservation
     #[ORM\Column(length: 255)]
     private ?string $idAfpa = null;
 
-    // #[ORM\Column]
-    // private ?int $idAfpa = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -144,18 +141,6 @@ class Reservation
 
         return $this;
     }
-
-    // public function getIdAfpa(): ?int
-    // {
-    //     return $this->idAfpa;
-    // }
-
-    // public function setIdAfpa(int $idAfpa): static
-    // {
-    //     $this->idAfpa = $idAfpa;
-
-    //     return $this;
-    // }
 
     public function getIdAfpa(): ?string
     {

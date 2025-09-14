@@ -16,6 +16,17 @@ class TimeSlotRepository extends ServiceEntityRepository
         parent::__construct($registry, TimeSlot::class);
     }
 
+    public function countAvailableByWorkshop(int $workshopId): int
+    {
+        return $this->createQueryBuilder('ts')
+            ->select('count(ts.id)')
+            ->where('ts.workshop = :workshopId')
+            ->andWhere('ts.reservations IS EMPTY')
+            ->setParameter('workshopId', $workshopId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return TimeSlot[] Returns an array of TimeSlot objects
 //     */
