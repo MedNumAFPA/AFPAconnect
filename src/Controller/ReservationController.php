@@ -6,8 +6,10 @@ use App\Entity\Reservation;
 use App\Entity\Workshop;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
+use App\Repository\TimeSlotRepository;
 use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +45,6 @@ final class ReservationController extends AbstractController
                     'individual_reservations' => [],
                 ];
             }
-
             // Add the full reservation object to the group
             $groupedSubscriptions[$key]['individual_reservations'][] = $reservation;
         }
@@ -139,34 +140,25 @@ final class ReservationController extends AbstractController
                 return $this->redirectToRoute('app_homepage');
             }
 
-            $createdReservations = [];
-            $reservationsByDate = [];
-
             foreach ($timeSlots as $timeSlot) {
 
                 if (count($timeSlot->getReservations()) >= $maxSlots) {
-                    $this->addFlash(
-                        'danger',
-                        sprintf(
-                            'Désolé, l\'atelier "%s" est complet pour le créneau du %s à %s.',
-                            $workshop->getName(),
-                            $timeSlot->getDate()->format('d/m/Y'),
-                            $timeSlot->getFromTime()->format('H:i')
-                        )
-                    );
+                    $this->addFlash('danger', sprintf('Désolé, l\'atelier "%s" est complet.', $workshop->getName()));
                     return $this->redirectToRoute('app_homepage');
                 }
+            }
 
-
+            $createdReservations = [];
+            foreach ($timeSlots as $timeSlot) {
                 $newReservation = clone $reservationTemplate;
                 $newReservation->setTimeslot($timeSlot);
                 $entityManager->persist($newReservation);
-
                 $createdReservations[] = $newReservation;
             }
 
             $entityManager->flush();
 
+            $reservationsByDate = [];
             foreach ($createdReservations as $reservation) {
                 $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
                 $reservationsByDate[$dateKey][] = $reservation;
@@ -194,26 +186,33 @@ final class ReservationController extends AbstractController
             'form' => $form->createView(),]);
     }
 
-    #[
-        Route('/rendez-vous', name: 'app_rendez_vous_new')]
+    /**
+     * @throws ORMException
+     */
+    #[Route('/rendez-vous', name: 'app_rendez_vous_new')]
     public function newRendezVous(
         Request                $request,
         EntityManagerInterface $entityManager,
-        WorkshopRepository     $workshopRepository
+        WorkshopRepository     $workshopRepository,
+        TimeSlotRepository     $timeSlotRepository,
     ): Response
     {
         $reservation = new Reservation();
-        // 1. Find the specific "Entretien Individuel" workshop.
-        // We find it by a unique, hardcoded name.
+        // We find the specific "Entretien Individuel" workshop by a unique, hardcoded name.
         $entretienWorkshop = $workshopRepository->findOneBy(['name' => 'Entretien Individuel']);
 
         if (!$entretienWorkshop) {
-            // Handle the case where the admin hasn't created the workshop yet.
             $this->addFlash('warning', 'Les entretiens individuels ne sont pas disponibles pour le moment.');
             return $this->redirectToRoute('app_homepage');
         }
 
-        // 2. Pass the workshop ID to the form options.
+        $availableSlotsCount = $timeSlotRepository->countAvailableByWorkshop($entretienWorkshop->getId());
+
+        if ($availableSlotsCount <= 0) {
+            $this->addFlash('warning', 'Désolé, il n\'y a plus de créneaux disponibles pour un entretien individuel.');
+            return $this->redirectToRoute('app_homepage');
+        }
+
         $form = $this->createForm(ReservationType::class, $reservation, [
             'workshop_id' => $entretienWorkshop->getId(),
         ]);
@@ -221,6 +220,16 @@ final class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $selectedTimeSlot = $reservation->getTimeslot();
+            $entityManager->refresh($selectedTimeSlot);
+            if (!$selectedTimeSlot->getReservations()->isEmpty()) {
+                $this->addFlash('danger', 'Le créneau que vous avez choisi vient d\'être réservé. Veuillez en sélectionner un autre.');
+
+                return $this->render('reservation/new_rendez_vous.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $entityManager->persist($reservation);
             $entityManager->flush();
 

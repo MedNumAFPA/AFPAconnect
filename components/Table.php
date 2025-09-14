@@ -6,7 +6,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 
-class Table {
-
+class Table
+{
     public string $class = "";
 }

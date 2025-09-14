@@ -29,7 +29,6 @@ final class SendReminderEmailMessageHandler
     }
 
     // The __invoke method receives the message from the SAME namespace.
-
     /**
      * @throws TransportExceptionInterface
      */
@@ -49,13 +48,12 @@ final class SendReminderEmailMessageHandler
             ->from('reminder@afpaconnect.fr',) // Change this later
             ->to($reservation->getEmail())
             ->subject('Rappel: Vous avez un atelier bientôt!')
-//            ->embedFromPath('public/images/logo.png', 'logo')
             ->embedFromPath(
                 $this->kernel->getProjectDir()
                 .
                 '/public/images/logo-txt.png', 'logo-txt')
-            ->text('This is the plain text version of the email.') // Fallback plain text
-            // Set the HTML body of the email
+            // Fallback plain text
+            ->text('This is the plain text version of the email.')
             ->html($htmlContent);
 
         $this->mailer->send($email);

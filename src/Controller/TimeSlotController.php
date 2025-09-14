@@ -25,19 +25,29 @@ final class TimeSlotController extends AbstractController
     }
 
     #[Route('/new', name: 'app_time_slot_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TimeSlotRepository $timeSlotsRepo): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        TimeSlotRepository $timeSlotsRepo
+    ): Response
     {
         $timeSlot = new TimeSlot();
         $form = $this->createForm(TimeSlotType::class, $timeSlot);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($timeSlot->getFromTime() > $timeSlot->getToTime() || $timeSlot->getToTime() < $timeSlot->getFromTime()) {
+            if ($timeSlot->getToTime() < $timeSlot->getFromTime()) {
                 $this->addFlash('danger', 'Please check the start and end time again!');
                 return $this->redirectToRoute('app_time_slot_index', [], Response::HTTP_SEE_OTHER);
             }
 
-            $slot = $timeSlotsRepo->findBy(['fromTime' => $timeSlot->getFromTime(), 'toTime' => $timeSlot->getToTime(), 'date' => $timeSlot->getDate(), 'workshop' => $timeSlot->getWorkshop()]);
+            $slot = $timeSlotsRepo->findBy(
+                [
+                    'fromTime' => $timeSlot->getFromTime(),
+                    'toTime' => $timeSlot->getToTime(),
+                    'date' => $timeSlot->getDate(),
+                    'workshop' => $timeSlot->getWorkshop()
+                ]);
             if ($slot) {
                 $this->addFlash('danger', 'The time slot already exists!');
                 return $this->redirectToRoute('app_time_slot_index', [], Response::HTTP_SEE_OTHER);
@@ -95,8 +105,8 @@ final class TimeSlotController extends AbstractController
     #[Route('/new/batch', name: 'app_time_slot_new_batch')]
     public function newBatch(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Cette structure sert pour l'affichage initial du formulaire.
-        // C'est ce qui permet aux valeurs par défaut de TimeSlotType de fonctionner.
+        // This structure is used for the initial display of the form.
+        // This is what allows the default values of TimeSlotType to work.
         $initialData = [
             'dailySlots' => [
                 ['date' => new \DateTime(),]
@@ -111,12 +121,12 @@ final class TimeSlotController extends AbstractController
             $workshop = $data['workshop'];
 
 
-            // On récupère les données brutes de la requête pour vérifier les cases à cocher.
+            // We retrieve the raw request data to check the checkboxes.
             $requestData = $request->request->all();
-            // Le nom 'workshop_time_slot' est dérivé de WorkshopTimeSlotType
+            // The name 'workshop_time_slot' is derived from WorkshopTimeSlotType
             $dailySlotsRequestData = $requestData['workshop_time_slot']['dailySlots'] ?? [];
 
-            // On boucle sur les données validées du formulaire, en récupérant l'index.
+            // We loop over the validated form data, retrieving the index.
             foreach ($data['dailySlots'] as $index => $dailySlotData) {
                 $date = $dailySlotData['date'];
 
@@ -127,8 +137,8 @@ final class TimeSlotController extends AbstractController
                     $entityManager->persist($morning);
                 }
 
-                // On vérifie si la case 'hasAfternoonSlot' a été envoyée pour cet index.
-                // Si la case est décochée, la clé n'existera pas dans les données de la requête.
+                // We check if the 'hasAfternoonSlot' box was sent for this index.
+                // If the box is unchecked, the key will not exist in the request data.
                 if (isset($dailySlotsRequestData[$index]['hasAfternoonSlot'])) {
                     $afternoon = $dailySlotData['afternoonSlot'];
                     if ($afternoon && $afternoon->getFromTime() && $afternoon->getToTime()) {

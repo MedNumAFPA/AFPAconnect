@@ -7,7 +7,6 @@
         <div class="flex flex-col w-full md:h-[80vh] h-[100vh] bg-gray-50">
             <twig:PageTitle class="text-center">Dashboard Admin</twig:PageTitle>
 
-            {#--------- Onglets pour les semaines ----------------#}
             <ul class="flex space-x-2 border-b justify-center">
                 {% set start_week = "now"|date('W') %}
                 {% for i in 0..3 %}
@@ -29,10 +28,10 @@
                     </li>
                 {% endfor %}
             </ul>
-            {#--------- Contenu des onglets ----------------#}
+
             {% for i in 1..4 %}
                 <div id="tab{{ i }}" class=" mt-6 overflow-x-auto overflow-y-auto bg-white border border-gray-300 rounded-b p-4 {% if i != 1 %}hidden{% endif %}">
-                    {#------- Table pour les écrans md et plus -------#}
+
                     <table class=" hidden md:table min-w-full border-collapse text-sm md:text-base">
                         <thead>
                             <tr class="bg-gray-100 font-semibold text-center">
@@ -70,7 +69,7 @@
                         </tbody>
                     </table>
 
-                    {# Version mobile #}
+                    {# Mobile #}
                     <div class="md:hidden space-y-4 p-4 bg-white border border-gray-300 rounded-b">
                         {% set semaineKey = 'semaine' ~ i %}
                         {% for day in days %}

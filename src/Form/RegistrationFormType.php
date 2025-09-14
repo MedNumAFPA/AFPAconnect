@@ -43,11 +43,11 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', RepeatedType::class, [ // oblige l’utilisateur à taper le mot de passe deux fois (pour éviter les erreurs de saisie).
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les deux mots de passe doivent correspondre.', // message affiché si les deux champs ne correspondent pas.
+                'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'], // dit au navigateur qu’il s’agit d’un nouveau mot de passe (meilleure gestion de la sécurité).
+                'attr' => ['autocomplete' => 'new-password'],
                 'required' => true,
                 'first_options' => [
                     'label' => 'Mot de passe',
@@ -66,10 +66,10 @@ class RegistrationFormType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe.', // le mot de passe est obligatoire.
+                        'message' => 'Veuillez entrer un mot de passe.',
                     ]),
                     new Length([
-                        'min' => 6, // minimum de 6 caractères, maximum de 4096 (limite de sécurité de Symfony).
+                        'min' => 6,
                         'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
                         'max' => 4096,
                     ]),
