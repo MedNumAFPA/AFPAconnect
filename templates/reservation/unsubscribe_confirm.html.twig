@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmer l'annulation{% endblock %}
+
+{% block body %}
+    <twig:ContainerMobile>
+        <twig:CardHome>
+            <twig:PageTitle>Confirmer l'annulation</twig:PageTitle>
+
+            <p class="text-center text-gray-700 my-6">
+                Êtes-vous sûr de vouloir annuler votre inscription à cet atelier ? Cette action est irréversible.
+            </p>
+
+            <div class="flex justify-center items-center space-x-4">
+
+                <form method="post" action="{{ path('app_workshop_unsubscribe_handle') }}">
+
+                    <button type="submit" class="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition">
+                        Oui, annuler mon inscription
+                    </button>
+                </form>
+
+                <a href="{{ path('app_homepage') }}" class="px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-lg hover:bg-gray-300 transition">
+                    Non, retourner à l'accueil
+                </a>
+            </div>
+        </twig:CardHome>
+    </twig:ContainerMobile>
+{% endblock %}
