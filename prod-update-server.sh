@@ -106,6 +106,10 @@ step "6. Clearing Symfony cache for production..."
 symfony console cache:clear --env=prod || handle_error "Cache clear failed."
 # --env=prod
 
+# 7. Restart php-fpm just to be sure (probably needed to clear OPcache)
+step "7. Restart php-fpm ..."
+sudo systemctl restart php-fpm || handle_error "php-fpm retart failed."
+
 # Final success message
 echo ""
 echo "================================================="
