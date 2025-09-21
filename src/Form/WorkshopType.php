@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\Workshop;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,6 +43,14 @@ class WorkshopType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez le n° de salle... (Optionnel, laissez vide pour entretien distanciel)'
                 ]
+            ])
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'nickname',
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Selectionnez les animateurs en charge',
+                'by_reference' => false,
             ]);
     }
 

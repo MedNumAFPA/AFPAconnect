@@ -3,7 +3,20 @@
 {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block font-medium text-gray-700'}}) }}
 {{ form_widget(form.name, {'attr': {'class': 'w-full  shadow-sm focus:border-blue-500 '}}) }}
 
-{{ form_label(form.description, 'Description', {'label_attr': {'class': ' font-medium text-gray-700'}}) }}
+<div class="mb-4">
+    {{ form_label(form.users, 'Selectionnez les animateurs en charge', {'label_attr': {'class': 'block font-medium text-gray-700 mb-2'}}) }}
+    <div class="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-y-2 sm:gap-x-6 sm:gap-y-2">
+        {% for checkbox in form.users %}
+            <div class="flex items-center">
+                {{ form_label(checkbox, null, {'label_attr': {'class': 'ml-2 text-sm text-gray-700'}}) }}
+                {{ form_widget(checkbox, {'attr': {'class': 'h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded'}}) }}
+            </div>
+        {% endfor %}
+    </div>
+    {{ form_errors(form.users) }}
+</div>
+
+{{ form_label(form.description, 'Description', {'label_attr': {'class': 'font-medium text-gray-700'}}) }}
 {{ form_widget(form.description, {'attr': {'class': 'w-full shadow-sm focus:border-blue-500'} }) }}
 
 {{ form_label(form.maxSlots, 'Places maximum', {'label_attr': {'class': 'font-medium text-gray-700'}}) }}
