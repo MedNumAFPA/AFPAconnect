@@ -20,9 +20,9 @@ class DailyTimeSlotType extends AbstractType
             ])
             ->add('morningSlot', TimeSlotType::class, [
                 'label' => 'Créneau du matin',
-
                 'default_from_time' => new \DateTime('08:00'),
                 'default_to_time' => new \DateTime('12:00'),
+                'show_users' => false,
             ])
             ->add('hasAfternoonSlot', CheckboxType::class, [
                 'label' => 'Ajouter un créneau l\'après-midi ?',
@@ -35,6 +35,7 @@ class DailyTimeSlotType extends AbstractType
                 'required' => false,
                 'default_from_time' => new \DateTime('13:30'),
                 'default_to_time' => new \DateTime('17:30'),
+                'show_users' => false,
             ]);
     }
 
