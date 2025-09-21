@@ -49,7 +49,7 @@ class WorkshopType extends AbstractType
                 'choice_label' => 'nickname',
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'Selectionnez les animateurs en charge',
+                'label' => 'Animateurs en charge',
                 'by_reference' => false,
             ]);
     }

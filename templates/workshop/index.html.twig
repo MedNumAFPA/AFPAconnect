@@ -40,13 +40,32 @@
                     </td>
                     <td class="px-2 py-4">{{ workshop.description }}</td>
                     <td class="px-2 py-4">
-                        {% if workshop.users is not empty %}
-                            {% for user in workshop.users %}
+                        {# --- START: NEW, CORRECT LOGIC --- #}
+
+                        {# 1. Create an empty dictionary (hash map) to store unique users. #}
+                        {% set unique_users_map = {} %}
+
+                        {# 2. Loop through all timeslots and their users. #}
+                        {% for time_slot in workshop.timeSlots %}
+                            {% for user in time_slot.users %}
+                                {# 3. Add each user to the map using their ID as the key. #}
+                                {# This automatically handles duplicates. If we see user #5 twice, #}
+                                {# it just gets overwritten with the same object. #}
+                                {% set unique_users_map = unique_users_map|merge({ (user.id): user }) %}
+                            {% endfor %}
+                        {% endfor %}
+
+                        {# 4. Now, check if our final map has any users in it. #}
+                        {% if unique_users_map is not empty %}
+                            {# 5. Loop through the map. Twig's 'for' loop iterates over the values by default. #}
+                            {% for user in unique_users_map %}
                                 <div class="text-sm">{{ user.nickname }}</div>
                             {% endfor %}
                         {% else %}
                             <span class="text-xs text-gray-400">Aucun</span>
                         {% endif %}
+
+                        {# --- END: NEW, CORRECT LOGIC --- #}
                     </td>
                     <td class="px-2 py-4">{{ workshop.maxSlots }}</td>
                     <td class="px-2 py-4">{{ workshop.roomNumber }}</td>

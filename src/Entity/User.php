@@ -39,12 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $nickname = null;
 
     /**
-     * @var Collection<int, Workshop>
-     */
-    #[ORM\ManyToMany(targetEntity: Workshop::class, mappedBy: 'users')]
-    private Collection $workshops;
-
-    /**
      * @var Collection<int, TimeSlot>
      */
     #[ORM\ManyToMany(targetEntity: TimeSlot::class, mappedBy: 'users')]
@@ -52,7 +46,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->workshops = new ArrayCollection();
         $this->timeSlots = new ArrayCollection();
     }
 
@@ -145,33 +138,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNickname(string $nickname): static
     {
         $this->nickname = $nickname;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Workshop>
-     */
-    public function getWorkshops(): Collection
-    {
-        return $this->workshops;
-    }
-
-    public function addWorkshop(Workshop $workshop): static
-    {
-        if (!$this->workshops->contains($workshop)) {
-            $this->workshops->add($workshop);
-            $workshop->addUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkshop(Workshop $workshop): static
-    {
-        if ($this->workshops->removeElement($workshop)) {
-            $workshop->removeUser($this);
-        }
 
         return $this;
     }

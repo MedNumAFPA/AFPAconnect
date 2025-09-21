@@ -33,16 +33,9 @@ class Workshop
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roomNumber = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'workshops')]
-    private Collection $users;
-
     public function __construct()
     {
         $this->timeSlots = new ArrayCollection();
-        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,27 +114,4 @@ class Workshop
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        $this->users->removeElement($user);
-
-        return $this;
-    }
 }
