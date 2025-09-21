@@ -43,6 +43,7 @@
                                             <th scope="col" class="px-2 py-3">Date</th>
                                             <th scope="col" class="px-2 py-3">Début</th>
                                             <th scope="col" class="px-2 py-3">Fin</th>
+                                            <th scope="col" class="px-2 py-3">Animateur(s)</th>
                                             <th scope="col" class="px-2 py-3 text-center">Actions</th>
                                         </tr>
                                         </thead>
@@ -53,6 +54,15 @@
                                                 <td class="px-2 py-4">{{ time_slot.date ? time_slot.date|date('d/m/Y') : '' }}</td>
                                                 <td class="px-2 py-4">{{ time_slot.fromTime ? time_slot.fromTime|date('H:i') : '' }}</td>
                                                 <td class="px-2 py-4">{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
+                                                <td class="px-2 py-4">
+                                                    {% if time_slot.users is not empty %}
+                                                        {% for user in time_slot.users %}
+                                                            <div class="text-sm">{{ user.nickname }}</div>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <span class="text-xs text-gray-400">Aucun</span>
+                                                    {% endif %}
+                                                </td>
                                                 <td class="px-6 py-4">
                                                     <div
                                                         class="flex flex-row justify-center items-center space-x-3 actions">
@@ -81,6 +91,17 @@
                                                     <tr>
                                                         <th scope="row" class="py-1 pr-2">Fin :</th>
                                                         <td>{{ time_slot.toTime ? time_slot.toTime|date('H:i') : '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row" class="py-1 pr-2">Animateur(s) :</th>
+                                                        <td>
+                                                            {% if time_slot.users is not empty %}
+                                                                {# Join the nicknames with a comma for a compact display #}
+                                                                {{ time_slot.users|map(u => u.nickname)|join(', ') }}
+                                                            {% else %}
+                                                                <span class="text-xs text-gray-400">N/A</span>
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                 </table>
                                                 <div

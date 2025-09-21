@@ -4,99 +4,146 @@
 {% endblock %}
 
 {% block body %}
-	<twig:ContainerMobile>
-		<twig:CardHome>
-			<twig:PageTitle>Ateliers</twig:PageTitle>
-			<twig:Link color="primary" href="{{ path('app_workshop_new') }}">Ajouter</twig:Link>
+    <twig:ContainerMobile>
+    <twig:CardHome>
+        <twig:PageTitle>Ateliers</twig:PageTitle>
+        <twig:Link color="primary" href="{{ path('app_workshop_new') }}">Ajouter</twig:Link>
 
-			<div class="mt-8 mb-4 flex justify-center md:mt-4 md:mb-0 md:justify-start">
-				<a href="{{ path('app_dashboard_admin') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
-					← Retour
-				</a>
-			</div>
+        <div class="mt-8 mb-4 flex justify-center md:mt-4 md:mb-0 md:justify-start">
+            <a href="{{ path('app_dashboard_admin') }}"
+               class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 text-gray-700 font-medium transition">
+                ← Retour
+            </a>
+        </div>
 
-			<twig:Table class="hidden md:flex">
-				<thead class="uppercase border-b-2 ">
-					<tr>
-						<th scope="col" class="px-2 py-4">Id</th>
-						<th scope="col" class="px-2 py-4">Nom</th>
-						<th scope="col" class="px-2 py-4">Description</th>
-						<th scope="col" class="px-2 py-4">Places maximum</th>
-						<th scope="col" class="px-2 py-4">N° de salle</th>
-						<th scope="col" class="px-2 py-4">Actions</th>
-					</tr>
-				</thead>
-				<tbody name="body">
+        <twig:Table class="hidden md:flex">
+            <thead class="uppercase border-b-2 ">
+            <tr>
+                <th scope="col" class="px-2 py-4">Id</th>
+                <th scope="col" class="px-2 py-4">Nom</th>
+                <th scope="col" class="px-2 py-4">Description</th>
+                <th scope="col" class="px-2 py-4">Animateurs</th>
+                <th scope="col" class="px-2 py-4">Places maximum</th>
+                <th scope="col" class="px-2 py-4">N° de salle</th>
+                <th scope="col" class="px-2 py-4">Actions</th>
+            </tr>
+            </thead>
+            <tbody name="body">
 
-					{% for workshop in workshops %}
-						<tr class="border-b dark:border-neutral-600">
-							<td class="px-2 py-4">{{ workshop.id }}</td>
-							<td class="px-2 py-4 font-medium text-gray-900">
-								<a href="{{ path('app_workshop_show', {'id': workshop.id}) }}" class=" hover:text-blue-600">
-									{{ workshop.name }}
-								</a>
-							</td>
-							<td class="px-2 py-4">{{ workshop.description }}</td>
-							<td class="px-2 py-4">{{ workshop.maxSlots }}</td>
-							<td class="px-2 py-4">{{ workshop.roomNumber }}</td>
-							<td class="px-2 py-4 space-x-2">
-								<div class="flex flex-row justify-center space-x-3 actions">
-									<twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
-										<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-									</twig:TableLink>
+            {% for workshop in workshops %}
+                <tr class="border-b dark:border-neutral-600">
+                    <td class="px-2 py-4">{{ workshop.id }}</td>
+                    <td class="px-2 py-4 font-medium text-gray-900">
+                        <a href="{{ path('app_workshop_show', {'id': workshop.id}) }}" class=" hover:text-blue-600">
+                            {{ workshop.name }}
+                        </a>
+                    </td>
+                    <td class="px-2 py-4">{{ workshop.description }}</td>
+                    <td class="px-2 py-4">
+                        {% set unique_users = [] %}
+                        {% set seen_user_ids = [] %}
 
-									{{ include('workshop/_delete_form.html.twig') }}
-								</div>
-							</td>
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="6" class="px-6 py-4 text-center text-gray-500">
-								Aucun atelier pour le moment.
-							</td>
-						</tr>
-					{% endfor %}
+                        {% for time_slot in workshop.timeSlots %}
+                            {% for user in time_slot.users %}
+                                {% if user.id not in seen_user_ids %}
 
-				</tbody>
-			</twig:Table>
+                                    {% set unique_users = unique_users|merge([user]) %}
+                                    {% set seen_user_ids = seen_user_ids|merge([user.id]) %}
+
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% if unique_users is not empty %}
+                            {% for user in unique_users %}
+                                <div class="text-sm">{{ user.nickname }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <span class="text-xs text-gray-400">Aucun</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-2 py-4">{{ workshop.maxSlots }}</td>
+                    <td class="px-2 py-4">{{ workshop.roomNumber }}</td>
+                    <td class="px-2 py-4 space-x-2">
+                        <div class="flex flex-row justify-center space-x-3 actions">
+                            <twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
+                                <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+                            </twig:TableLink>
+
+                            {{ include('workshop/_delete_form.html.twig') }}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                        Aucun atelier pour le moment.
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </twig:Table>
 
 
-			<div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
+        <div class="flex flex-col items-center md:hidden text-sm text-center w-full p-3">
 
-				{% for workshop in workshops %}
-					<twig:RecordCard title="{{ workshop.name }}">
-						<table class="text-left my-5"></tr>
+            {% for workshop in workshops %}
+                <twig:RecordCard title="{{ workshop.name }}">
+                    <table class="text-left my-5">
 
-						<tr>
-							<th scope="row" class="py-1">Nom :</th>
+                        <tr>
+                            <th scope="row" class="py-1">Nom :</th>
+                            <td class="">{{ workshop.name }}</td>
+                        </tr>
 
-							<td class="">{{ workshop.name }}</td>
-						</tr>
-						<tr>
-							<th scope="row" class="py-1">Description :</th>
+                        <tr>
+                            <th scope="row" class="py-1">Description :</th>
+                            <td class="">{{ workshop.description |length > 12 ? workshop.description | slice(0, 12) ~ ' ...' : workshop.description }}</td>
+                        </tr>
 
-							<td class="">{{ workshop.description |length > 12 ? workshop.description | slice(0, 12) ~ ' ...' : workshop.description }}</td>
-						</tr>
-						<tr></tr>
-						<th scope="row" class="py-1">Places max :</th>
+                        <tr>
+                            <th scope="row" class="py-1 pr-2">Animateurs :</th>
+                            <td class="px-2 py-4">
+                                {% set unique_users_map = {} %}
 
-						<td class="">{{ workshop.maxSlots }}</td>
-					</tr>
-					<tr>
-						<th scope="row" class="py-1">N° de salle :</th>
+                                {% for time_slot in workshop.timeSlots %}
+                                    {% for user in time_slot.users %}
+                                        {% set unique_users_map = unique_users_map|merge({ (user.id): user }) %}
+                                    {% endfor %}
+                                {% endfor %}
 
-						<td class="">{{ workshop.roomNumber }}</td>
-					</tr>
-				</table>
-				<div class="flex flex-row justify-center items-center space-x-3 actions">
-					<twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
-						<i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
-					</twig:TableLink>
-					{{ include('workshop/_delete_form.html.twig') }}
-				</div>
-			</twig:RecordCard>
-		{% endfor %}
+                                {% if unique_users_map is not empty %}
+                                    {% for user in unique_users_map %}
+                                        <div class="text-sm">{{ user.nickname }}</div>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-xs text-gray-400">Aucun</span>
+                                {% endif %}
+                            </td>
+                        </tr>
 
-	</div>
+                        <tr>
+                            <th scope="row" class="py-1">Places max :</th>
 
-</twig:CardHome></twig:ContainerMobile>{% endblock %}
+                            <td class="">{{ workshop.maxSlots }}</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" class="py-1">N° de salle :</th>
+
+                            <td class="">{{ workshop.roomNumber }}</td>
+                        </tr>
+                    </table>
+                    <div class="flex flex-row justify-center items-center space-x-3 actions">
+                        <twig:TableLink color="info" href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">
+                            <i class="fa-solid fa-pen-to-square fa-lg m-1"></i>
+                        </twig:TableLink>
+                        {{ include('workshop/_delete_form.html.twig') }}
+                    </div>
+                </twig:RecordCard>
+            {% endfor %}
+
+        </div>
+
+    </twig:CardHome></twig:ContainerMobile>{% endblock %}

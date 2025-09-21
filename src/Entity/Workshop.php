@@ -113,4 +113,5 @@ class Workshop
 
         return $this;
     }
+
 }
