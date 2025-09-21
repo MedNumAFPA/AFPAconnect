@@ -105,16 +105,22 @@
                         <tr>
                             <th scope="row" class="py-1 pr-2">Animateurs :</th>
                             <td class="px-2 py-4">
-                                {% set unique_users_map = {} %}
+                                {% set unique_users = [] %}
+                                {% set seen_user_ids = [] %}
 
                                 {% for time_slot in workshop.timeSlots %}
                                     {% for user in time_slot.users %}
-                                        {% set unique_users_map = unique_users_map|merge({ (user.id): user }) %}
+                                        {% if user.id not in seen_user_ids %}
+
+                                            {% set unique_users = unique_users|merge([user]) %}
+                                            {% set seen_user_ids = seen_user_ids|merge([user.id]) %}
+
+                                        {% endif %}
                                     {% endfor %}
                                 {% endfor %}
 
-                                {% if unique_users_map is not empty %}
-                                    {% for user in unique_users_map %}
+                                {% if unique_users is not empty %}
+                                    {% for user in unique_users %}
                                         <div class="text-sm">{{ user.nickname }}</div>
                                     {% endfor %}
                                 {% else %}
