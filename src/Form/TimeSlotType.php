@@ -28,17 +28,18 @@ class TimeSlotType extends AbstractType
                 'html5' => true,
             ]);
 
-        if ($options['is_entretien_individuel']) {
+        if ($options['show_users']) {
             $builder->add('users', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'nickname',
                 'label' => 'Animateur(s) assigné(s)',
                 'multiple' => true,
-                'expanded' => true,
+                'expanded' => true, // Checkboxes
                 'required' => false,
                 'by_reference' => false,
             ]);
         }
+
 
         if (isset($options['default_from_time'])) {
             $fromTimeOptions['data'] = $options['default_from_time'];
@@ -60,7 +61,7 @@ class TimeSlotType extends AbstractType
             'data_class' => TimeSlot::class,
             'default_from_time' => null,
             'default_to_time' => null,
-            'is_entretien_individuel' => false,
+            'show_users' => true,
         ]);
     }
 }

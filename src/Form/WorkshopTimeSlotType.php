@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Entity\Workshop; // Assurez-vous d'utiliser le nom au singulier si vous avez renommé
+use App\Entity\Workshop;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -37,7 +37,7 @@ class WorkshopTimeSlotType extends AbstractType
 //                    'class' => 'hidden',
 //                ]
                 'row_attr' => [
-                    'class' => 'workshop-users-field hidden',
+                    'class' => 'workshop-users-field',
                 ]
             ])
             ->add('dailySlots', CollectionType::class, [

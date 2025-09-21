@@ -43,14 +43,6 @@ class WorkshopType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez le n° de salle... (Optionnel, laissez vide pour entretien distanciel)'
                 ]
-            ])
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'nickname',
-                'multiple' => true,
-                'expanded' => true,
-                'label' => 'Animateurs en charge',
-                'by_reference' => false,
             ]);
     }
 

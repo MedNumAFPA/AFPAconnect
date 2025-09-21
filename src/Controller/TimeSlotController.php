@@ -77,15 +77,7 @@ final class TimeSlotController extends AbstractController
     #[Route('/{id}/edit', name: 'app_time_slot_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, TimeSlot $timeSlot, EntityManagerInterface $entityManager): Response
     {
-        $isEntretienIndividuel = false;
-
-        if ($timeSlot->getWorkshop() && $timeSlot->getWorkshop()->getName() === 'Entretien Individuel') {
-            $isEntretienIndividuel = true;
-        }
-
-        $form = $this->createForm(TimeSlotType::class, $timeSlot, [
-            'is_entretien_individuel' => $isEntretienIndividuel,
-        ]);
+        $form = $this->createForm(TimeSlotType::class, $timeSlot);
 
         $form->handleRequest($request);
 
@@ -128,20 +120,7 @@ final class TimeSlotController extends AbstractController
             $data = $form->getData();
             $workshop = $data['workshop'];
 
-            // --- START: NEW LOGIC ---
-            // 1. Get the assigned users from the unmapped form field.
             $assignedUsers = $form->get('users')->getData();
-
-            // 2. Perform the conditional validation.
-            if ($workshop && $workshop->getName() === 'Entretien Individuel' && $assignedUsers->isEmpty()) {
-                // Add an error to the 'users' field and re-render the form.
-                $form->get('users')->addError(new FormError('Vous devez assigner au moins un animateur pour un entretien individuel.'));
-
-                return $this->render('time_slot/new_batch.html.twig', [
-                    'form' => $form->createView(),
-                ]);
-            }
-            // --- END: NEW LOGIC ---
 
             $requestData = $request->request->all();
             $dailySlotsRequestData = $requestData['workshop_time_slot']['dailySlots'] ?? [];
@@ -154,12 +133,9 @@ final class TimeSlotController extends AbstractController
                     $morning->setDate($date);
                     $morning->setWorkshop($workshop);
 
-                    // --- START: NEW LOGIC ---
-                    // 3. Assign the selected users to the morning timeslot.
                     foreach ($assignedUsers as $user) {
                         $morning->addUser($user);
                     }
-                    // --- END: NEW LOGIC ---
 
                     $entityManager->persist($morning);
                 }
@@ -170,12 +146,9 @@ final class TimeSlotController extends AbstractController
                         $afternoon->setDate($date);
                         $afternoon->setWorkshop($workshop);
 
-                        // --- START: NEW LOGIC ---
-                        // 4. Assign the same users to the afternoon timeslot.
                         foreach ($assignedUsers as $user) {
                             $afternoon->addUser($user);
                         }
-                        // --- END: NEW LOGIC ---
 
                         $entityManager->persist($afternoon);
                     }

@@ -40,32 +40,27 @@
                     </td>
                     <td class="px-2 py-4">{{ workshop.description }}</td>
                     <td class="px-2 py-4">
-                        {# --- START: NEW, CORRECT LOGIC --- #}
+                        {% set unique_users = [] %}
+                        {% set seen_user_ids = [] %}
 
-                        {# 1. Create an empty dictionary (hash map) to store unique users. #}
-                        {% set unique_users_map = {} %}
-
-                        {# 2. Loop through all timeslots and their users. #}
                         {% for time_slot in workshop.timeSlots %}
                             {% for user in time_slot.users %}
-                                {# 3. Add each user to the map using their ID as the key. #}
-                                {# This automatically handles duplicates. If we see user #5 twice, #}
-                                {# it just gets overwritten with the same object. #}
-                                {% set unique_users_map = unique_users_map|merge({ (user.id): user }) %}
+                                {% if user.id not in seen_user_ids %}
+
+                                    {% set unique_users = unique_users|merge([user]) %}
+                                    {% set seen_user_ids = seen_user_ids|merge([user.id]) %}
+
+                                {% endif %}
                             {% endfor %}
                         {% endfor %}
 
-                        {# 4. Now, check if our final map has any users in it. #}
-                        {% if unique_users_map is not empty %}
-                            {# 5. Loop through the map. Twig's 'for' loop iterates over the values by default. #}
-                            {% for user in unique_users_map %}
+                        {% if unique_users is not empty %}
+                            {% for user in unique_users %}
                                 <div class="text-sm">{{ user.nickname }}</div>
                             {% endfor %}
                         {% else %}
                             <span class="text-xs text-gray-400">Aucun</span>
                         {% endif %}
-
-                        {# --- END: NEW, CORRECT LOGIC --- #}
                     </td>
                     <td class="px-2 py-4">{{ workshop.maxSlots }}</td>
                     <td class="px-2 py-4">{{ workshop.roomNumber }}</td>
@@ -109,9 +104,19 @@
 
                         <tr>
                             <th scope="row" class="py-1 pr-2">Animateurs :</th>
-                            <td class="">
-                                {% if workshop.users is not empty %}
-                                    {{ workshop.users|map(u => u.nickname)|join(', ') }}
+                            <td class="px-2 py-4">
+                                {% set unique_users_map = {} %}
+
+                                {% for time_slot in workshop.timeSlots %}
+                                    {% for user in time_slot.users %}
+                                        {% set unique_users_map = unique_users_map|merge({ (user.id): user }) %}
+                                    {% endfor %}
+                                {% endfor %}
+
+                                {% if unique_users_map is not empty %}
+                                    {% for user in unique_users_map %}
+                                        <div class="text-sm">{{ user.nickname }}</div>
+                                    {% endfor %}
                                 {% else %}
                                     <span class="text-xs text-gray-400">Aucun</span>
                                 {% endif %}

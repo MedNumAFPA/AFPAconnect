@@ -48,7 +48,7 @@
 
             {{ form_row(form.workshop) }}
 
-            <div class="workshop-users-field hidden my-4">
+            <div class="workshop-users-field my-4">
                 {{ form_label(form.users) }}
                 <div class="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-y-2 sm:gap-x-6 sm:gap-y-2">
                     {% for checkbox in form.users %}
@@ -118,29 +118,6 @@
             const list = document.getElementById('daily-slots-list');
             const addDayButton = document.getElementById('add-day-button');
             const removeDayButton = document.getElementById('remove-day-button');
-
-
-            // START NEW LOGIC FOR USERS ON ENTRETIENS INDIVIDUEL TIMESLOTS
-            const workshopSelect = document.getElementById('workshop_time_slot_workshop');
-            const usersField = document.querySelector('.workshop-users-field');
-
-            const toggleUsersField = () => {
-                if (!workshopSelect || !usersField) return;
-
-                const selectedOptionText = workshopSelect.options[workshopSelect.selectedIndex]?.text;
-
-                if (selectedOptionText === 'Entretien Individuel') {
-                    usersField.classList.remove('hidden');
-                } else {
-                    usersField.classList.add('hidden');
-                }
-            };
-
-            if (workshopSelect) {
-                workshopSelect.addEventListener('change', toggleUsersField);
-                toggleUsersField();
-            }
-            // END NEW LOGIC FOR USERS ON ENTRETIENS INDIVIDUEL TIMESLOTS
 
             if (!list || !addDayButton || !removeDayButton) {
                 return;
