@@ -32,7 +32,7 @@ class WorkshopTimeSlotType extends AbstractType
                 'expanded' => true,
                 'required' => false,
                 'mapped' => false,
-                'label_attr' => ['class' => 'required'],
+                'label_attr' => ['class' => ''],
 //                'attr' => [
 //                    'class' => 'hidden',
 //                ]
