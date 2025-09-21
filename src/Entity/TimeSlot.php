@@ -35,9 +35,16 @@ class TimeSlot
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'timeslot', cascade: ['remove'],  orphanRemoval: true)]
     private Collection $reservations;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'timeSlots')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,5 +140,29 @@ class TimeSlot
             $fromTime,
             $toTime
         );
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        $this->users->removeElement($user);
+
+        return $this;
     }
 }

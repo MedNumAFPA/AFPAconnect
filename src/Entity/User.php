@@ -44,9 +44,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Workshop::class, mappedBy: 'users')]
     private Collection $workshops;
 
+    /**
+     * @var Collection<int, TimeSlot>
+     */
+    #[ORM\ManyToMany(targetEntity: TimeSlot::class, mappedBy: 'users')]
+    private Collection $timeSlots;
+
     public function __construct()
     {
         $this->workshops = new ArrayCollection();
+        $this->timeSlots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -164,6 +171,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->workshops->removeElement($workshop)) {
             $workshop->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeSlot>
+     */
+    public function getTimeSlots(): Collection
+    {
+        return $this->timeSlots;
+    }
+
+    public function addTimeSlot(TimeSlot $timeSlot): static
+    {
+        if (!$this->timeSlots->contains($timeSlot)) {
+            $this->timeSlots->add($timeSlot);
+            $timeSlot->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeSlot(TimeSlot $timeSlot): static
+    {
+        if ($this->timeSlots->removeElement($timeSlot)) {
+            $timeSlot->removeUser($this);
         }
 
         return $this;
