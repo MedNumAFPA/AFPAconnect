@@ -31,6 +31,27 @@
             font-size: 16px;
         }
 
+        .details-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .details-box p {
+            margin: 5px 0;
+            font-size: 15px;
+        }
+
+        .instruction-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
         .footer {
             text-align: center;
             padding: 20px;
@@ -47,38 +68,29 @@
             border-radius: 5px;
             font-weight: bold;
         }
-
-        .instruction-box {
-            background-color: #f9f9f9;
-            border-left: 4px solid #4CAF50;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 14px;
-        }
     </style>
-    <title>Rappel de votre atelier !</title>
+    <title>Rappel de vos ateliers</title>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        {#        'cid:logo' uses the logo variables we set in the emailHandler and cid is to use for email images
-        It basically upload the image as attachement and then embed it in the mail  #}
         <img src="{{ 'cid:logo-txt' }}" alt="Afpa Connect Logo" width="200">
     </div>
     <div class="content" style="color: #333333;">
-        <h3>Bonjour {{ reservation.firstname }},</h3>
-
+        <h3>Bonjour {{ main_reservation.firstname }},</h3>
         <p>
-            Ceci est un rappel concernant votre inscription à l'atelier :
+            Ceci est un rappel concernant vos inscriptions pour la journée du
+            <strong>{{ main_reservation.timeslot.date|format_date(locale='fr', pattern='EEEE d MMMM yyyy') }}</strong>.
         </p>
 
-        <h2 style="color: #4CAF50;">{{ reservation.timeslot.workshop.name }}</h2>
-
-        <p>
-            Il est prévu pour le
-            <strong>{{ reservation.timeslot.date | format_date(locale='fr', pattern='EEEE d MMMM yyyy') }}</strong>
-            à <strong>{{ reservation.timeslot.fromTime | format_time(locale='fr', pattern='HH:mm') }}</strong>.
-        </p>
+        {% for timeslot in timeslots|sort((a, b) => a.fromTime <=> b.fromTime) %}
+            <div class="details-box">
+                <p><strong>Atelier :</strong> {{ timeslot.workshop.name }}</p>
+                <p><strong>Horaire :</strong> {{ timeslot.fromTime|date('H:i') }} - {{ timeslot.toTime|date('H:i') }}
+                </p>
+                <p><strong>Lieu :</strong> Salle {{ timeslot.workshop.roomNumber }}</p>
+            </div>
+        {% endfor %}
 
         <div class="instruction-box">
             <p style="margin: 0;">
@@ -89,10 +101,7 @@
             </p>
         </div>
 
-        <p>
-            Nous avons hâte de vous voir !
-        </p>
-
+        <p style="margin-top: 20px;">Nous avons hâte de vous voir !</p>
         <br>
         <p style="text-align:center;">
             <a href="{{ app_url }}" class="button" style="color: #ffffff; text-decoration: none;">Visiter notre site</a>

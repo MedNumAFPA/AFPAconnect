@@ -21,8 +21,6 @@ use Twig\Environment;
 )]
 class SendRemindersCommand extends Command
 {
-    // --- START: THE FIX ---
-    // Inject all the services needed for building and sending emails
     public function __construct(
         private readonly ReservationRepository $reservationRepository,
         private readonly EntityManagerInterface $entityManager,
@@ -34,45 +32,64 @@ class SendRemindersCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInputInterface|InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
         $reservationsToSend = $this->reservationRepository->findRemindersToSend();
 
         if (empty($reservationsToSend)) {
-            $io->info('No reminders are due to be sent at this time.');
+            $io->info('No reminders to send at this time.');
             return Command::SUCCESS;
         }
 
-        $io->info(sprintf('Found %d reminder(s) to send.', count($reservationsToSend)));
-
+        $groupedReminders = [];
         foreach ($reservationsToSend as $reservation) {
+            $dateKey = $reservation->getTimeslot()->getDate()->format('Y-m-d');
+            $groupKey = $reservation->getEmail() . '-' . $dateKey;
 
-            $reservation->setReminderSentAt(new \DateTimeImmutable());
-            $this->entityManager->persist($reservation);
+            if (!isset($groupedReminders[$groupKey])) {
+                $groupedReminders[$groupKey] = [
+                    'main_reservation' => $reservation,
+                    'timeslots' => [],
+                ];
+            }
+
+            $groupedReminders[$groupKey]['timeslots'][] = $reservation->getTimeslot();
+        }
+
+        $io->info(sprintf('Found %d reminder email(s) to send.', count($groupedReminders)));
+
+        foreach ($groupedReminders as $group) {
+            $mainReservation = $group['main_reservation'];
 
             $logoPublicUrl = $this->assets->getUrl('images/logo-txt.png');
             $logoFilesystemPath = $this->kernel->getProjectDir() . '/public' . $logoPublicUrl;
 
             $htmlContent = $this->twig->render('email/reminder.html.twig', [
-                'reservation' => $reservation,
+                'main_reservation' => $mainReservation,
+                'timeslots' => $group['timeslots'], // Pass the array of timeslots
                 'app_url' => 'https://www.afpaconnect.fr'
             ]);
 
             $email = (new Email())
                 ->from('Afpa Connect <reminders@afpaconnect.fr>')
-                ->to($reservation->getEmail())
-                ->subject('Rappel de votre inscription à l\'atelier : ' . $reservation->getTimeslot()->getWorkshop()->getName())
+                ->to($mainReservation->getEmail())
+                ->subject('Rappel de vos ateliers pour le ' . $mainReservation->getTimeslot()->getDate()->format('d/m/Y'))
                 ->embedFromPath($logoFilesystemPath, 'logo-txt')
                 ->html($htmlContent);
 
             $this->mailer->send($email);
 
-            $io->text('Dispatched reminder for reservation ID: ' . $reservation->getId());
+            $io->text('Dispatched daily reminder for: ' . $mainReservation->getEmail());
         }
 
+        foreach ($reservationsToSend as $reservation) {
+            $reservation->setReminderSentAt(new \DateTimeImmutable());
+            $this->entityManager->persist($reservation);
+        }
         $this->entityManager->flush();
+
         $io->success('All reminder emails have been dispatched successfully.');
 
         return Command::SUCCESS;
