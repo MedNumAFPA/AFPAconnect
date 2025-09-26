@@ -16,7 +16,6 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
-
     /**
      * Finds reservation where the reminder is active, not yet sent, and the workshop
      * is scheduled to start within the next 24 hours.
@@ -27,17 +26,20 @@ class ReservationRepository extends ServiceEntityRepository
     {
         $now = new \DateTimeImmutable();
         $twentyFourHoursLater = $now->modify('+24 hours');
-// For testing purposes
+        // For testing purposes
 //        $twentyFourHoursLater = $now->modify('+5 minutes');
+        $sixHoursAgo = $now->modify('-6 hours');
 
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
             ->andWhere('r.reminderSentAt IS NULL')
             ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :now AND :endTime')
+            ->andWhere('r.createdAt < :sixHoursAgo')
             ->setParameter('isActive', true)
             ->setParameter('now', $now->format('Y-m-d H:i:s'))
             ->setParameter('endTime', $twentyFourHoursLater->format('Y-m-d H:i:s'))
+            ->setParameter('sixHoursAgo', $sixHoursAgo->format('Y-m-d H:i:s'))
             ->getQuery()
             ->getResult();
     }
