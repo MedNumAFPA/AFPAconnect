@@ -83,18 +83,19 @@
 
                                                     {% set timeslotsParJour = {} %}
                                                     {% for ts in workshop.timeslots %}
-                                                        {% set jourEn = ts.date|date('l') %}
-                                                        {% set jourFr = joursFr[jourEn] %}
 
-                                                        {% if timeslotsParJour[jourFr] is not defined %}
-                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): [ts] }) %}
+                                                        {% set jourCle = ts.date|format_date(locale='fr', pattern='EEEE dd/MM/yyyy')|capitalize %}
+
+                                                        {% if timeslotsParJour[jourCle] is not defined %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourCle): [ts] }) %}
                                                         {% else %}
-                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): timeslotsParJour[jourFr]|merge([ts]) }) %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourCle): timeslotsParJour[jourCle]|merge([ts]) }) %}
                                                         {% endif %}
                                                     {% endfor %}
 
-                                                    {% for jour, listeTimeslots in timeslotsParJour %}
-                                                        <p class="font-semibold text-primary mt-2">{{ jour }}</p>
+                                                    {% for jourCle, listeTimeslots in timeslotsParJour|sort((a, b) => a[0].date <=> b[0].date) %}
+
+                                                        <p class="font-semibold text-primary mt-2">{{ jourCle }}</p>
                                                         {% for ts in listeTimeslots %}
                                                             <p class="text-sm mb-3 ">
                                                             <div class="-mt-2"><span
@@ -104,7 +105,6 @@
                                                                     class="underline">Salle</span>: {{ ts.workshop.roomNumber }}
                                                             </div>
                                                         {% endfor %}
-
                                                     {% endfor %}
                                                 {% endif %}
 
