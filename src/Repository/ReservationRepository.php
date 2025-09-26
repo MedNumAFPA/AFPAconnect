@@ -17,8 +17,6 @@ class ReservationRepository extends ServiceEntityRepository
     }
 
 
-
-
     /**
      * Finds reservation where the reminder is active, not yet sent, and the workshop
      * is scheduled to start within the next 24 hours.
@@ -28,8 +26,9 @@ class ReservationRepository extends ServiceEntityRepository
     public function findRemindersToSend(): array
     {
         $now = new \DateTimeImmutable();
-//        $twentyFourHoursLater = $now->modify('+24 hours');
-        $twentyFourHoursLater = $now->modify('+5 minutes');
+        $twentyFourHoursLater = $now->modify('+24 hours');
+// For testing purposes
+//        $twentyFourHoursLater = $now->modify('+5 minutes');
 
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
