@@ -84,7 +84,7 @@
                                                     {% set timeslotsParJour = {} %}
                                                     {% for ts in workshop.timeslots %}
 
-                                                        {% set jourCle = ts.date|format_date(locale='fr', pattern='EEEE dd/MM/yyyy')|capitalize %}
+                                                        {% set jourCle = ts.date|format_date(locale='fr', pattern='EEEE dd/MM')|capitalize %}
 
                                                         {% if timeslotsParJour[jourCle] is not defined %}
                                                             {% set timeslotsParJour = timeslotsParJour|merge({(jourCle): [ts] }) %}
