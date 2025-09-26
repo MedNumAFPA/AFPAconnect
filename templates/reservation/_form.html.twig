@@ -44,12 +44,6 @@
     </div>
 {% endif %}
 
-<div class="flex items-center space-x-2 my-4 w-full">
-    {{ form_label(form.isReminderActive) }}
-    {{ form_widget(form.isReminderActive) }}
-    {{ form_errors(form.isReminderActive) }}
-</div>
-
 <div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
     <twig:Button color="primary">
         {{ button_label|default("S'inscrire") }}

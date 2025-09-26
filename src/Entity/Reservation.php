@@ -41,6 +41,11 @@ class Reservation
     #[ORM\Column(length: 255)]
     private ?string $idAfpa = null;
 
+    public function __construct()
+    {
+        $this->isReminderActive = true;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

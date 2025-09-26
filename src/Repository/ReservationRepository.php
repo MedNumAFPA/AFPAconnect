@@ -21,22 +21,24 @@ class ReservationRepository extends ServiceEntityRepository
 
     /**
      * Finds reservation where the reminder is active, not yet sent, and the workshop
-     * is scheduled within the given time window.
+     * is scheduled to start within the next 24 hours.
      *
-     * @return Reservation[] // Corrected based on your entity name
+     * @return Reservation[]
      */
-    public function findRemindersDueToSend(\DateTimeImmutable $startTime, \DateTimeImmutable $endTime): array
+    public function findRemindersToSend(): array
     {
+        $now = new \DateTimeImmutable();
+//        $twentyFourHoursLater = $now->modify('+24 hours');
+        $twentyFourHoursLater = $now->modify('+5 minutes');
+
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
             ->andWhere('r.reminderSentAt IS NULL')
-            // This is CRITICAL. We combine the date and time columns in the database.
-            // NOTE: The CONCAT function is for MySQL/MariaDB. For PostgreSQL, you would use `(t.date || ' ' || t.fromTime)::timestamp`
-            ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :startTime AND :endTime')
+            ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :now AND :endTime')
             ->setParameter('isActive', true)
-            ->setParameter('startTime', $startTime->format('Y-m-d H:i:s'))
-            ->setParameter('endTime', $endTime->format('Y-m-d H:i:s'))
+            ->setParameter('now', $now->format('Y-m-d H:i:s'))
+            ->setParameter('endTime', $twentyFourHoursLater->format('Y-m-d H:i:s'))
             ->getQuery()
             ->getResult();
     }

@@ -44,19 +44,15 @@ class ReservationType extends AbstractType
                 'attr' => ['placeholder' => 'Entrez votre numéro de téléphone...']
             ])
             ->add('idAfpa', TextType::class, [
-                'label' => 'Identifiant AFPA',
+                'label' => 'Identifiant AFPA (de votre carte stagiaire)',
                 'required' => true,
                 'label_attr' => ['class' => 'required'],
                 'attr' => ['placeholder' => 'Entrez votre numero de formation...']
             ])
             ->add('formationName', TextType::class, [
-                'label' => 'Nom de la formation',
+                'label' => 'Nom de la formation suivi',
                 'required' => false,
                 'attr' => ['placeholder' => 'Entrez votre nom de formation...']
-            ])
-            ->add('isReminderActive', CheckboxType::class, [
-                'label' => 'Activer le rappel par email?',
-                'required' => false,
             ]);
 
         if (!$options['is_workshop_subscription']) {
@@ -73,7 +69,7 @@ class ReservationType extends AbstractType
 
             if ($options['workshop_id']) {
                 $workshopId = $options['workshop_id'];
-                $timeslotOptions['query_builder'] = function (TimeSlotRepository $tsr) use ($workshopId) {
+                $timeslotOptions['query_builder'] = static function (TimeSlotRepository $tsr) use ($workshopId) {
                     return $tsr->createQueryBuilder('ts')
                         ->where('ts.workshop = :workshopId')
                         ->andWhere('ts.reservations IS EMPTY')
