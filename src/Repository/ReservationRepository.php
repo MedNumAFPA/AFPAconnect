@@ -31,6 +31,8 @@ class ReservationRepository extends ServiceEntityRepository
         $sixHoursAgo = $now->modify('-6 hours');
         // For testing purposes
 //        $sixHoursAgo = $now->modify('-1 minutes');
+
+//        TODO: FUCKING TEST THIS
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
