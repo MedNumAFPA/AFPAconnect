@@ -24,25 +24,18 @@ class ReservationRepository extends ServiceEntityRepository
      */
     public function findRemindersToSend(): array
     {
-        $now = new \DateTimeImmutable();
-        $twentyFourHoursLater = $now->modify('+24 hours');
-        // For testing purposes
-//        $twentyFourHoursLater = $now->modify('+5 minutes');
-        $sixHoursAgo = $now->modify('-6 hours');
-        // For testing purposes
-//        $sixHoursAgo = $now->modify('-1 minutes');
+        $tomorrow = new \DateTimeImmutable('tomorrow');
+        $today = new \DateTimeImmutable('today');
 
-//        TODO: FUCKING TEST THIS
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
             ->andWhere('r.reminderSentAt IS NULL')
-            ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :now AND :endTime')
-            ->andWhere('r.createdAt < :sixHoursAgo')
+            ->andWhere('t.date = :tomorrow')
+            ->andWhere('r.createdAt < :today')
             ->setParameter('isActive', true)
-            ->setParameter('now', $now->format('Y-m-d H:i:s'))
-            ->setParameter('endTime', $twentyFourHoursLater->format('Y-m-d H:i:s'))
-            ->setParameter('sixHoursAgo', $sixHoursAgo->format('Y-m-d H:i:s'))
+            ->setParameter('tomorrow', $tomorrow->format('Y-m-d'))
+            ->setParameter('today', $today)
             ->getQuery()
             ->getResult();
     }
