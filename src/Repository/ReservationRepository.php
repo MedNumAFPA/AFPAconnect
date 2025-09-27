@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use App\Entity\TimeSlot;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -52,6 +53,29 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.email = :email')
             ->setParameter('workshopId', $workshopId)
             ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Finds any existing reservations for a given email that match a list of timeslot IDs.
+     * @param string $email
+     * @param TimeSlot[] $selectedTimeSlots
+     * @return Reservation[]
+     */
+    public function findExistingReservationsForTimeslots(string $email, array $selectedTimeSlots): array
+    {
+        if (empty($selectedTimeSlots)) {
+            return [];
+        }
+
+        $timeSlotIds = array_map(static fn(TimeSlot $slot) => $slot->getId(), $selectedTimeSlots);
+
+        return $this->createQueryBuilder('r')
+            ->where('r.email = :email')
+            ->andWhere('r.timeslot IN (:timeSlotIds)')
+            ->setParameter('email', $email)
+            ->setParameter('timeSlotIds', $timeSlotIds)
             ->getQuery()
             ->getResult();
     }

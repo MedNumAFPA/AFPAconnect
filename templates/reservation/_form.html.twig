@@ -1,5 +1,23 @@
 {{ form_start(form) }}
 
+{% if form.timeslots is defined %}
+    {% if form.timeslots.vars.errors|length > 0 %}
+        <div class="mt-2 text-sm text-red-600 space-y-1">
+            {% for error in form.timeslots.vars.errors %}
+                <div>{{ error.message }}</div>
+
+                {% if error.messageParameters['%duplicates%'] is defined %}
+                    <ul class="list-disc list-inside ml-4 mt-1">
+                        {% for duplicate_detail in error.messageParameters['%duplicates%'] %}
+                            <li>{{ duplicate_detail }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+
 <div class="flex flex-col mb-4">
     {{ form_label(form.firstname) }}
     {{ form_widget(form.firstname) }}
@@ -38,11 +56,30 @@
 
 {% if form.timeslot is defined %}
     <div class="flex flex-col mb-4">
-        {{ form_label(form.timeslot, 'Créneaux disponibles') }}
+        {{ form_label(form.timeslot) }}
         {{ form_widget(form.timeslot) }}
         {{ form_errors(form.timeslot) }}
     </div>
 {% endif %}
+
+{% if form.timeslots is defined %}
+
+    <div class="workshop-users-field my-4">
+        {{ form_label(form.timeslots) }}
+
+        <div class="flex flex-wrap mt-2 gap-3">
+            {% for checkbox in form.timeslots %}
+                <div class="flex items-center space-x-2 flex-none w-full md:w-1/3">
+                    {{ form_widget(checkbox, {'attr': {'class': 'h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded'}}) }}
+                    {{ form_label(checkbox) }}
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+{% endif %}
+
 
 <div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
     <twig:Button color="primary">
