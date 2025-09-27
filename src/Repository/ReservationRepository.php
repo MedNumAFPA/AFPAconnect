@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
+use App\Entity\TimeSlot;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,27 +17,26 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
-
-
-
     /**
      * Finds reservation where the reminder is active, not yet sent, and the workshop
-     * is scheduled within the given time window.
+     * is scheduled to start within the next 24 hours.
      *
-     * @return Reservation[] // Corrected based on your entity name
+     * @return Reservation[]
      */
-    public function findRemindersDueToSend(\DateTimeImmutable $startTime, \DateTimeImmutable $endTime): array
+    public function findRemindersToSend(): array
     {
+        $tomorrow = new \DateTimeImmutable('tomorrow');
+        $today = new \DateTimeImmutable('today');
+
         return $this->createQueryBuilder('r')
             ->innerJoin('r.timeslot', 't')
             ->where('r.isReminderActive = :isActive')
             ->andWhere('r.reminderSentAt IS NULL')
-            // This is CRITICAL. We combine the date and time columns in the database.
-            // NOTE: The CONCAT function is for MySQL/MariaDB. For PostgreSQL, you would use `(t.date || ' ' || t.fromTime)::timestamp`
-            ->andWhere('CONCAT(t.date, \' \', t.fromTime) BETWEEN :startTime AND :endTime')
+            ->andWhere('t.date = :tomorrow')
+            ->andWhere('r.createdAt < :today')
             ->setParameter('isActive', true)
-            ->setParameter('startTime', $startTime->format('Y-m-d H:i:s'))
-            ->setParameter('endTime', $endTime->format('Y-m-d H:i:s'))
+            ->setParameter('tomorrow', $tomorrow->format('Y-m-d'))
+            ->setParameter('today', $today)
             ->getQuery()
             ->getResult();
     }
@@ -53,6 +53,29 @@ class ReservationRepository extends ServiceEntityRepository
             ->andWhere('r.email = :email')
             ->setParameter('workshopId', $workshopId)
             ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Finds any existing reservations for a given email that match a list of timeslot IDs.
+     * @param string $email
+     * @param TimeSlot[] $selectedTimeSlots
+     * @return Reservation[]
+     */
+    public function findExistingReservationsForTimeslots(string $email, array $selectedTimeSlots): array
+    {
+        if (empty($selectedTimeSlots)) {
+            return [];
+        }
+
+        $timeSlotIds = array_map(static fn(TimeSlot $slot) => $slot->getId(), $selectedTimeSlots);
+
+        return $this->createQueryBuilder('r')
+            ->where('r.email = :email')
+            ->andWhere('r.timeslot IN (:timeSlotIds)')
+            ->setParameter('email', $email)
+            ->setParameter('timeSlotIds', $timeSlotIds)
             ->getQuery()
             ->getResult();
     }

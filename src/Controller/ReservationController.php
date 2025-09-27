@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\UriSigner;
@@ -116,6 +117,13 @@ final class ReservationController extends AbstractController
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws ORMException
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     #[Route('/workshop/{id}/subscribe', name: 'app_workshop_subscribe')]
     public function subscribeToWorkshop(
         Workshop               $workshop,
@@ -126,91 +134,121 @@ final class ReservationController extends AbstractController
         KernelInterface        $kernel,
         MailerInterface        $mailer,
         Packages               $assets,
-        UriSigner              $uriSigner,
+        UriSigner              $uriSigner
     ): Response
     {
+        $availableTimeSlots = $workshop->getTimeSlots()->filter(function ($timeSlot) use ($workshop) {
+            return $timeSlot->getDate() > new \DateTime('today') &&
+                count($timeSlot->getReservations()) < $workshop->getMaxSlots();
+        });
+
+        if ($availableTimeSlots->isEmpty()) {
+            $this->addFlash('warning', sprintf('L\'atelier "%s" n\'a plus de créneaux disponibles.', $workshop->getName()));
+            return $this->redirectToRoute('app_homepage');
+        }
+
         $reservationTemplate = new Reservation();
+
         $form = $this->createForm(ReservationType::class, $reservationTemplate, [
             'is_workshop_subscription' => true,
+            'workshop_id' => $workshop->getId(),
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $existingReservations = $reservationRepository->findByEmailAndWorkshop(
-                $reservationTemplate->getEmail(),
-                $workshop->getId()
-            );
+            $selectedTimeSlots = $form->get('timeslots')->getData()->toArray();
 
-            if (!empty($existingReservations)) {
-                $this->addFlash('danger', sprintf(
-                    'L\'adresse email "%s" est déjà inscrite à l\'atelier "%s".',
+            if (empty($selectedTimeSlots)) {
+                $form->get('timeslots')->addError(new FormError('Vous devez sélectionner au moins un créneau pour vous inscrire.'));
+            }
+
+            if (!empty($selectedTimeSlots)) {
+                $duplicateReservations = $reservationRepository->findExistingReservationsForTimeslots(
                     $reservationTemplate->getEmail(),
-                    $workshop->getName()
-                ));
-                return $this->redirectToRoute('app_homepage');
-            }
+                    $selectedTimeSlots
+                );
 
-            $timeSlots = $workshop->getTimeSlots();
-            $maxSlots = $workshop->getMaxSlots();
+                if (!empty($duplicateReservations)) {
+                    $duplicateDetails = [];
+                    foreach ($duplicateReservations as $dup) {
+                        $timeslot = $dup->getTimeslot();
+                        $duplicateDetails[] = sprintf(
+                            '%s (%s - %s)',
+                            $timeslot->getDate()->format('d/m/Y'),
+                            $timeslot->getFromTime()->format('H:i'),
+                            $timeslot->getToTime()->format('H:i')
+                        );
+                    }
 
-            if ($timeSlots->isEmpty()) {
-                $this->addFlash('danger', 'Cet atelier n\'a pas de créneaux disponibles.');
-                return $this->redirectToRoute('app_homepage');
-            }
-
-            foreach ($timeSlots as $timeSlot) {
-
-                if (count($timeSlot->getReservations()) >= $maxSlots) {
-                    $this->addFlash('danger', sprintf('Désolé, l\'atelier "%s" est complet.', $workshop->getName()));
-                    return $this->redirectToRoute('app_homepage');
+                    $form->get('timeslots')->addError(new FormError(
+                        'Vous êtes déjà inscrit(e) pour le(s) créneau(x) suivant(s) :',
+                        null, // No message template
+                        ['%duplicates%' => array_unique($duplicateDetails)] // Pass the array here
+                    ));
                 }
             }
 
-            $createdReservations = [];
-            foreach ($timeSlots as $timeSlot) {
-                $newReservation = clone $reservationTemplate;
-                $newReservation->setTimeslot($timeSlot);
-                $entityManager->persist($newReservation);
-                $createdReservations[] = $newReservation;
+            if ($form->isValid()) {
+                $createdReservations = [];
+                foreach ($selectedTimeSlots as $timeSlot) {
+                    $entityManager->refresh($timeSlot);
+
+                    if (count($timeSlot->getReservations()) >= $timeSlot->getWorkshop()->getMaxSlots()) {
+                        $this->addFlash('danger', sprintf('Le créneau du %s à %s est maintenant complet. Veuillez essayer de nouveau.', $timeSlot->getDate()->format('d/m/Y'), $timeSlot->getFromTime()->format('H:i')));
+                        return $this->redirectToRoute('app_workshop_subscribe', ['id' => $workshop->getId()]);
+                    }
+
+                    $newReservation = clone $reservationTemplate;
+                    $newReservation->setTimeslot($timeSlot);
+                    $entityManager->persist($newReservation);
+                    $createdReservations[] = $newReservation;
+                }
+
+                $entityManager->flush();
+
+                $unsubscribeUrl = $this->generateUrl('app_workshop_unsubscribe_confirm', [
+                    'workshopId' => $workshop->getId(),
+                    'email' => $reservationTemplate->getEmail(),
+                ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                $signedUnsubscribeUrl = $uriSigner->sign($unsubscribeUrl);
+
+                $reservationsByDate = [];
+                foreach ($createdReservations as $reservation) {
+                    $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
+                    $reservationsByDate[$dateKey][] = $reservation;
+                }
+
+                $htmlContent = $twig->render('email/subscription.html.twig', [
+                    'reservations' => $createdReservations,
+                    'reservationsByDate' => $reservationsByDate,
+                    'signedUnsubscribeUrl' => $signedUnsubscribeUrl,
+                ]);
+
+                $email = (new Email())
+                    ->from('Afpa Connect <subscribed@afpaconnect.fr>')
+                    ->to($reservationTemplate->getEmail())
+                    ->subject('Confirmation de votre inscription à l\'atelier : ' . $workshop->getName())
+                    ->embedFromPath($kernel->getProjectDir() . '/public' . $assets->getUrl('images/logo-txt.png'), 'logo-txt')
+                    ->html($htmlContent);
+
+                $mailer->send($email);
+
+                $this->addFlash('success', 'Votre inscription à l\'atelier "' . $workshop->getName() . '" a été enregistrée avec succès !');
+                return $this->redirectToRoute('app_homepage');
             }
-
-            $entityManager->flush();
-
-            $unsubscribeUrl = $this->generateUrl('app_workshop_unsubscribe_confirm', [
-                'workshopId' => $workshop->getId(),
-                'email' => $reservationTemplate->getEmail(),
-            ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $signedUnsubscribeUrl = $uriSigner->sign($unsubscribeUrl);
-
-            $reservationsByDate = [];
-            foreach ($createdReservations as $reservation) {
-                $dateKey = $reservation->getTimeSlot()->getDate()->format('Y-m-d');
-                $reservationsByDate[$dateKey][] = $reservation;
-            }
-
-            $htmlContent = $twig->render('email/subscription.html.twig', [
-                'reservations' => $createdReservations,
-                'reservationsByDate' => $reservationsByDate,
-                'signedUnsubscribeUrl' => $signedUnsubscribeUrl,
-            ]);
-
-            $email = (new Email())
-                ->from('Afpa Connect <subscribed@afpaconnect.fr>')
-                ->to($reservationTemplate->getEmail())
-                ->subject('Confirmation de votre inscription à l\'atelier : ' . $workshop->getName())
-                ->embedFromPath($kernel->getProjectDir() . '/public' . $assets->getUrl('images/logo-txt.png'), 'logo-txt')
-                ->html($htmlContent);
-
-            $mailer->send($email);
-
-            $this->addFlash('success', 'Votre inscription à l\'atelier "' . $workshop->getName() . '" a été enregistrée avec succès !');
-            return $this->redirectToRoute('app_homepage');
         }
 
-        return $this->render('reservation/subscribe.html.twig', ['workshop' => $workshop,
-            'form' => $form->createView(),]);
+        $responseStatusCode = ($form->isSubmitted() && !$form->isValid())
+            ? Response::HTTP_UNPROCESSABLE_ENTITY
+            : Response::HTTP_OK;
+
+        return $this->render('reservation/subscribe.html.twig', [
+            'workshop' => $workshop,
+            'form' => $form->createView(),
+        ], new Response(null, $responseStatusCode));
     }
 
     #[Route('/workshop/unsubscribe', name: 'app_workshop_unsubscribe_confirm', methods: ['GET'])]

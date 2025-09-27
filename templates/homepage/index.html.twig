@@ -60,63 +60,70 @@
                                                 </svg>
                                             </button>
                                             <div
-                                                class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2">
-                                                {% if workshop.timeSlots|length > 0 %}
-                                                    <div>
-                                                        <div>Places prises / places max :</div>
-                                                        <div class="mb-2">{{ workshop.timeSlots[0].reservations.count }}
-                                                            / {{ workshop.maxSlots }}</div>
-                                                    </div>
-                                                {% endif %}
+                                                class="accordion-content absolute top-full left-0 z-20 w-full bg-white p-4 rounded shadow-lg hidden flex-col items-center mt-2 max-h-96 overflow-y-auto">
 
                                                 <p class="text-gray-700 mb-4 break-words whitespace-pre-wrap ">{{ workshop.description }}</p>
-                                                {% if workshop.timeslots|length > 0 %}
-                                                    {% set joursFr = {
-                                                        'Monday': 'Lundi',
-                                                        'Tuesday': 'Mardi',
-                                                        'Wednesday': 'Mercredi',
-                                                        'Thursday': 'Jeudi',
-                                                        'Friday': 'Vendredi',
-                                                        'Saturday': 'Samedi',
-                                                        'Sunday': 'Dimanche'
-                                                    } %}
 
-                                                    {% set timeslotsParJour = {} %}
-                                                    {% for ts in workshop.timeslots %}
-                                                        {% set jourEn = ts.date|date('l') %}
-                                                        {% set jourFr = joursFr[jourEn] %}
+                                                {% set today = "now"|date("Y-m-d") %}
 
-                                                        {% if timeslotsParJour[jourFr] is not defined %}
-                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): [ts] }) %}
-                                                        {% else %}
-                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourFr): timeslotsParJour[jourFr]|merge([ts]) }) %}
+                                                {% set future_timeslots = workshop.timeslots|filter(ts => ts.date|date("Y-m-d") > today) %}
+                                                {% set available_timeslots_count = 0 %}
+
+                                                {% if future_timeslots|length > 0 %}
+                                                    {% for ts in future_timeslots %}
+                                                        {% if ts.reservations|length < workshop.maxSlots %}
+                                                            {% set available_timeslots_count = available_timeslots_count + 1 %}
                                                         {% endif %}
                                                     {% endfor %}
 
-                                                    {% for jour, listeTimeslots in timeslotsParJour %}
-                                                        <p class="font-semibold text-primary mt-2">{{ jour }}</p>
-                                                        {% for ts in listeTimeslots %}
-                                                            <p class="text-sm mb-3 ">
-                                                            <div class="-mt-2"><span
-                                                                    class="underline">Horaire</span>: {{ ts.fromTime|date('H:i') }}
-                                                                - {{ ts.toTime|date('H:i') }}</div>
-                                                            <div><span
-                                                                    class="underline">Salle</span>: {{ ts.workshop.roomNumber }}
+                                                    {% set timeslotsParJour = {} %}
+                                                    {% for ts in future_timeslots %}
+                                                        {% set jourCle = ts.date|format_date(locale='fr', pattern='EEEE dd/MM')|capitalize %}
+                                                        {% if timeslotsParJour[jourCle] is not defined %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourCle): [ts] }) %}
+                                                        {% else %}
+                                                            {% set timeslotsParJour = timeslotsParJour|merge({(jourCle): timeslotsParJour[jourCle]|merge([ts]) }) %}
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                    {% for jourCle, listeTimeslots in timeslotsParJour|sort((a, b) => a[0].date <=> b[0].date) %}
+                                                        <p class="font-semibold text-primary mt-2">{{ jourCle }}</p>
+                                                        {% for ts in listeTimeslots|sort((a, b) => a.fromTime <=> b.fromTime) %}
+                                                            <div class="mx-3">
+                                                                <div class="mt-2">
+                                                                    <span
+                                                                        class="underline">Horaire</span>: {{ ts.fromTime|date('H:i') }}
+                                                                    - {{ ts.toTime|date('H:i') }}
+                                                                </div>
+                                                                <div>
+                                                                    <span
+                                                                        class="underline">Salle</span>: {{ ts.workshop.roomNumber }}
+                                                                </div>
+                                                                <div class="text-gray-600">
+                                                                    Places: {{ ts.reservations|length }}
+                                                                    / {{ workshop.maxSlots }}
+                                                                </div>
                                                             </div>
                                                         {% endfor %}
-
                                                     {% endfor %}
+
+                                                {% else %}
+                                                    <p class="text-center text-gray-500 my-4">Aucun créneau à venir
+                                                        disponible.</p>
                                                 {% endif %}
 
-                                                {% set noTimeSlots = workshop.timeSlots|length == 0 %}
-                                                {% set isFull = noTimeSlots or (workshop.timeSlots[0].reservations.count >= workshop.maxSlots) %}
-
-                                                <div class="flex items-center justify-center mt-2">
-                                                    <a href="{{ isFull ? '#' : path('app_workshop_subscribe', {'id': workshop.id}) }}"
-                                                       class="block text-center text-white rounded px-4 py-2 font-medium transition w-3xs
-                                                        {{ isFull ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#22bb33] hover:shadow-sm' }}">
-                                                        {{ noTimeSlots ? 'Aucun créneau disponible' : (isFull ? 'Complet' : "S'inscrire") }}
-                                                    </a>
+                                                <div class="flex flex-col items-center justify-center mt-4 space-y-2">
+                                                    {% if available_timeslots_count > 0 %}
+                                                        <a href="{{ path('app_workshop_subscribe', {'id': workshop.id}) }}"
+                                                           class="block text-center text-white rounded px-4 py-2 font-medium bg-[#22bb33] hover:shadow-sm transition w-3xs">
+                                                            S'inscrire
+                                                        </a>
+                                                    {% else %}
+                                                        <span
+                                                            class="block text-center text-white rounded px-4 py-2 font-medium bg-gray-400 cursor-not-allowed w-3xs">
+                                                            Complet ou passé
+                                                        </span>
+                                                    {% endif %}
                                                 </div>
 
                                             </div>
@@ -176,3 +183,4 @@
         </div>
     </div>
 {% endblock %}
+

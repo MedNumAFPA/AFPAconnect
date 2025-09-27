@@ -60,20 +60,4 @@ final class HomepageController extends AbstractController
             'isRendezVousAvailable' => $isRendezVousAvailable,
         ]);
     }
-
-    #[Route('/visitor', name: 'app_homepage_visitor')]
-    public function indexVisitor(): Response
-    {
-        return $this->render('homepage/index-visitor.html.twig', [
-            'controller_name' => 'HomepageController',
-        ]);
-    }
-
-    #[Route('/intern', name: 'app_homepage_intern')]
-    public function indexIntern(WorkshopRepository $workshopRepository): Response
-    {
-        return $this->render('homepage/index-intern.html.twig', [
-            'workshops' => $workshopRepository->findAll(),
-        ]);
-    }
 }
