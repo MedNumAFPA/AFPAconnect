@@ -41,9 +41,13 @@ class Reservation
     #[ORM\Column(length: 255)]
     private ?string $idAfpa = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->isReminderActive = true;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -155,6 +159,18 @@ class Reservation
     public function setIdAfpa(string $idAfpa): static
     {
         $this->idAfpa = $idAfpa;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
