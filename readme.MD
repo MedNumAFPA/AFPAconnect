@@ -1,4 +1,4 @@
-# AFPA Connect - Digital Mediation Workshop Booking System
+ # AFPA Connect - Digital Mediation Workshop Booking System
 
 A simple web application for booking time slots at digital mediation workshops.
 

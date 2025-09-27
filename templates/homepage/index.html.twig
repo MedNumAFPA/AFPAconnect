@@ -100,16 +100,18 @@
                                                                         class="underline">Salle</span>: {{ ts.workshop.roomNumber }}
                                                                 </div>
                                                                 <div class="text-gray-600">
-                                                                    Places: {{ ts.reservations|length }}
-                                                                    / {{ workshop.maxSlots }}
+                                                                    {% if ts.reservations|length >= workshop.maxSlots %}
+                                                                        Complet
+                                                                    {% else %}
+                                                                        Places: {{ ts.reservations|length }} / {{ workshop.maxSlots }}
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                         {% endfor %}
                                                     {% endfor %}
 
                                                 {% else %}
-                                                    <p class="text-center text-gray-500 my-4">Aucun créneau à venir
-                                                        disponible.</p>
+                                                    <p class="text-center text-gray-500 my-4">Aucun créneau à venir disponible.</p>
                                                 {% endif %}
 
                                                 <div class="flex flex-col items-center justify-center mt-4 space-y-2">
