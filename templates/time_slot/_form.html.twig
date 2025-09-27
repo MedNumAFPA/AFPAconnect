@@ -11,7 +11,7 @@
         {{ form_label(form.users) }}
         <div class="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-y-2 sm:gap-x-6 sm:gap-y-2">
             {% for checkbox in form.users %}
-                <div class="flex items-center">
+                <div class="flex items-center space-x-2">
                     {{ form_label(checkbox, null, {'label_attr': {'class': 'ml-2 text-sm text-gray-700'}}) }}
                     {{ form_widget(checkbox, {'attr': {'class': 'h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded'}}) }}
                 </div>
