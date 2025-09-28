@@ -57,29 +57,31 @@
 {% if form.timeslot is defined %}
     <div class="flex flex-col mb-4">
         {{ form_label(form.timeslot) }}
-        {{ form_widget(form.timeslot) }}
+        {{ form_widget(form.timeslot, {'attr': {'class': 'ml-3 w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:ring-lime-500 focus:border-lime-500'}}) }}
         {{ form_errors(form.timeslot) }}
     </div>
 {% endif %}
 
 {% if form.timeslots is defined %}
+    {{ form_label(form.timeslots) }}
+    <div class="workshop-users-field flex flex-wrap justify-center items-center">
 
-    <div class="workshop-users-field my-4">
-        {{ form_label(form.timeslots) }}
-
-        <div class="flex flex-wrap mt-2 gap-3">
             {% for checkbox in form.timeslots %}
-                <div class="flex items-center space-x-2 flex-none w-full md:w-1/3">
-                    {{ form_widget(checkbox, {'attr': {'class': 'h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded'}}) }}
-                    {{ form_label(checkbox) }}
+                <div class="flex justify-center items-center space-x-2 flex-none w-[90%] md:max-w-[20%] border rounded-md my-2 md:m-5">
+                    {{ form_label(checkbox, null, {'label_attr': {'class': 'test'}}) }}
+                    {{ form_widget(checkbox, {'attr': {'class': 'border'}}) }}
                 </div>
             {% endfor %}
-        </div>
 
     </div>
 
 {% endif %}
 
+<div class="flex flex-col justify-center items-center md:items-start mb-4">
+    {{ form_label(form.consent) }}
+    {{ form_widget(form.consent, {'attr': {'class': 'm-0 pl-5 h-4 w-4 text-lime-600 focus:ring-lime-500 border-gray-300 rounded'}}) }}
+    {{ form_errors(form.consent) }}
+</div>
 
 <div class="flex justify-center items-center space-x-4 md:ml-0 mt-3">
     <twig:Button color="primary">

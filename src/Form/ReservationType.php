@@ -12,11 +12,14 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $chartePath = $options['charte_path'];
+
         $builder
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom',
@@ -52,6 +55,26 @@ class ReservationType extends AbstractType
                 'label' => 'Nom de la formation suivi',
                 'required' => false,
                 'attr' => ['placeholder' => 'Entrez votre nom de formation...']
+            ])
+            ->add('consent', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter les conditions pour continuer.',
+                    ]),
+                ],
+                'label_html' => true,
+                'label' => sprintf(
+                    '
+                           <p class="">En cochant cette case, je consens au traitement des informations saisies, ainsi qu\'à notre <a href="%s" target="_blank" class="underline text-blue-600 hover:text-blue-800">charte</a> pour des futurs ateliers ou entretiens.</p>
+                           <p class="w-fit">Vous pourrez également la trouver au format papier dans notre espace de médiation Afpa Connect. <span class="text-red-600">*</span>  </p>
+                           ',
+                    $chartePath
+                ),
+                'label_attr' => [
+//                    'class' => 'required',
+                        'id' => 'consent-checkbox'
+                ],
             ]);
 
         if (!$options['is_workshop_subscription']) {
@@ -85,9 +108,6 @@ class ReservationType extends AbstractType
             $builder->add('timeslot', EntityType::class, $timeslotOptions);
         }
 
-
-//        TODO: add check for slots, render slots per timeslots on homepage, etc ...
-
         if ($options['is_workshop_subscription']) {
             $builder->add('timeslots', EntityType::class, [
                 'class' => TimeSlot::class,
@@ -95,7 +115,7 @@ class ReservationType extends AbstractType
                     $reservationCount = count($slot->getReservations());
                     $maxSlots = $slot->getWorkshop()->getMaxSlots();
                     return sprintf(
-                        '<div class="flex flex-col">
+                        '<div class="flex flex-col gap-1 mr-5">
                                     <span class="block">%s</span>
                                     <span class="block">(%s - %s)</span>
                                     <span class="block">%d/%d Places réservées</span>
@@ -134,6 +154,8 @@ class ReservationType extends AbstractType
             'data_class' => Reservation::class,
             'is_workshop_subscription' => false,
             'workshop_id' => null,
+            'charte_path' => null,
         ]);
+        $resolver->setRequired('charte_path');
     }
 }

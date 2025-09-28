@@ -103,6 +103,14 @@ input[type="checkbox"]:checked::after {
     top: -8px;
 }
 
+input[name="reservation[consent]"] {
+    @apply m-0 mr-1 my-4 md:ml-6;
+}
+
+#consent-checkbox::after {
+    display: none;
+}
+
 /* montserrat-regular - latin */
 @font-face {
     font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
