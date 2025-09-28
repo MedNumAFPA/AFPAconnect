@@ -9,7 +9,6 @@
                 Dashboard Admin
             </h1>
 
-
             <ul class="flex space-x-2 border-b justify-center">
                 {% set start_week = "now"|date('W') %}
                 {% for i in 0..3 %}
@@ -33,6 +32,24 @@
                 <div id="tab{{ i }}" class=" mt-6 overflow-x-auto overflow-y-auto {% if i != 1 %}hidden{% endif %}">
 
                     <table class=" hidden md:table min-w-full border-collapse text-sm md:text-base">
+
+                        {# --- START: THIS IS THE NEW TABLE HEADER SECTION --- #}
+                        <thead>
+                        <tr class="bg-gray-100 font-semibold text-center">
+                            {# This empty header aligns with the 'Ateliers' column #}
+                            <th class="p-2 border border-gray-300"></th>
+
+                            {# Loop through the days to create the date headers #}
+                            {% for day in days %}
+                                <th class="p-2 border border-gray-300">
+                                    {{ day|capitalize }}<br>
+                                    {{ weekDates['semaine' ~ i][day]|date('d/m/Y') }}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        {# --- END: NEW TABLE HEADER SECTION --- #}
+
                         <tbody>
                         <tr>
                             <td class="font-semibold p-2 border border-gray-300 text-center">Ateliers</td>
@@ -73,9 +90,7 @@
                                 {% set timeslotday = week[semaineKey][day] ?? [] %}
                                 {% if timeslotday is not empty %}
                                     {% for timeslot in timeslotday %}
-
                                         <div class="bg-gradient-to-r from-gray-500 to-gray-700 text-white p-3 rounded mb-2 text-sm">
-
                                             <div class="text-base font-bold mb-1">{{ timeslot.workshop.name }}</div>
                                             <div class="font-normal">Salle: {{ timeslot.workshop.roomNumber }}</div>
                                             <div class="font-normal">Places max: {{ timeslot.reservations|length }}/{{ timeslot.workshop.maxSlots }}</div>
