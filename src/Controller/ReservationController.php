@@ -148,10 +148,12 @@ final class ReservationController extends AbstractController
         }
 
         $reservationTemplate = new Reservation();
+        $chartePath = $assets->getUrl('pdfs/Charte_AFPA_Connect.pdf');
 
         $form = $this->createForm(ReservationType::class, $reservationTemplate, [
             'is_workshop_subscription' => true,
             'workshop_id' => $workshop->getId(),
+            'charte_path' => $chartePath,
         ]);
 
         $form->handleRequest($request);
@@ -332,9 +334,11 @@ final class ReservationController extends AbstractController
     {
         $reservation = new Reservation();
         $entretienWorkshop = $workshopRepository->findOneBy(['name' => 'Entretien Individuel']);
+        $chartePath = $assets->getUrl('pdfs/Charte_AFPA_Connect.pdf');
 
         $form = $this->createForm(ReservationType::class, $reservation, [
             'workshop_id' => $entretienWorkshop->getId(),
+            'charte_path' => $chartePath,
         ]);
 
         $form->handleRequest($request);
