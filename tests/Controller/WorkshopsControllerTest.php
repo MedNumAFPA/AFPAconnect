@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
+//kek
 final class WorkshopsControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
